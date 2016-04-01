@@ -1,5 +1,7 @@
 package domain;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +18,7 @@ public class User {
 
     public User(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.setPassword(password);
         this.lastAccess = new Date();
         this.favorites = new ArrayList<>();
         this.teams = new ArrayList<>();
@@ -30,12 +32,16 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public void setPassword(String password) {
+        this.password = DigestUtils.sha256Hex(password);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getPassword() {
+        return this.password;
+    }
+
+    public boolean passwordIsCorrect(String password){
+        return this.password.equals(DigestUtils.sha256Hex(password));
     }
 
     public List<Character> getFavorites() {

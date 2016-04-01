@@ -32,6 +32,9 @@ public class TeamTest {
 
     @Test
     public void testGetMembers() throws Exception {
-
+        Team team = new Team("");
+        Character character = new Character();
+        team.getMembers().add(character);
+        assertTrue(team.getMembers().contains(character));
     }
 }

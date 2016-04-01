@@ -1,4 +1,5 @@
 package vo;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class PocTest {
     public static void oneTimeSetUp() {
         // one-time initialization code
         System.out.println("@BeforeClass - oneTimeSetUp");
+        System.out.println(DigestUtils.sha256Hex("test"));
     }
 
     @AfterClass
