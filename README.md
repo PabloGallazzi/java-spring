@@ -18,9 +18,12 @@ commons-codec: v1.10
 
 ## How do i run the tests?
 
+```
 mvn test
+```
 
 ## How do i run the app?
 
+```
 mvn spring-boot:run
-
+```
