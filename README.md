@@ -1,6 +1,6 @@
 ## This is the repository for the TACS assignment.
 
-For detailed information of the API see the [wiki] (https://github.com/niko118/tp-tacs/wiki)
+For detailed information abuot the API see the [wiki] (https://github.com/niko118/tp-tacs/wiki)
 
 ## Frameworks:
 
