@@ -1,7 +1,11 @@
 package domain;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,10 +14,14 @@ import java.util.List;
 /**
  * Created by niko118 on 3/29/16.
  */
+@Entity("users")
 public class User {
-    @Id private String username;
+    @Id private ObjectId id;
+    private String username;
     private String password;
+    @Reference
     private List<Character> favorites;
+    @Embedded
     private List<Team> teams;
     private Date lastAccess;
 
