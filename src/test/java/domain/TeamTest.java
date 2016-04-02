@@ -1,6 +1,5 @@
 package domain;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ public class TeamTest {
     @Test
     public void testGetMembers() throws Exception {
         Team team = new Team("");
-        Character character = new Character();
+        Character character = new Character(1);
         team.getMembers().add(character);
         assertTrue(team.getMembers().contains(character));
     }

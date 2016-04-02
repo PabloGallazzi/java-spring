@@ -1,5 +1,7 @@
 package domain;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import java.util.List;
  * Created by niko118 on 3/29/16.
  */
 public class Team {
+    private ObjectId id;
     private String name;
     private List<Character> members;
 

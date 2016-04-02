@@ -1,6 +1,5 @@
 package domain;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +42,7 @@ public class UserTest {
     @Test
     public void testGetFavorites() throws Exception {
         User user = new User("", "");
-        Character character = new Character();
+        Character character = new Character(1);
         user.getFavorites().add(character);
         assertTrue(user.getFavorites().contains(character));
     }
