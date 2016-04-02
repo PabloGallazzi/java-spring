@@ -13,10 +13,12 @@ import java.util.List;
  */
 @Embedded
 public class Team {
-    @Id private ObjectId id;
+    private ObjectId id;
     private String name;
     @Reference
     private List<Character> members;
+
+    public Team(){/*Necessary for Mongo*/}
 
     public Team(String name) {
         this.name = name;

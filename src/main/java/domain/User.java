@@ -25,6 +25,8 @@ public class User {
     private List<Team> teams;
     private Date lastAccess;
 
+    public User(){/*Necessary for Mongo*/}
+
     public User(String username, String password) {
         this.username = username;
         this.setPassword(password);
