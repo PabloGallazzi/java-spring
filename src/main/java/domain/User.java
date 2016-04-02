@@ -1,6 +1,7 @@
 package domain;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by niko118 on 3/29/16.
  */
 public class User {
-    private String username;
+    @Id private String username;
     private String password;
     private List<Character> favorites;
     private List<Team> teams;
