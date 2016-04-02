@@ -13,25 +13,25 @@ import java.util.List;
 public class PocRestController {
 
     //This is a POC to use the QUERY STRING params
-    @RequestMapping(value = "/punga", method = RequestMethod.GET)
+    @RequestMapping(value = "/poc", method = RequestMethod.GET)
     public PocVo greeting(@RequestParam(value = "id", required = false, defaultValue = "1") String id) {
-        return getPunga(Integer.valueOf(id));
+        return getPoc(Integer.valueOf(id));
     }
 
     //This is a POC to use the PATH params
-    @RequestMapping(value = "/punga/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/poc/{id}", method = RequestMethod.GET)
     public PocVo greeting(@PathVariable Integer id) {
-        return getPunga(id);
+        return getPoc(id);
     }
 
-    PocVo getPunga(Integer id) {
-        List<String> pungaHobbies = Arrays.asList("dormir", "comer", "nada");
-        PocVo pungaInstance = new PocVo(1, "Pablo", "Gallazzi", 23, pungaHobbies);
-        PocVo pungaInstance2 = new PocVo(2, "Nico", "Garcia", 23, pungaHobbies);
-        List<PocVo> pungaDb = Arrays.asList(pungaInstance, pungaInstance2);
-        for (PocVo punga : pungaDb) {
-            if (punga.getId() == id) {
-                return punga;
+    PocVo getPoc(Integer id) {
+        List<String> pocHobbies = Arrays.asList("dormir", "comer", "nada");
+        PocVo pocInstance = new PocVo(1, "Pablo", "Gallazzi", 23, pocHobbies);
+        PocVo pocInstance2 = new PocVo(2, "Nico", "Garcia", 23, pocHobbies);
+        List<PocVo> pocDb = Arrays.asList(pocInstance, pocInstance2);
+        for (PocVo poc : pocDb) {
+            if (poc.getId() == id) {
+                return poc;
             }
         }
         return null;
