@@ -1,4 +1,4 @@
-package vo;
+package domain;
 
 import java.util.List;
 
@@ -19,6 +19,10 @@ public class PocVo {
         this.surname = surname;
         this.age = age;
         this.hobbies = hobbies;
+    }
+
+    public PocVo() {
+        //Empty constructor needed for auto parsing in a request
     }
 
     public int getId() {
