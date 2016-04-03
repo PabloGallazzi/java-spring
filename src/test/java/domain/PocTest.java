@@ -1,4 +1,4 @@
-package vo;
+package domain;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.*;
 
