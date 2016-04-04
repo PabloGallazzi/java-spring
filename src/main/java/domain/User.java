@@ -19,7 +19,7 @@ public class User {
     @Id private ObjectId id;
     private String username;
     private String password;
-    @Reference
+    @Reference(lazy = true)
     private List<Character> favorites;
     @Embedded
     private List<Team> teams;

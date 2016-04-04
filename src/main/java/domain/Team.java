@@ -15,13 +15,14 @@ import java.util.List;
 public class Team {
     private ObjectId id;
     private String name;
-    @Reference
+    @Reference(lazy = true)
     private List<Character> members;
 
     public Team(){/*Necessary for Mongo*/}
 
     public Team(String name) {
         this.name = name;
+        this.id = new ObjectId();
         this.members = new ArrayList<>();
     }
 

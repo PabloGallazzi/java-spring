@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
+import domain.Team;
 import domain.User;
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
+import java.io.Console;
 import java.net.InetSocketAddress;
 
 import static org.junit.Assert.*;
@@ -34,6 +36,17 @@ public class MongoIntegrationTest {
         Morphia morphia = new Morphia();
         morphia.mapPackage("domain");
         ds = morphia.createDatastore(client,"bdtptacs_test");
+        ds.ensureIndexes();
+        insertTestData();
+    }
+
+    private void insertTestData() {
+        User user = new User("TACS","test");
+        Team team1 = new Team("Teamtest1");
+        Team team2 = new Team("Teamtest2");
+        user.getTeams().add(team1);
+        user.getTeams().add(team2);
+        ds.save(user);
     }
 
     @After
@@ -43,11 +56,15 @@ public class MongoIntegrationTest {
     }
 
     @Test
-    public void testMongoConnection() throws Exception{
-        User user = new User("TACS","");
-        ds.save(user);
+    public void testMongoFind() throws Exception{
         User userFind = ds.find(User.class, "username", "TACS").get();
-        assertEquals(user.getUsername(),userFind.getUsername());
+        assertEquals("TACS",userFind.getUsername());
+    }
+
+    @Test
+    public void testMongoDontFind() throws Exception{
+        User userFind = ds.find(User.class, "username", "TACSDontGet").get();
+        assertNull(userFind);
     }
 
 
