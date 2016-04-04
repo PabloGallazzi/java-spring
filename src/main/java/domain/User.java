@@ -2,10 +2,8 @@ package domain;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.utils.IndexDirection;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,12 +14,14 @@ import java.util.List;
  */
 @Entity("users")
 public class User {
-    @Id private ObjectId id;
+    @Id
+    private ObjectId id;
+    @Indexed(name="user", unique=true)
     private String username;
     private String password;
     @Reference(lazy = true)
     private List<Character> favorites;
-    @Embedded
+    @Reference(lazy = true)
     private List<Team> teams;
     private Date lastAccess;
 

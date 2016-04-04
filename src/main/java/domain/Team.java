@@ -2,6 +2,8 @@ package domain;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
 
 import java.util.ArrayList;
@@ -10,8 +12,9 @@ import java.util.List;
 /**
  * Created by niko118 on 3/29/16.
  */
-@Embedded
+@Entity("teams")
 public class Team {
+    @Id
     private ObjectId id;
     private String name;
     @Reference(lazy = true)
@@ -21,7 +24,7 @@ public class Team {
 
     public Team(String name) {
         this.name = name;
-        this.id = new ObjectId();
+        //this.id = new ObjectId();
         this.members = new ArrayList<>();
     }
 

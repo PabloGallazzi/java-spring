@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
+import domain.Character;
 import domain.Team;
 import domain.User;
 import org.junit.After;
@@ -44,8 +45,20 @@ public class MongoIntegrationTest {
         User user = new User("TACS","test");
         Team team1 = new Team("Teamtest1");
         Team team2 = new Team("Teamtest2");
+        Character character1 = new Character(1);
+        Character character2 = new Character(2);
+        Character character3 = new Character(3);
+        team1.getMembers().add(character1);
+        team1.getMembers().add(character2);
+        team2.getMembers().add(character3);
+        user.getFavorites().add(character1);
         user.getTeams().add(team1);
         user.getTeams().add(team2);
+        ds.save(character1);
+        ds.save(character2);
+        ds.save(character3);
+        ds.save(team1);
+        ds.save(team2);
         ds.save(user);
     }
 
