@@ -56,13 +56,13 @@ public class MongoIntegrationTest {
     }
 
     @Test
-    public void testMongoFind() throws Exception{
+    public void testMongoSearchAndFind() throws Exception{
         User userFind = ds.find(User.class, "username", "TACS").get();
         assertEquals("TACS",userFind.getUsername());
     }
 
     @Test
-    public void testMongoDontFind() throws Exception{
+    public void testMongoSearchAndDontFind() throws Exception{
         User userFind = ds.find(User.class, "username", "TACSDontGet").get();
         assertNull(userFind);
     }
