@@ -2,13 +2,13 @@ package spring.globalexceptionhandlers;
 
 import exceptions.web.WebBaseException;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
@@ -17,9 +17,8 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalWebExceptionHandlingControllerAdvice {
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(WebBaseException.class)
-    public ModelAndView handleError(HttpServletRequest req, Exception exception)
+    public ModelAndView handleError(HttpServletRequest req, Exception exception, HttpServletResponse httpServletResponse)
             throws Exception {
 
         // Rethrow annotated exceptions or they will be processed here instead.
@@ -34,6 +33,7 @@ public class GlobalWebExceptionHandlingControllerAdvice {
         mav.addObject("status", ((WebBaseException) exception).getStatus().value());
 
         mav.setViewName("error");
+        httpServletResponse.setStatus(((WebBaseException) exception).getStatus().value());
         return mav;
     }
 }
