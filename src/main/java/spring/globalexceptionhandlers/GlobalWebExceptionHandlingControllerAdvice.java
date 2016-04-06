@@ -2,7 +2,6 @@ package spring.globalexceptionhandlers;
 
 import exceptions.web.WebBaseException;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,7 +17,6 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalWebExceptionHandlingControllerAdvice {
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(WebBaseException.class)
     public ModelAndView handleError(HttpServletRequest req, Exception exception, HttpServletResponse httpServletResponse)
             throws Exception {
