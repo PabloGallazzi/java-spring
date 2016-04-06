@@ -11,6 +11,8 @@ import org.mongodb.morphia.annotations.Id;
 public class Character {
     @Id private Integer id;
 
+    public Character(){/*Necessary for Mongo*/}
+
     public Character(Integer id) {
         this.id = id;
     }
