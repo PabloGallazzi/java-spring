@@ -41,7 +41,7 @@ public class PocWebControllerTest extends BaseTester {
     @Test
     public void testGreetingErrorWeb() throws Exception {
         mockMvc.perform(get("/greetingError"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("url"))
                 .andExpect(model().attributeExists("timestamp"))
