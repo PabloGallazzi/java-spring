@@ -7,15 +7,17 @@ import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import domain.Character;
 import domain.Team;
 import domain.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runner.RunWith;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import services.DSMongoInterface;
 
 import java.io.Console;
@@ -26,17 +28,18 @@ import static org.junit.Assert.*;
 /**
  * Created by niko118 on 4/2/16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/META-INF/spring/app-context.xml")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MongoIntegrationTest {
     private MongoClient client;
     private MongoServer server;
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("mongomemory")
     private DSMongoInterface ds;
 
     @Before
     public void setUp() throws Exception{
-        BeanFactory factory = new ClassPathXmlApplicationContext("META-INF/spring/app-context.xml");
-        ds = (DSMongoInterface) factory.getBean("mongomemory");
         insertTestData();
     }
 
