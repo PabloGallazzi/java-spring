@@ -22,8 +22,13 @@ commons-codec: v1.10
 mvn test
 ```
 
-## How do i run the app?
+## How do I run the app in XXXX environment?
 
 ```
+mvn spring-boot:run -Dspring.profiles.active=XXXX
+```
+or you can set some profile as default
+```
+export spring_profiles_default=XXXX
 mvn spring-boot:run
 ```
