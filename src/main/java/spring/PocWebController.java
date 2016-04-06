@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import domain.PocVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.Map;
 @Controller
 public class PocWebController {
 
-    //This is a POC to render simple html
+    //This is a POC to render simple html, and specify custom http status code
     @RequestMapping("/greeting")
-    public String greeting(Model model) {
+    public String greeting(Model model, HttpServletResponse httpServletResponse) {
         List<String> pocHobbies = Arrays.asList("dormir", "comer", "nada");
         PocVo pocInstance = new PocVo(1, "Pablo", "Gallazzi", 23, pocHobbies);
         String title = "POC WEB";
@@ -28,6 +29,7 @@ public class PocWebController {
         modelToView.put("instance", pocInstance);
         modelToView.put("title", title);
         model.addAllAttributes(modelToView);
+        httpServletResponse.setStatus(200);
         return "greeting";
     }
 
