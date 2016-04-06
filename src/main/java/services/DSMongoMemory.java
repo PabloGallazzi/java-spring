@@ -6,6 +6,7 @@ import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,9 @@ import java.net.InetSocketAddress;
 /**
  * Created by niko118 on 4/6/16.
  */
-@Service("mongomemory")
+@Service
 @Scope("singleton")
+@Profile("test")
 public class DSMongoMemory implements DSMongoInterface {
 
     Datastore ds;
