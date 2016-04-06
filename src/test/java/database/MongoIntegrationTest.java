@@ -12,6 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import services.DSMongoInterface;
 
 import java.io.Console;
 import java.net.InetSocketAddress;
@@ -24,20 +29,14 @@ import static org.junit.Assert.*;
 public class MongoIntegrationTest {
     private MongoClient client;
     private MongoServer server;
-    private Datastore ds;
+    @Autowired
+    @Qualifier("mongomemory")
+    private DSMongoInterface ds;
 
     @Before
     public void setUp() throws Exception{
-        // create memory server
-        server = new MongoServer(new MemoryBackend());
-        // bind on a random local port
-        InetSocketAddress serverAddress = server.bind();
-        // create connection
-        client = new MongoClient(new ServerAddress(serverAddress));
-        Morphia morphia = new Morphia();
-        morphia.mapPackage("domain");
-        ds = morphia.createDatastore(client,"bdtptacs_test");
-        ds.ensureIndexes();
+        BeanFactory factory = new ClassPathXmlApplicationContext("META-INF/spring/app-context.xml");
+        ds = (DSMongoInterface) factory.getBean("mongomemory");
         insertTestData();
     }
 
@@ -54,29 +53,28 @@ public class MongoIntegrationTest {
         user.getFavorites().add(character1);
         user.getTeams().add(team1);
         user.getTeams().add(team2);
-        ds.save(character1);
-        ds.save(character2);
-        ds.save(character3);
-        ds.save(team1);
-        ds.save(team2);
-        ds.save(user);
+        ds.getDatastore().save(character1);
+        ds.getDatastore().save(character2);
+        ds.getDatastore().save(character3);
+        ds.getDatastore().save(team1);
+        ds.getDatastore().save(team2);
+        ds.getDatastore().save(user);
     }
 
     @After
     public void tearDown() throws Exception{
-        client.close();
-        server.shutdown();
+        ds.stopDatastore();
     }
 
     @Test
     public void testMongoSearchAndFind() throws Exception{
-        User userFind = ds.find(User.class, "username", "TACS").get();
+        User userFind = ds.getDatastore().find(User.class, "username", "TACS").get();
         assertEquals("TACS",userFind.getUsername());
     }
 
     @Test
     public void testMongoSearchAndDontFind() throws Exception{
-        User userFind = ds.find(User.class, "username", "TACSDontGet").get();
+        User userFind = ds.getDatastore().find(User.class, "username", "TACSDontGet").get();
         assertNull(userFind);
     }
 
