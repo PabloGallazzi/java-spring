@@ -57,6 +57,7 @@ public class MongoIntegrationTest {
         user.getFavorites().add(character1);
         user.getTeams().add(team1);
         user.getTeams().add(team2);
+        ds.getDatastore().getDB().dropDatabase();
         ds.getDatastore().save(character1);
         ds.getDatastore().save(character2);
         ds.getDatastore().save(character3);
