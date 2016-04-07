@@ -1,10 +1,7 @@
 package services;
 
 import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
 import de.bwaldvogel.mongo.MongoServer;
-import de.bwaldvogel.mongo.backend.h2.H2Backend;
-import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 /**
