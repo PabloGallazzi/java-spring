@@ -16,18 +16,24 @@ mongo-java-server: v1.6.0
 
 commons-codec: v1.10
 
-## How do i run the tests?
+## How do I run the tests?
 
 ```
 mvn test
 ```
+## Database for test local application
+MongoDB: localhost with port 27017 (configured in application-develop.properties) without user and password.
+```
+https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+```
 
 ## How do I run the app in XXXX environment?
+Application runs as default in develop (application.properties file) but if you want to force another one:
 
 ```
 mvn spring-boot:run -Dspring.profiles.active=XXXX
 ```
-or you can set some profile as default
+or you can set some profile as default in environment variables
 ```
 export spring_profiles_default=XXXX
 mvn spring-boot:run
