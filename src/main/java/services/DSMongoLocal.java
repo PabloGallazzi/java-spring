@@ -4,6 +4,9 @@ import com.mongodb.MongoClient;
 import de.bwaldvogel.mongo.MongoServer;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -21,17 +24,21 @@ public class DSMongoLocal implements DSMongoInterface {
 
     Datastore ds;
     private MongoClient client;
-    private MongoServer server;
-
+    @Value("${spring.connection.host}")
+    private String host;
+    @Value("${spring.connection.port}")
+    private int port;
+    @Value("${spring.connection.bdname}")
+    private String bdname;
 
     public DSMongoLocal(){}
 
     @PostConstruct
     public void initialize() throws UnknownHostException {
-        client = new MongoClient("localhost",27017);
+        client = new MongoClient(host,port);
         Morphia morphia = new Morphia();
         morphia.mapPackage("domain");
-        ds = morphia.createDatastore(client,"bdtptacs_dev");
+        ds = morphia.createDatastore(client,bdname);
         ds.ensureIndexes();
     }
 
