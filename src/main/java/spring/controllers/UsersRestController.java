@@ -3,10 +3,9 @@ package spring.controllers;
 import domain.PocVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -29,52 +28,96 @@ public class UsersRestController {
     * */
 
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
-    ResponseEntity<?> compareTeams(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.OK);
+    ResponseEntity<?> compareTeams(@PathVariable Integer id,
+                                   @PathVariable Integer id2) {
+        List<Map<String,Object>> output = new ArrayList<>();
+        Map<String, Object> character = new HashMap<String, Object>();
+        character.put("character_id",123);
+        output.add(character);
+        return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    ResponseEntity<?> createUser(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> createUser(@RequestBody Map<String, Object> input) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("user_name",input.get("user_name"));
+        output.put("user_id",1234);
+        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}", method = RequestMethod.GET)
-    ResponseEntity<?> getUserInfo(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.OK);
+    ResponseEntity<?> getUserInfo(@PathVariable Integer user,
+                                  @RequestParam(value = "attributes", required = false) String attributes) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("user_id", user);
+        output.put("teams","values_list");
+        output.put("access","value");
+        output.put("favorites","value_list");
+        return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
-    ResponseEntity<?> getFavorites(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.OK);
+    ResponseEntity<?> getFavorites(@PathVariable Integer user) {
+        List<Map<String, Object>> output = new ArrayList<>();
+        Map<String, Object> character = new HashMap<String, Object>();
+        character.put("character_id",123);
+        character.put("more_info","");
+        output.add(character);
+        return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
-    ResponseEntity<?> addFavorite(@RequestBody PocVo input) {
+    ResponseEntity<?> addFavorite(@PathVariable Integer user,
+                                  @RequestBody Map<String, Object> input) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("character_id",input.get("character"));
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites/{id}", method = RequestMethod.DELETE)
-    ResponseEntity<?> removeFavorite(@RequestBody PocVo input) {
+    ResponseEntity<?> removeFavorite(@PathVariable Integer user,
+                                     @PathVariable Integer character) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
-    ResponseEntity<?> createTeam(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> createTeam(@PathVariable Integer user,
+                                 @RequestBody Map<String, Object> input) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("team_id",123);
+        output.put("team_name",input.get("team_name"));
+        output.put("characters",input.get("characters"));
+        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
-    ResponseEntity<?> getTeam(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.OK);
+    ResponseEntity<?> getTeam(@PathVariable Integer user,
+                              @PathVariable Integer team) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("team_id",123);
+        output.put("team_name","someName");
+        List<Map<String, Object>> characters = new ArrayList<>();
+        Map<String, Object> character = new HashMap<String, Object>();
+        character.put("character_id",123);
+        character.put("more_info","");
+        characters.add(character);
+        output.put("characters",characters);
+        return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}/characters", method = RequestMethod.POST)
-    ResponseEntity<?> addToTeam(@RequestBody PocVo input) {
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> addToTeam(@PathVariable Integer user,
+                                @PathVariable Integer team,
+                                @RequestBody Map<String, Object> input) {
+        Map<String, Object> output = new HashMap<String, Object>();
+        output.put("character_id",input.get("character_id"));
+        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}/characters/{id}", method = RequestMethod.DELETE)
-    ResponseEntity<?> removeFromTeam(@RequestBody PocVo input) {
+    ResponseEntity<?> removeFromTeam(@PathVariable Integer user,
+                                     @PathVariable Integer team,
+                                     @PathVariable Integer character) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
