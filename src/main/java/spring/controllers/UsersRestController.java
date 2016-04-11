@@ -1,6 +1,9 @@
 package spring.controllers;
 
+import domain.Character;
 import domain.PocVo;
+import domain.Team;
+import domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +41,9 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    ResponseEntity<?> createUser(@RequestBody Map<String, Object> input) {
+    ResponseEntity<?> createUser(@RequestBody User input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("user_name",input.get("user_name"));
+        output.put("user_name",input.getUsername());
         output.put("user_id",1234);
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
@@ -68,9 +71,9 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
-                                  @RequestBody Map<String, Object> input) {
+                                  @RequestBody Character input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("character_id",input.get("character_id"));
+        output.put("character_id",input.getCharacter_id());
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -82,11 +85,11 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
-                                 @RequestBody Map<String, Object> input) {
+                                 @RequestBody Team input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("team_id",123);
-        output.put("team_name",input.get("team_name"));
-        output.put("characters",input.get("characters"));
+        output.put("team_name",input.getName());
+        output.put("members",input.getMembers());
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
 
@@ -108,9 +111,9 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams/{team}/characters", method = RequestMethod.POST)
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
-                                @RequestBody Map<String, Object> input) {
+                                @RequestBody Character input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("character_id",input.get("character_id"));
+        output.put("character_id",input.getCharacter_id());
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
 

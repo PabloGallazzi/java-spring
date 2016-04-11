@@ -1,6 +1,7 @@
 package spring.controllers;
 
 import domain.PocVo;
+import domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class AuthRestController {
     *
     * */
     @RequestMapping(value = "/users/authenticate", method = RequestMethod.POST)
-    ResponseEntity<?> login(@RequestBody Map<String, Object> input) {
+    ResponseEntity<?> login(@RequestBody User input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("access_token", "LONG_STRING");
         output.put("user_id",123);

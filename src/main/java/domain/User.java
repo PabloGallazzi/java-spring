@@ -15,10 +15,10 @@ import java.util.List;
 @Entity("users")
 public class User {
     @Id
-    private ObjectId id;
+    private ObjectId user_id;
     @Indexed(name="user", unique=true)
-    private String username;
-    private String password;
+    private String user_name;
+    private String user_password;
     @Reference(lazy = true)
     private List<Character> favorites;
     @Reference(lazy = true)
@@ -28,7 +28,7 @@ public class User {
     public User(){/*Necessary for Mongo*/}
 
     public User(String username, String password) {
-        this.username = username;
+        this.user_name = username;
         this.setPassword(password);
         this.lastAccess = new Date();
         this.favorites = new ArrayList<>();
@@ -36,23 +36,23 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return user_name;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.user_name = username;
     }
 
     public void setPassword(String password) {
-        this.password = DigestUtils.sha256Hex(password);
+        this.user_password = DigestUtils.sha256Hex(password);
     }
 
     public String getPassword() {
-        return this.password;
+        return this.user_password;
     }
 
     public boolean passwordIsCorrect(String password){
-        return this.password.equals(DigestUtils.sha256Hex(password));
+        return this.user_password.equals(DigestUtils.sha256Hex(password));
     }
 
     public List<Character> getFavorites() {

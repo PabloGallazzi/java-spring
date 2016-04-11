@@ -15,25 +15,25 @@ import java.util.List;
 @Entity("teams")
 public class Team {
     @Id
-    private ObjectId id;
-    private String name;
+    private ObjectId team_id;
+    private String team_name;
     @Reference(lazy = true)
     private List<Character> members;
 
     public Team(){/*Necessary for Mongo*/}
 
     public Team(String name) {
-        this.name = name;
+        this.team_name = name;
         //this.id = new ObjectId();
         this.members = new ArrayList<>();
     }
 
     public String getName() {
-        return name;
+        return team_name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.team_name = name;
     }
 
     public List<Character> getMembers() {
