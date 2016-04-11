@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -27,14 +24,14 @@ public class CharactersRestController {
                                     @RequestParam(value = "criteria", required = false) String criteria,
                                     @RequestParam(value = "offset", required = false) String offset,
                                     @RequestParam(value = "limit", required = false) String limit) {
-        Map<String, Object> output = new HashMap<String, Object>();
-        Map<String, Object> paging = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
+        Map<String, Object> paging = new LinkedHashMap<String, Object>();
         paging.put("total", 123);
         paging.put("limit", limit);
         paging.put("offset", offset);
         output.put("paging",paging);
         List<Map<String, Object>> characterList = new ArrayList<>();
-        Map<String, Object> characters = new HashMap<String, Object>();
+        Map<String, Object> characters = new LinkedHashMap<String, Object>();
         characters.put("character_id",123);
         characters.put("more_info","");
         characterList.add(characters);
@@ -45,7 +42,7 @@ public class CharactersRestController {
     @RequestMapping(value = "/characters/ranking", method = RequestMethod.GET)
     ResponseEntity<?> getRanking() {
         List<Map<String, Object>> output = new ArrayList<>();
-        Map<String, Object> characters = new HashMap<String, Object>();
+        Map<String, Object> characters = new LinkedHashMap<String, Object>();
         characters.put("character_id",123);
         characters.put("elected_times",15);
         output.add(characters);

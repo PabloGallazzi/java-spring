@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +21,7 @@ public class AuthRestController {
     * */
     @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
     ResponseEntity<?> login(@RequestBody Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("access_token", "LONG_STRING");
         output.put("user_id",123);
         output.put("more_info","");

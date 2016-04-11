@@ -31,7 +31,7 @@ public class UsersRestController {
     ResponseEntity<?> compareTeams(@PathVariable Integer id,
                                    @PathVariable Integer id2) {
         List<Map<String,Object>> output = new ArrayList<>();
-        Map<String, Object> character = new HashMap<String, Object>();
+        Map<String, Object> character = new LinkedHashMap<String, Object>();
         character.put("character_id",123);
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
@@ -39,7 +39,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("user_name",input.get("user_name"));
         output.put("user_id",1234);
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
@@ -48,7 +48,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo(@PathVariable Integer user,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<>();
         output.put("user_id", user);
         output.put("teams","values_list");
         output.put("access","value");
@@ -59,7 +59,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable Integer user) {
         List<Map<String, Object>> output = new ArrayList<>();
-        Map<String, Object> character = new HashMap<String, Object>();
+        Map<String, Object> character = new LinkedHashMap<String, Object>();
         character.put("character_id",123);
         character.put("more_info","");
         output.add(character);
@@ -69,7 +69,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("character_id",input.get("character"));
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
@@ -83,7 +83,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("team_id",123);
         output.put("team_name",input.get("team_name"));
         output.put("characters",input.get("characters"));
@@ -93,11 +93,11 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("team_id",123);
         output.put("team_name","someName");
         List<Map<String, Object>> characters = new ArrayList<>();
-        Map<String, Object> character = new HashMap<String, Object>();
+        Map<String, Object> character = new LinkedHashMap<String, Object>();
         character.put("character_id",123);
         character.put("more_info","");
         characters.add(character);
@@ -109,7 +109,7 @@ public class UsersRestController {
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
                                 @RequestBody Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<String, Object>();
+        Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("character_id",input.get("character_id"));
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }
