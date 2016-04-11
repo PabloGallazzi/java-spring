@@ -1,4 +1,4 @@
-package spring;
+package spring.controllers;
 
 import exceptions.web.WebBaseException;
 import org.springframework.http.HttpStatus;

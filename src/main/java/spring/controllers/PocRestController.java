@@ -1,4 +1,4 @@
-package spring;
+package spring.controllers;
 
 import exceptions.rest.BadRequestException;
 import exceptions.rest.InternalServerError;
