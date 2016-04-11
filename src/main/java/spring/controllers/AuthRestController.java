@@ -19,13 +19,13 @@ public class AuthRestController {
     * /user/authenticate POST
     *
     * */
-    @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/authenticate", method = RequestMethod.POST)
     ResponseEntity<?> login(@RequestBody Map<String, Object> input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
         output.put("access_token", "LONG_STRING");
         output.put("user_id",123);
         output.put("more_info","");
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+        return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
 

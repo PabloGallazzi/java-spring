@@ -1,7 +1,8 @@
-package spring;
+package spring.controllers;
 
 import domain.PocVo;
 import org.junit.Test;
+import spring.BaseRestTester;
 
 import java.util.Arrays;
 import java.util.List;

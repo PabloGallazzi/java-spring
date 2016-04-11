@@ -1,14 +1,12 @@
-package spring;
+package spring.controllers;
 
-import domain.PocVo;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import spring.BaseRestTester;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
@@ -22,6 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by niko118 on 4/11/16.
  */
 public class UsersRestControllerTest extends BaseRestTester {
+
+
+    @Test
+    public void testCompareTeams() throws Exception {
+
+    }
 
     @Test
     public void testCreateUser() throws Exception {
@@ -38,4 +42,43 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.user_id", is(1234)));
     }
 
+    @Test
+    public void testGetUserInfo() throws Exception {
+
+    }
+
+    @Test
+    public void testGetFavorites() throws Exception {
+
+    }
+
+    @Test
+    public void testAddFavorite() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveFavorite() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateTeam() throws Exception {
+
+    }
+
+    @Test
+    public void testGetTeam() throws Exception {
+
+    }
+
+    @Test
+    public void testAddToTeam() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveFromTeam() throws Exception {
+
+    }
 }

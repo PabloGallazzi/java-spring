@@ -22,8 +22,8 @@ public class CharactersRestController {
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     ResponseEntity<?> getCharacters(@RequestParam(value = "sort", required = false) String sort,
                                     @RequestParam(value = "criteria", required = false) String criteria,
-                                    @RequestParam(value = "offset", required = false) String offset,
-                                    @RequestParam(value = "limit", required = false) String limit) {
+                                    @RequestParam(value = "offset", required = false) int offset,
+                                    @RequestParam(value = "limit", required = false) int limit) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
         Map<String, Object> paging = new LinkedHashMap<String, Object>();
         paging.put("total", 123);

@@ -1,6 +1,7 @@
-package spring;
+package spring.controllers;
 
 import org.junit.Test;
+import spring.BaseTester;
 
 import java.util.Arrays;
 
