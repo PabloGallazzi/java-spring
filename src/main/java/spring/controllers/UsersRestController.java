@@ -70,7 +70,7 @@ public class UsersRestController {
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Map<String, Object> input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("character_id",input.get("character"));
+        output.put("character_id",input.get("character_id"));
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
