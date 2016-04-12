@@ -1,11 +1,8 @@
 package services;
 
 import com.mongodb.MongoClient;
-import de.bwaldvogel.mongo.MongoServer;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
