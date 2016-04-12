@@ -1,11 +1,11 @@
-package spring;
+package spring.controllers.poc;
 
 import exceptions.web.WebBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import domain.PocVo;
+import domain.poc.PocVo;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;

@@ -5,8 +5,8 @@ package exceptions.rest;
  */
 public class ExceptionMapper {
 
-    int status;
     String message;
+    int status;
     String error;
     String[] cause;
 

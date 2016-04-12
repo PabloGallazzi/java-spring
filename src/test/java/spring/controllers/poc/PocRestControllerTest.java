@@ -1,7 +1,8 @@
-package spring;
+package spring.controllers.poc;
 
-import domain.PocVo;
+import domain.poc.PocVo;
 import org.junit.Test;
+import spring.BaseRestTester;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-
 
 /**
  * Created by pgallazzi on 2/4/16.

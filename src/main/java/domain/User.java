@@ -1,11 +1,8 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.annotations.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,43 +13,47 @@ import java.util.List;
  */
 @Entity("users")
 public class User {
-    @Id private ObjectId id;
-    private String username;
-    private String password;
-    @Reference
+
+    @Id
+    private Integer user_id;
+    @Indexed(name="user", unique=true)
+    private String user_name;
+    private String user_password;
+    @Reference(lazy = true)
     private List<Character> favorites;
-    @Embedded
+    @Reference(lazy = true)
     private List<Team> teams;
-    private Date lastAccess;
+    private Date last_access;
 
     public User(){/*Necessary for Mongo*/}
 
     public User(String username, String password) {
-        this.username = username;
-        this.setPassword(password);
-        this.lastAccess = new Date();
+        this.user_name = username;
+        this.setUser_password(password);
+        this.last_access = new Date();
         this.favorites = new ArrayList<>();
         this.teams = new ArrayList<>();
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser_name(String username) {
+        this.user_name = username;
     }
 
-    public void setPassword(String password) {
-        this.password = DigestUtils.sha256Hex(password);
+    public void setUser_password(String password) {
+        this.user_password = DigestUtils.sha256Hex(password);
     }
 
-    public String getPassword() {
-        return this.password;
+    @JsonIgnore
+    public String getUser_password() {
+        return this.user_password;
     }
 
     public boolean passwordIsCorrect(String password){
-        return this.password.equals(DigestUtils.sha256Hex(password));
+        return this.user_password.equals(DigestUtils.sha256Hex(password));
     }
 
     public List<Character> getFavorites() {
@@ -63,11 +64,27 @@ public class User {
         return teams;
     }
 
-    public Date getLastAccess() {
-        return lastAccess;
+    public Date getLast_access() {
+        return last_access;
     }
 
-    public void setLastAccess(Date lastAccess) {
-        this.lastAccess = lastAccess;
+    public void setLast_access(Date last_access) {
+        this.last_access = last_access;
     }
+    public void setFavorites(List<Character> favorites) {
+        this.favorites = favorites;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
 }
