@@ -1,6 +1,7 @@
 package domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.mongodb.morphia.annotations.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * Created by niko118 on 3/29/16.
  */
 @Entity("users")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     @Id

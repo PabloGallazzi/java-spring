@@ -1,6 +1,7 @@
 package domain;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
@@ -8,6 +9,7 @@ import org.mongodb.morphia.annotations.Id;
  * Created by niko118 on 3/29/16.
  */
 @Entity("characters")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Character {
     @Id
     private Integer character_id;

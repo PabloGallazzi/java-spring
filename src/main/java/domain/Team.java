@@ -1,5 +1,6 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
@@ -11,6 +12,7 @@ import java.util.List;
  * Created by niko118 on 3/29/16.
  */
 @Entity("teams")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Team {
 
     @Id

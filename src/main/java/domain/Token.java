@@ -1,5 +1,6 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Random;
 /**
  * Created by pgallazzi on 11/4/16.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token {
 
     Date expiration_date;
