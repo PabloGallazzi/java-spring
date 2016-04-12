@@ -85,11 +85,8 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Team input) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("team_id",123);
-        output.put("team_name",input.getName());
-        output.put("members",input.getMembers());
-        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
+        input.setTeam_id(1);
+        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)

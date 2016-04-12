@@ -1,7 +1,5 @@
 package domain;
 
-import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
@@ -14,8 +12,9 @@ import java.util.List;
  */
 @Entity("teams")
 public class Team {
+
     @Id
-    private ObjectId team_id;
+    private Integer team_id;
     private String team_name;
     @Reference(lazy = true)
     private List<Character> members;
@@ -26,6 +25,14 @@ public class Team {
         this.team_name = name;
         //this.id = new ObjectId();
         this.members = new ArrayList<>();
+    }
+
+    public Integer getTeam_id() {
+        return team_id;
+    }
+
+    public void setTeam_id(Integer team_id) {
+        this.team_id = team_id;
     }
 
     public String getName() {
