@@ -78,7 +78,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{user}/characters/favorites/{id}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFavorite(@PathVariable Integer user,
-                                     @PathVariable Integer character) {
+                                     @PathVariable Integer id) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
