@@ -32,38 +32,48 @@ public class UsersRestController {
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
     ResponseEntity<?> compareTeams(@PathVariable Integer id,
                                    @PathVariable Integer id2) {
-        List<Map<String,Object>> output = new ArrayList<>();
-        Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id",123);
+        List<Character> output = new ArrayList<>();
+        Character character = new Character(1);
+        character.setName("TACS");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User input) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("user_name",input.getUser_name());
-        output.put("user_id",1234);
-        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
+        input.setUser_id(1);
+        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/users/{user}", method = RequestMethod.GET)
-    ResponseEntity<?> getUserInfo(@PathVariable Integer user,
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    ResponseEntity<?> getUserInfo(@PathVariable Integer id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
-        Map<String, Object> output = new LinkedHashMap<>();
-        output.put("user_id", user);
-        output.put("teams","values_list");
-        output.put("access","value");
-        output.put("favorites","value_list");
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+        User user = new User();
+        user.setUser_id(1);
+        user.setUser_name("Pablo");
+        user.setLast_access(new Date());
+        Team team = new Team("Pablito");
+        team.setTeam_id(1);
+        List<Character> teamItems = new ArrayList<>();
+        Character character = new Character(1);
+        character.setName("TACS");
+        teamItems.add(character);
+        team.setMembers(teamItems);
+        List<Team> teams = new ArrayList<Team>();
+        teams.add(team);
+        user.setTeams(teams);
+        List<Character> characters = new ArrayList<Character>();
+        characters.add(character);
+        user.setFavorites(characters);
+        return new ResponseEntity<>(user, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable Integer user) {
         List<Map<String, Object>> output = new ArrayList<>();
         Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id",123);
-        character.put("more_info","");
+        character.put("character_id", 123);
+        character.put("more_info", "");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
@@ -92,14 +102,14 @@ public class UsersRestController {
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("team_id",123);
-        output.put("team_name","someName");
+        output.put("team_id", 123);
+        output.put("team_name", "someName");
         List<Map<String, Object>> characters = new ArrayList<>();
         Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id",123);
-        character.put("more_info","");
+        character.put("character_id", 123);
+        character.put("more_info", "");
         characters.add(character);
-        output.put("characters",characters);
+        output.put("characters", characters);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 

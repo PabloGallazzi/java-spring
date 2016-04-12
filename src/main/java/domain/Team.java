@@ -47,4 +47,8 @@ public class Team {
         return members;
     }
 
+    public void setMembers(List<Character> members) {
+        this.members = members;
+    }
+
 }

@@ -1,7 +1,7 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
 import java.util.ArrayList;
@@ -13,8 +13,9 @@ import java.util.List;
  */
 @Entity("users")
 public class User {
+
     @Id
-    private ObjectId user_id;
+    private Integer user_id;
     @Indexed(name="user", unique=true)
     private String user_name;
     private String user_password;
@@ -46,6 +47,7 @@ public class User {
         this.user_password = DigestUtils.sha256Hex(password);
     }
 
+    @JsonIgnore
     public String getUser_password() {
         return this.user_password;
     }
@@ -69,4 +71,16 @@ public class User {
     public void setLast_access(Date last_access) {
         this.last_access = last_access;
     }
+    public void setFavorites(List<Character> favorites) {
+        this.favorites = favorites;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
 }
