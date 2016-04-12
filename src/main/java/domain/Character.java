@@ -12,7 +12,7 @@ public class Character {
     @Id
     private Integer character_id;
     String name;
-    Integer elected_times;
+    Integer elected_times = 0;
 
     public Integer getElected_times() {
         return elected_times;
