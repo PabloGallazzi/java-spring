@@ -39,4 +39,4 @@ export spring_profiles_default=XXXX
 mvn spring-boot:run
 ```
 
-* The available enviroments are: test, debug, and production
+* The available enviroments are: test, develop, and production
