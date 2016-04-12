@@ -1,7 +1,6 @@
 package spring.controllers;
 
 import domain.Character;
-import domain.PocVo;
 import domain.Team;
 import domain.User;
 import org.springframework.http.HttpStatus;

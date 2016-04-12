@@ -1,4 +1,4 @@
-package spring.controllers;
+package spring.controllers.poc;
 
 import org.junit.Test;
 import spring.BaseTester;

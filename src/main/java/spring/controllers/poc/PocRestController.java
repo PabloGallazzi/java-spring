@@ -1,4 +1,4 @@
-package spring.controllers;
+package spring.controllers.poc;
 
 import exceptions.rest.BadRequestException;
 import exceptions.rest.InternalServerError;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import domain.PocVo;
+import domain.poc.PocVo;
 
 import java.util.Arrays;
 import java.util.Date;
