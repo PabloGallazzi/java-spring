@@ -111,15 +111,14 @@ public class UsersRestController {
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
                                 @RequestBody Character input) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("character_id",input.getCharacter_id());
-        return new ResponseEntity<>(output, null, HttpStatus.CREATED);
+        input.setCharacter_id(1);
+        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}/characters/{id}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFromTeam(@PathVariable Integer user,
                                      @PathVariable Integer team,
-                                     @PathVariable Integer character) {
+                                     @PathVariable Integer id) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
