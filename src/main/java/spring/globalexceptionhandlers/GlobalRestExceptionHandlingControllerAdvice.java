@@ -1,8 +1,11 @@
 package spring.globalexceptionhandlers;
 
 import exceptions.rest.ExceptionMapper;
+import exceptions.rest.InternalServerError;
 import exceptions.rest.RestBaseException;
+import exceptions.web.WebBaseException;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +32,24 @@ public class GlobalRestExceptionHandlingControllerAdvice {
 
         ExceptionMapper exceptionMapper = new ExceptionMapper((RestBaseException) exception);
         return new ResponseEntity<>(exceptionMapper, null, ((RestBaseException) exception).getStatus());
+
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleExceptionError(HttpServletRequest req, Exception exception)
+            throws Exception {
+
+        // Rethrow annotated exceptions or they will be processed here instead.
+        if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
+            throw exception;
+        }
+
+        // Rethrow custom exceptions or they will be processed here instead.
+        if (exception instanceof RestBaseException || exception instanceof WebBaseException) {
+            throw exception;
+        }
+
+        return new ResponseEntity<>(new ExceptionMapper(new InternalServerError()), null, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

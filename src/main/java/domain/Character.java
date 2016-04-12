@@ -10,6 +10,15 @@ import org.mongodb.morphia.annotations.Id;
 @Entity("characters")
 public class Character {
     @Id private Integer character_id;
+    String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Character(){/*Necessary for Mongo*/}
 
