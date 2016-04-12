@@ -38,3 +38,5 @@ or you can set some profile as default in environment variables
 export spring_profiles_default=XXXX
 mvn spring-boot:run
 ```
+
+* The available enviroments are: test, develop, and production
