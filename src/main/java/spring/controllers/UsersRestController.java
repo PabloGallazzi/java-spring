@@ -82,6 +82,7 @@ public class UsersRestController {
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Character input) {
         input.setCharacter_id(1);
+        input.setElected_times(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 

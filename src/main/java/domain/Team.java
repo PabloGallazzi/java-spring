@@ -35,11 +35,11 @@ public class Team {
         this.team_id = team_id;
     }
 
-    public String getName() {
+    public String getTeam_name() {
         return team_name;
     }
 
-    public void setName(String name) {
+    public void setTeam_name(String name) {
         this.team_name = name;
     }
 
