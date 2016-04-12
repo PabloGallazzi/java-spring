@@ -71,8 +71,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Character input) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("character_id",input.getCharacter_id());
+        input.setCharacter_id(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
