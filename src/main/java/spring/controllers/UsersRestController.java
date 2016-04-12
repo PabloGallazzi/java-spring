@@ -42,7 +42,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User input) {
         Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("user_name",input.getUsername());
+        output.put("user_name",input.getUser_name());
         output.put("user_id",1234);
         return new ResponseEntity<>(output, null, HttpStatus.CREATED);
     }

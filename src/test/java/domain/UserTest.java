@@ -22,20 +22,20 @@ public class UserTest {
     @Test
     public void testGetUsername() throws Exception {
         User user = new User("testName", "");
-        assertEquals(user.getUsername(),"testName");
+        assertEquals(user.getUser_name(),"testName");
     }
 
     @Test
     public void testSetUsername() throws Exception {
         User user = new User("test", "");
-        user.setUsername("test1");
-        assertEquals(user.getUsername(),"test1");
+        user.setUser_name("test1");
+        assertEquals(user.getUser_name(),"test1");
     }
 
     @Test
     public void testSetPassword() throws Exception {
         User user = new User("", "test");
-        user.setPassword("test2");
+        user.setUser_password("test2");
         assertTrue(user.passwordIsCorrect("test2"));
     }
 
@@ -59,16 +59,16 @@ public class UserTest {
     public void testGetLastAccess() throws Exception {
         User user = new User("", "");
         Date dateNow = new Date();
-        user.setLastAccess(dateNow);
-        assertEquals(user.getLastAccess(),dateNow);
+        user.setLast_access(dateNow);
+        assertEquals(user.getLast_access(),dateNow);
     }
 
     @Test
     public void testSetLastAccess() throws Exception {
         User user = new User("", "");
         Date dateNow = new Date();
-        user.setLastAccess(dateNow);
-        assertEquals(user.getLastAccess(),dateNow);
+        user.setLast_access(dateNow);
+        assertEquals(user.getLast_access(),dateNow);
     }
 
     @Test
@@ -81,6 +81,6 @@ public class UserTest {
     public void testGetPassword() throws Exception {
         String passwordTest = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
         User user = new User("", "test");
-        assertEquals(user.getPassword(), passwordTest);
+        assertEquals(user.getUser_password(), passwordTest);
     }
 }

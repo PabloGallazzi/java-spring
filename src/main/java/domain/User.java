@@ -3,7 +3,6 @@ package domain;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
-import org.mongodb.morphia.utils.IndexDirection;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,31 +22,31 @@ public class User {
     private List<Character> favorites;
     @Reference(lazy = true)
     private List<Team> teams;
-    private Date lastAccess;
+    private Date last_access;
 
     public User(){/*Necessary for Mongo*/}
 
     public User(String username, String password) {
         this.user_name = username;
-        this.setPassword(password);
-        this.lastAccess = new Date();
+        this.setUser_password(password);
+        this.last_access = new Date();
         this.favorites = new ArrayList<>();
         this.teams = new ArrayList<>();
     }
 
-    public String getUsername() {
+    public String getUser_name() {
         return user_name;
     }
 
-    public void setUsername(String username) {
+    public void setUser_name(String username) {
         this.user_name = username;
     }
 
-    public void setPassword(String password) {
+    public void setUser_password(String password) {
         this.user_password = DigestUtils.sha256Hex(password);
     }
 
-    public String getPassword() {
+    public String getUser_password() {
         return this.user_password;
     }
 
@@ -63,11 +62,11 @@ public class User {
         return teams;
     }
 
-    public Date getLastAccess() {
-        return lastAccess;
+    public Date getLast_access() {
+        return last_access;
     }
 
-    public void setLastAccess(Date lastAccess) {
-        this.lastAccess = lastAccess;
+    public void setLast_access(Date last_access) {
+        this.last_access = last_access;
     }
 }
