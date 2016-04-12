@@ -9,8 +9,18 @@ import org.mongodb.morphia.annotations.Id;
  */
 @Entity("characters")
 public class Character {
-    @Id private Integer character_id;
+    @Id
+    private Integer character_id;
     String name;
+    Integer elected_times;
+
+    public Integer getElected_times() {
+        return elected_times;
+    }
+
+    public void setElected_times(Integer elected_times) {
+        this.elected_times = elected_times;
+    }
 
     public String getName() {
         return name;
@@ -20,7 +30,7 @@ public class Character {
         this.name = name;
     }
 
-    public Character(){/*Necessary for Mongo*/}
+    public Character() {/*Necessary for Mongo*/}
 
     public Character(Integer id) {
         this.character_id = id;

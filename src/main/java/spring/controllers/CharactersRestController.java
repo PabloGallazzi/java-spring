@@ -1,5 +1,6 @@
 package spring.controllers;
 
+import domain.Character;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,30 +29,28 @@ public class CharactersRestController {
         paging.put("total", 123);
         paging.put("limit", limit);
         paging.put("offset", offset);
-        output.put("paging",paging);
-        List<Map<String, Object>> characterList = new ArrayList<>();
-        Map<String, Object> characters = new LinkedHashMap<String, Object>();
-        characters.put("character_id",123);
-        characters.put("more_info","");
-        characterList.add(characters);
-        output.put("result",characterList);
+        output.put("paging", paging);
+        List<Character> characterList = new ArrayList<>();
+        Character character = new Character(1);
+        character.setName("TACS");
+        characterList.add(character);
+        output.put("results", characterList);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/characters/ranking", method = RequestMethod.GET)
     ResponseEntity<?> getRanking() {
-        List<Map<String, Object>> output = new ArrayList<>();
-        Map<String, Object> characters = new LinkedHashMap<String, Object>();
-        characters.put("character_id",123);
-        characters.put("elected_times",15);
-        output.add(characters);
-        characters.clear();
-        characters.put("character_id",124);
-        characters.put("elected_times",10);
-        output.add(characters);
+        List<Character> output = new ArrayList<>();
+        Character character = new Character(1);
+        character.setName("TACS");
+        character.setElected_times(10);
+        Character character2 = new Character(1);
+        character2.setName("TACS");
+        character2.setElected_times(9);
+        output.add(character);
+        output.add(character2);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
-
 
 }
 

@@ -1,12 +1,13 @@
 package spring.controllers;
 
+import domain.Token;
 import domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -20,11 +21,12 @@ public class AuthRestController {
     * */
     @RequestMapping(value = "/users/authenticate", method = RequestMethod.POST)
     ResponseEntity<?> login(@RequestBody User input) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("access_token", "LONG_STRING");
-        output.put("user_id",123);
-        output.put("more_info","");
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+        List<String> scopes = new ArrayList<>();
+        scopes.add("admin");
+        scopes.add("read");
+        scopes.add("write");
+        Token token = new Token(scopes,1);
+        return new ResponseEntity<>(token, null, HttpStatus.OK);
     }
 
 
