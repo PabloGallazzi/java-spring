@@ -36,8 +36,11 @@ public class MongoIntegrationTest {
 
     private void insertTestData() {
         User user = new User("TACS","test");
+        user.setUser_id(1);
         Team team1 = new Team("Teamtest1");
+        team1.setTeam_id(1);
         Team team2 = new Team("Teamtest2");
+        team2.setTeam_id(2);
         Character character1 = new Character(1);
         Character character2 = new Character(2);
         Character character3 = new Character(3);

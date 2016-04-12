@@ -35,7 +35,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_name", is("userTest")))
-                .andExpect(jsonPath("$.user_id", is(1234)));
+                .andExpect(jsonPath("$.user_id", is(1)));
     }
 
     @Test

@@ -83,4 +83,8 @@ public class User {
         this.user_id = user_id;
     }
 
+    public Integer getUser_id() {
+        return user_id;
+    }
+
 }

@@ -28,8 +28,7 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .contentType(contentType))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.access_token", is("LONG_STRING")))
-                .andExpect(jsonPath("$.user_id", is(123)));
+                .andExpect(jsonPath("$.user_id", is(1)));
 
     }
 }
