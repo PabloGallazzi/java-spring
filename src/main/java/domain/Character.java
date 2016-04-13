@@ -13,8 +13,10 @@ import org.mongodb.morphia.annotations.Id;
 public class Character {
     @Id
     private Integer character_id;
-    String name;
-    Integer elected_times = 0;
+    private String name;
+    private String description;
+    private Integer elected_times = 0;
+    private String eTag;
 
     public Integer getElected_times() {
         return elected_times;
@@ -34,8 +36,10 @@ public class Character {
 
     public Character() {/*Necessary for Mongo*/}
 
-    public Character(Integer id) {
+    public Character(Integer id, String name, String description) {
         this.character_id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Integer getCharacter_id() {
@@ -44,5 +48,29 @@ public class Character {
 
     public void setCharacter_id(Integer character_id) {
         this.character_id = character_id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String geteTag() {
+        return eTag;
+    }
+
+    public void seteTag(String eTag) {
+        this.eTag = eTag;
+    }
+
+    public void selectedAsFavorite(){
+        elected_times++;
+    }
+
+    public void removedAsFavorite(){
+        elected_times--;
     }
 }

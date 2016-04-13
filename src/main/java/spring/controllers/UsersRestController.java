@@ -3,6 +3,7 @@ package spring.controllers;
 import domain.Character;
 import domain.Team;
 import domain.User;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,7 @@ public class UsersRestController {
     ResponseEntity<?> compareTeams(@PathVariable Integer id,
                                    @PathVariable Integer id2) {
         List<Character> output = new ArrayList<>();
-        Character character = new Character(1);
-        character.setName("TACS");
+        Character character = new Character(1,"TACS","Description");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
@@ -55,8 +55,7 @@ public class UsersRestController {
         Team team = new Team("Pablito");
         team.setTeam_id(1);
         List<Character> teamItems = new ArrayList<>();
-        Character character = new Character(1);
-        character.setName("TACS");
+        Character character = new Character(1,"TACS","TACSDescription");
         teamItems.add(character);
         team.setMembers(teamItems);
         List<Team> teams = new ArrayList<Team>();
@@ -70,10 +69,8 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable Integer user) {
-        List<Map<String, Object>> output = new ArrayList<>();
-        Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id", 123);
-        character.put("more_info", "");
+        List<Character> output = new ArrayList<>();
+        Character character = new Character(123,"TestName","TestDescription");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
@@ -81,8 +78,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Character input) {
-        input.setCharacter_id(1);
-        input.setElected_times(1);
+        input.selectedAsFavorite();
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -102,15 +98,10 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("team_id", 123);
-        output.put("team_name", "someName");
-        List<Map<String, Object>> characters = new ArrayList<>();
-        Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id", 123);
-        character.put("more_info", "");
-        characters.add(character);
-        output.put("characters", characters);
+        Team output = new Team("TeamName");
+        output.setTeam_id(1);
+        Character character = new Character(1,"CharacterName","DescriptionTest");
+        output.getMembers().add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
@@ -118,7 +109,6 @@ public class UsersRestController {
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
                                 @RequestBody Character input) {
-        input.setCharacter_id(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
