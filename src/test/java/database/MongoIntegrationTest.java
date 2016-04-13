@@ -41,9 +41,9 @@ public class MongoIntegrationTest {
         team1.setTeam_id(1);
         Team team2 = new Team("Teamtest2");
         team2.setTeam_id(2);
-        Character character1 = new Character(1);
-        Character character2 = new Character(2);
-        Character character3 = new Character(3);
+        Character character1 = new Character(1, "Cap America", "Adamantium addict");
+        Character character2 = new Character(2, "Black Widow", "=)");
+        Character character3 = new Character(3, "Hawkeye", "The Dark Age guy");
         team1.getMembers().add(character1);
         team1.getMembers().add(character2);
         team2.getMembers().add(character3);

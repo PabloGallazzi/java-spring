@@ -42,7 +42,7 @@ public class UserTest {
     @Test
     public void testGetFavorites() throws Exception {
         User user = new User("", "");
-        Character character = new Character(1);
+        Character character = new Character(1, "IronMan", "Rich, famous, filantropous.");
         user.getFavorites().add(character);
         assertTrue(user.getFavorites().contains(character));
     }

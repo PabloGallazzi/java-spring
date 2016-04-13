@@ -32,7 +32,7 @@ public class TeamTest {
     @Test
     public void testGetMembers() throws Exception {
         Team team = new Team("");
-        Character character = new Character(1);
+        Character character = new Character(1, "Thor", "Asgard guy");
         team.getMembers().add(character);
         assertTrue(team.getMembers().contains(character));
     }
