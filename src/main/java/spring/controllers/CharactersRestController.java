@@ -43,10 +43,10 @@ public class CharactersRestController {
         List<Character> output = new ArrayList<>();
         Character character = new Character(1);
         character.setName("TACS");
-        character.setElected_times(10);
+        character.setElectedTimes(10);
         Character character2 = new Character(1);
         character2.setName("TACS");
-        character2.setElected_times(9);
+        character2.setElectedTimes(9);
         output.add(character);
         output.add(character2);
         return new ResponseEntity<>(output, null, HttpStatus.OK);

@@ -13,44 +13,44 @@ import java.util.Random;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token {
 
-    Date expiration_date;
-    String access_token;
-    Integer user_id;
+    Date expirationDate;
+    String accessToken;
+    Integer userId;
     List<String> scopes;
 
-    public Token(List<String> scopes, Integer user_id) {
+    public Token(List<String> scopes, Integer userId) {
         Date date = new Date();
         date.setTime(date.getTime()+120001);
-        this.expiration_date = date;
+        this.expirationDate = date;
         this.scopes = scopes;
-        this.user_id = user_id;
+        this.userId = userId;
         Random random = new Random();
         Double doubleValue = random.nextDouble();
-        this.access_token = user_id.toString() + "-" + DigestUtils.sha256Hex(doubleValue.toString()) + "-" + DigestUtils.sha256Hex(this.expiration_date.toString());
+        this.accessToken = userId.toString() + "-" + DigestUtils.sha256Hex(doubleValue.toString()) + "-" + DigestUtils.sha256Hex(this.expirationDate.toString());
     }
 
-    public Date getExpiration_date() {
-        return expiration_date;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExpiration_date(Date expiration_date) {
-        this.expiration_date = expiration_date;
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    public String getAccess_token() {
-        return access_token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setAccess_token(String token) {
-        this.access_token = token;
+    public void setAccessToken(String token) {
+        this.accessToken = token;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user) {
-        this.user_id = user;
+    public void setUserId(Integer user) {
+        this.userId = user;
     }
 
     public List<String> getScopes() {

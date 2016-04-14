@@ -17,45 +17,45 @@ import java.util.List;
 public class User {
 
     @Id
-    private Integer user_id;
+    private Integer userId;
     @Indexed(name="user", unique=true)
-    private String user_name;
-    private String user_password;
+    private String userName;
+    private String userPassword;
     @Reference(lazy = true)
     private List<Character> favorites;
     @Reference(lazy = true)
     private List<Team> teams;
-    private Date last_access;
+    private Date lastAccess;
 
     public User(){/*Necessary for Mongo*/}
 
     public User(String username, String password) {
-        this.user_name = username;
-        this.setUser_password(password);
-        this.last_access = new Date();
+        this.userName = username;
+        this.setUserPassword(password);
+        this.lastAccess = new Date();
         this.favorites = new ArrayList<>();
         this.teams = new ArrayList<>();
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String username) {
-        this.user_name = username;
+    public void setUserName(String username) {
+        this.userName = username;
     }
 
-    public void setUser_password(String password) {
-        this.user_password = DigestUtils.sha256Hex(password);
+    public void setUserPassword(String password) {
+        this.userPassword = DigestUtils.sha256Hex(password);
     }
 
     @JsonIgnore
-    public String getUser_password() {
-        return this.user_password;
+    public String getUserPassword() {
+        return this.userPassword;
     }
 
     public boolean passwordIsCorrect(String password){
-        return this.user_password.equals(DigestUtils.sha256Hex(password));
+        return this.userPassword.equals(DigestUtils.sha256Hex(password));
     }
 
     public List<Character> getFavorites() {
@@ -66,12 +66,12 @@ public class User {
         return teams;
     }
 
-    public Date getLast_access() {
-        return last_access;
+    public Date getLastAccess() {
+        return lastAccess;
     }
 
-    public void setLast_access(Date last_access) {
-        this.last_access = last_access;
+    public void setLastAccess(Date lastAccess) {
+        this.lastAccess = lastAccess;
     }
     public void setFavorites(List<Character> favorites) {
         this.favorites = favorites;
@@ -81,12 +81,12 @@ public class User {
         this.teams = teams;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
 }

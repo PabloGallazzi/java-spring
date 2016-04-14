@@ -19,14 +19,14 @@ public class TeamTest {
     @Test
     public void testGetName() throws Exception {
         Team team = new Team("Equipo1");
-        assertEquals(team.getTeam_name(),"Equipo1");
+        assertEquals(team.getTeamName(),"Equipo1");
     }
 
     @Test
     public void testSetName() throws Exception {
         Team team = new Team("Equipo1");
-        team.setTeam_name("Equipo2");
-        assertEquals(team.getTeam_name(),"Equipo2");
+        team.setTeamName("Equipo2");
+        assertEquals(team.getTeamName(),"Equipo2");
     }
 
     @Test

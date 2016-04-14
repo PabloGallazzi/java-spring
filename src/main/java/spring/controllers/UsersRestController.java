@@ -41,7 +41,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User input) {
-        input.setUser_id(1);
+        input.setUserId(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -49,11 +49,11 @@ public class UsersRestController {
     ResponseEntity<?> getUserInfo(@PathVariable Integer id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
         User user = new User();
-        user.setUser_id(1);
-        user.setUser_name("Pablo");
-        user.setLast_access(new Date());
+        user.setUserId(1);
+        user.setUserName("Pablo");
+        user.setLastAccess(new Date());
         Team team = new Team("Pablito");
-        team.setTeam_id(1);
+        team.setTeamId(1);
         List<Character> teamItems = new ArrayList<>();
         Character character = new Character(1);
         character.setName("TACS");
@@ -81,8 +81,8 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Character input) {
-        input.setCharacter_id(1);
-        input.setElected_times(1);
+        input.setCharacterId(1);
+        input.setElectedTimes(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -95,7 +95,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Team input) {
-        input.setTeam_id(1);
+        input.setTeamId(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -118,7 +118,7 @@ public class UsersRestController {
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
                                 @RequestBody Character input) {
-        input.setCharacter_id(1);
+        input.setCharacterId(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
