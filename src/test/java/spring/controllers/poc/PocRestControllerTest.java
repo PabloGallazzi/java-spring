@@ -1,6 +1,6 @@
 package spring.controllers.poc;
 
-import domain.poc.PocVo;
+import domain.vo.poc.PocVo;
 import org.junit.Test;
 import spring.BaseRestTester;
 

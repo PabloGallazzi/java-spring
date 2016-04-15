@@ -109,7 +109,7 @@ public class UsersRestController {
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
                                 @RequestBody Character input) {
-        input.setCharacterId(1);
+        input.setId(1);
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
