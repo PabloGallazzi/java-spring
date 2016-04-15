@@ -12,9 +12,36 @@ import org.mongodb.morphia.annotations.Id;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Character {
     @Id
-    private Integer characterId;
+    private Integer id;
     String name;
+    String description;
     Integer electedTimes = 0;
+    Thumbnail thumbnail;
+    String resourceURI;
+
+    public String getResourceURI() {
+        return resourceURI;
+    }
+
+    public void setResourceURI(String resourceURI) {
+        this.resourceURI = resourceURI;
+    }
+
+    public Thumbnail getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getElectedTimes() {
         return electedTimes;
@@ -35,14 +62,14 @@ public class Character {
     public Character() {/*Necessary for Mongo*/}
 
     public Character(Integer id) {
-        this.characterId = id;
+        this.id = id;
     }
 
-    public Integer getCharacterId() {
-        return characterId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCharacterId(Integer characterId) {
-        this.characterId = characterId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
