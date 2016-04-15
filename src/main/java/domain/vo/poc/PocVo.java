@@ -1,4 +1,4 @@
-package domain.poc;
+package domain.vo.poc;
 
 import java.util.List;
 
