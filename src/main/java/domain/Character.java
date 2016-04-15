@@ -67,10 +67,10 @@ public class Character {
     }
 
     public void selectedAsFavorite(){
-        elected_times++;
+        electedTimes++;
     }
 
     public void removedAsFavorite(){
-        elected_times--;
+        electedTimes--;
     }
 }

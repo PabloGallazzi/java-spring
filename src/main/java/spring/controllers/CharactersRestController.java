@@ -41,9 +41,9 @@ public class CharactersRestController {
     ResponseEntity<?> getRanking() {
         List<Character> output = new ArrayList<>();
         Character character = new Character(2, "Dr. Strange", "Tira magias.");
-        character.setElected_times(10);
+        character.setElectedTimes(10);
         Character character2 = new Character(3, "Hulk", "SMASH SMASH SMASH");
-        character2.setElected_times(9);
+        character2.setElectedTimes(9);
         output.add(character);
         output.add(character2);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
