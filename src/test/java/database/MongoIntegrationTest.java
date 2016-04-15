@@ -36,11 +36,11 @@ public class MongoIntegrationTest {
 
     private void insertTestData() {
         User user = new User("TACS","test");
-        user.setUser_id(1);
+        user.setUserId(1);
         Team team1 = new Team("Teamtest1");
-        team1.setTeam_id(1);
+        team1.setTeamId(1);
         Team team2 = new Team("Teamtest2");
-        team2.setTeam_id(2);
+        team2.setTeamId(2);
         Character character1 = new Character(1, "Cap America", "Adamantium addict");
         Character character2 = new Character(2, "Black Widow", "=)");
         Character character3 = new Character(3, "Hawkeye", "The Dark Age guy");
@@ -66,13 +66,13 @@ public class MongoIntegrationTest {
 
     @Test
     public void testMongoSearchAndFind() throws Exception{
-        User userFind = ds.getDatastore().find(User.class, "user_name", "TACS").get();
-        assertEquals("TACS",userFind.getUser_name());
+        User userFind = ds.getDatastore().find(User.class, "userName", "TACS").get();
+        assertEquals("TACS",userFind.getUserName());
     }
 
     @Test
     public void testMongoSearchAndDontFind() throws Exception{
-        User userFind = ds.getDatastore().find(User.class, "user_name", "TACSDontGet").get();
+        User userFind = ds.getDatastore().find(User.class, "userName", "TACSDontGet").get();
         assertNull(userFind);
     }
 

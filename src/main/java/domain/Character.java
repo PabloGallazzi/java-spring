@@ -12,18 +12,18 @@ import org.mongodb.morphia.annotations.Id;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Character {
     @Id
-    private Integer character_id;
-    private String name;
+    private Integer characterId;
+    String name;
+    Integer electedTimes = 0;
     private String description;
-    private Integer elected_times = 0;
     private String eTag;
 
-    public Integer getElected_times() {
-        return elected_times;
+    public Integer getElectedTimes() {
+        return electedTimes;
     }
 
-    public void setElected_times(Integer elected_times) {
-        this.elected_times = elected_times;
+    public void setElectedTimes(Integer electedTimes) {
+        this.electedTimes = electedTimes;
     }
 
     public String getName() {
@@ -37,17 +37,17 @@ public class Character {
     public Character() {/*Necessary for Mongo*/}
 
     public Character(Integer id, String name, String description) {
-        this.character_id = id;
+        this.characterId = id;
         this.name = name;
         this.description = description;
     }
 
-    public Integer getCharacter_id() {
-        return character_id;
+    public Integer getCharacterId() {
+        return characterId;
     }
 
-    public void setCharacter_id(Integer character_id) {
-        this.character_id = character_id;
+    public void setCharacterId(Integer characterId) {
+        this.characterId = characterId;
     }
 
     public String getDescription() {

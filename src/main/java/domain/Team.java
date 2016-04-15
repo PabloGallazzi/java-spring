@@ -16,33 +16,33 @@ import java.util.List;
 public class Team {
 
     @Id
-    private Integer team_id;
-    private String team_name;
+    private Integer teamId;
+    private String teamName;
     @Reference(lazy = true)
     private List<Character> members;
 
     public Team(){/*Necessary for Mongo*/}
 
     public Team(String name) {
-        this.team_name = name;
+        this.teamName = name;
         //this.id = new ObjectId();
         this.members = new ArrayList<>();
     }
 
-    public Integer getTeam_id() {
-        return team_id;
+    public Integer getTeamId() {
+        return teamId;
     }
 
-    public void setTeam_id(Integer team_id) {
-        this.team_id = team_id;
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
     }
 
-    public String getTeam_name() {
-        return team_name;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeam_name(String name) {
-        this.team_name = name;
+    public void setTeamName(String name) {
+        this.teamName = name;
     }
 
     public List<Character> getMembers() {
