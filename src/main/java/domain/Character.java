@@ -43,7 +43,6 @@ public class Character {
     public void setDescription(String description) {
         this.description = description;
     }
-    private String description;
 
     public Integer getElectedTimes() {
         return electedTimes;
@@ -75,14 +74,6 @@ public class Character {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String geteTag() {
