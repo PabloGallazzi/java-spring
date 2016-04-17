@@ -11,7 +11,7 @@
 		<!-- Bootstrap Core CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom CSS -->
-		<link href="css/home_user.css" rel="stylesheet">
+		<link href="css/login.css" rel="stylesheet">
 		<!-- jQuery -->
 		<script src="js/jquery.js"></script>
 		<!-- Bootstrap Core JavaScript -->
@@ -33,65 +33,27 @@
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="#">Personajes</a>
-						</li>
-						<li>
-							<a href="#">Equipos</a>
-						</li>
-						<li>
-							<a href="#">Favoritos</a>
-						</li>
+					<ul class="nav navbar-nav">						
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
 			</div>
 			<!-- /.container -->
 		</nav>
-
-		<header>			
-			<img height="500" width="100%" src="images/home.jpeg" alt="">  			
-		</header> 
 		
-		<!-- Page Content -->
 		<div class="container">
-			<hr>
-			
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="col-sm-12 imgDescription">
-						<a href="#">
-							<img class="img-circle img-center" height="236" width="300" src="images/marvel_characters.png" alt="">
-						</a>
-					</div>
-					<h2 class="imgTitle">Personajes</h2>
-					<p class="imgDescription">Conoce ya el universo entero de personajes de MARVEL.</p>
-				</div>
-				<div class="col-sm-4">
-					<div class="col-sm-12 imgDescription">
-						<a href="#">
-							<img class="img-circle img-center" height="236px" width="300" src="images/favoritos_icon.jpg" alt="">
-						</a>
-					</div>
-					<h2 class="imgTitle">Favoritos</h2>
-					<p class="imgDescription">Accede a todos tus personajes favoritos.</p>
-				</div>
-				<div class="col-sm-4">
-					<div class="col-sm-12 imgDescription">
-						<a href="#">
-							<img class="img-circle img-center" height="236px" width="300" src="images/team.jpg" alt="">
-						</a>
-					</div>
-					<h2 class="imgTitle">Equipos</h2>
-					<p class="imgDescription">Crea tu propio equipo de personajes.</p>
-				</div>
-			</div>
-			<!-- /.row -->
-
-			<hr>			
-
-		</div>
+			<div class="card card-container">				
+				<img id="profile-img" class="profile-img-card" src="images/icon-user.png" />				
+				<form class="form-signin">					
+					<input type="email" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+					<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>					
+					<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+				</form><!-- /form -->
+				<a href="#" >
+					Sign Up
+				</a>
+			</div><!-- /card-container -->
+		</div>	
 		<!-- /.container -->
 
 		<!-- Footer -->
