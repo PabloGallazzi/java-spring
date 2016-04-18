@@ -50,37 +50,37 @@
 							<div class="form-group">
 								<label for="username" class="col-sm-3 control-label">User Name</label>
 								<div class="col-sm-8">
-									<input type="text" id="username" placeholder="User Name" class="form-control" autofocus>								
+									<input type="text" id="username" placeholder="User Name" class="form-control" required autofocus>								
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="password" class="col-sm-3 control-label">Password</label>
 								<div class="col-sm-8">
-									<input type="password" id="password" placeholder="Password" class="form-control">
+									<input type="password" id="password" placeholder="Password" class="form-control" required>
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="firstName" class="col-sm-3 control-label">First Name</label>
 								<div class="col-sm-8">
-									<input type="text" id="firstName" placeholder="First Name" class="form-control" autofocus>								
+									<input type="text" id="firstName" placeholder="First Name" class="form-control" required autofocus>								
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="lastName" class="col-sm-3 control-label">Last Name</label>
 								<div class="col-sm-8">
-									<input type="text" id="lastName" placeholder="Last Name" class="form-control" autofocus>								
+									<input type="text" id="lastName" placeholder="Last Name" class="form-control" required autofocus>								
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="email" class="col-sm-3 control-label">Email</label>
 								<div class="col-sm-8">
-									<input type="email" id="email" placeholder="Email" class="form-control">
+									<input type="email" id="email" placeholder="Email" class="form-control" required>
 								</div>
 							</div>							
 							<div class="form-group">
 								<label for="birthDate" class="col-sm-3 control-label">Date of Birth</label>
 								<div class="col-sm-8">
-									<input type="date" id="birthDate" placeholder="dd/mm/yyyy" class="form-control">
+									<input type="date" id="birthDate" placeholder="dd/mm/yyyy" class="form-control" required>
 								</div>
 							</div>
 					
@@ -90,12 +90,12 @@
 									<div class="row">
 										<div class="col-sm-6">
 											<label class="radio-inline">
-												<input type="radio" id="femaleRadio" value="Female">Female
+												<input required type="radio" name="radioSex" id="femaleRadio" value="Female">Female
 											</label>
 										</div>
 										<div class="col-sm-6">
 											<label class="radio-inline">
-												<input type="radio" id="maleRadio" value="Male">Male
+												<input required type="radio" name="radioSex" id="maleRadio" value="Male">Male
 											</label>
 										</div>									
 									</div>
@@ -105,7 +105,7 @@
 								<div class="col-sm-9 col-sm-offset-3">
 									<div class="checkbox">
 										<label>
-											<input type="checkbox">I accept <a href="#">terms</a>
+											<input type="checkbox" required>I accept <a href="#">terms</a>
 										</label>
 									</div>
 								</div>
