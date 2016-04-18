@@ -1,18 +1,13 @@
 package spring.controllers;
 
-import com.pgallazzi.http.client.TacsRestClient;
-import com.pgallazzi.http.utils.callbacks.JavaRestClientCallback;
-import com.pgallazzi.http.utils.response.RestClientResponse;
 import domain.Character;
-import domain.User;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.services.MarvelApiService;
+import services.MarvelApiService;
 
-import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -58,16 +53,11 @@ public class CharactersRestController {
     }
 
     //This is an example to use the restClient
-    @RequestMapping(value = "/characters/mervel", method = RequestMethod.GET)
-    ResponseEntity<?> getCharacterMarvel(@RequestParam(value = "limit", required = false) String limit,
-                                         @RequestParam(value = "offset", required = false) String offset,
-                                         @RequestParam(value = "name_starts_with", required = false) String nameStartsWith) throws Exception {
-        if (limit == null || offset == null || nameStartsWith == null) {
-            throw new BadRequestException("Parameters limit, offset and name_starts_with must be provided");
-        }
+    @RequestMapping(value = "/characters/marvel", method = RequestMethod.GET)
+    ResponseEntity<?> getCharacterMarvel(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit,
+                                         @RequestParam(value = "offset", required = false, defaultValue = "0") String offset,
+                                         @RequestParam(value = "name_starts_with", required = false, defaultValue = "") String nameStartsWith) throws Exception {
         GetMarvelCharacters resp = MarvelApiService.getCharacters(nameStartsWith, limit, offset);
-        //See also:
-        //GetMarvelCharacters resp = MarvelApiService.getCharacters(nameStartsWith, limit, offset);
         return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 
