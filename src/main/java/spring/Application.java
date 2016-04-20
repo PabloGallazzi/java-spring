@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by pgallazzi on 31/3/16.
  */
-@SpringBootApplication(scanBasePackages = {"services", "spring"})
+@SpringBootApplication(scanBasePackages = {"services", "spring", "repositories"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

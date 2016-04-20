@@ -2,6 +2,10 @@ package domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 import java.util.Date;
 import java.util.List;
@@ -11,11 +15,14 @@ import java.util.Random;
  * Created by pgallazzi on 11/4/16.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity("tokens")
 public class Token {
-
-    Date expirationDate;
+    @Id
     String accessToken;
+    Date expirationDate;
+    //@Reference(lazy = true) Si referencias un usuario y no el ID deberias tener esto
     Integer userId;
+    @Embedded //Revisar si esto funciona o estalla porque no se si se embeben listas de strings
     List<String> scopes;
 
     public Token(List<String> scopes, Integer userId) {

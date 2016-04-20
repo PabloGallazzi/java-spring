@@ -2,9 +2,12 @@ package spring.controllers;
 
 import domain.Token;
 import domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import repositories.AuthRepository;
+import repositories.UsersRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +18,20 @@ import java.util.List;
 @RestController
 public class AuthRestController {
 
+    @Autowired
+    private AuthRepository auths;
+
     /* URLs a Mapear en el controller.
     * /user/authenticate POST
     *
     * */
     @RequestMapping(value = "/users/authenticate", method = RequestMethod.POST)
     ResponseEntity<?> login(@RequestBody User input) {
-        List<String> scopes = new ArrayList<>();
-        scopes.add("admin");
-        scopes.add("read");
-        scopes.add("write");
-        Token token = new Token(scopes,1);
+        //TODO: ojo que no se que hace al hacer el parseoen el requestBody. Si usa el setter, la pass esta en SHA.
+        //TODO: y el usuario en el metodo passwordIsCorrect da por hecho que recibe el string.
+        //Checkear que haya traido informacion
+        Token token = auths.login(input);
+        //Validar que no haya devuelto null
         return new ResponseEntity<>(token, null, HttpStatus.OK);
     }
 
