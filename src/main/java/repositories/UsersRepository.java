@@ -18,10 +18,6 @@ public class UsersRepository {
     @Autowired
     private DSMongoInterface ds;
 
-    public User findById(Integer id) {
-        return ds.getDatastore().find(User.class, "userId", id).get();
-    }
-
     public User findByUserNameAndPassword(String userName, String password) {
         User aUser = ds.getDatastore().find(User.class, "userName", userName).get();
         return aUser.passwordIsCorrect(password) ? aUser : null;

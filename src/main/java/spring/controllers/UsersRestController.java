@@ -1,10 +1,10 @@
 package spring.controllers;
 
-import com.mongodb.DuplicateKeyException;
 import domain.Character;
 import domain.Team;
 import domain.User;
 import exceptions.rest.BadRequestException;
+import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,30 +60,17 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    ResponseEntity<?> getUserInfo(@PathVariable Integer id,
+    ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
-        User user = new User();
-        user.setUserName("Pablo" + String.valueOf(new Date().getTime()));
-        user.setUserPassword("123456");
-        user.setLastAccess(new Date());
-        /*Team team = new Team("Pablito");
-        team.setTeamId(1);
-        List<Character> teamItems = new ArrayList<>();
-        Character character = new Character(1,"TACS","TACSDescription");
-        teamItems.add(character);
-        team.setMembers(teamItems);
-        List<Team> teams = new ArrayList<Team>();
-        teams.add(team);
-        user.setTeams(teams);
-        List<Character> characters = new ArrayList<Character>();
-        characters.add(character);
-        user.setFavorites(characters);*/
-        String idString = String.format("%1$" + "24" + "s", String.valueOf(new Date().getTime())).replaceAll(" ", "a");
-        //TODO: Remove this
-        ObjectId objectId = new ObjectId(idString);
-        user.setUserId(objectId);
-        users.save(user);
-        user = users.findByUserId(idString);
+        User user;
+        try{
+            user = users.findByUserId(id);
+        } catch (Exception e){
+            throw new NotFoundException();
+        }
+        if (user == null){
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(user, null, HttpStatus.OK);
     }
 
