@@ -2,8 +2,14 @@ package domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
+import spring.utils.ObjectIdToStringSerializer;
+import spring.utils.StringToObjectIdDeserializer;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,8 +22,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
+    @JsonSerialize(using = ObjectIdToStringSerializer.class)
+    @JsonDeserialize(using = StringToObjectIdDeserializer.class)
     @Id
-    private Integer userId;
+    private ObjectId userId;
+
     @Indexed(name="user", unique=true)
     private String userName;
     private String userPassword;
@@ -81,11 +90,11 @@ public class User {
         this.teams = teams;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(ObjectId userId) {
         this.userId = userId;
     }
 
-    public Integer getUserId() {
+    public ObjectId getUserId() {
         return userId;
     }
 
