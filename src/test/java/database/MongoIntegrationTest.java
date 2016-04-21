@@ -5,6 +5,7 @@ import de.bwaldvogel.mongo.MongoServer;
 import domain.Character;
 import domain.Team;
 import domain.User;
+import org.bson.types.ObjectId;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +37,11 @@ public class MongoIntegrationTest {
 
     private void insertTestData() {
         User user = new User("TACS","test");
-        user.setUserId(1);
+        //user.setUserId(1);
         Team team1 = new Team("Teamtest1");
-        team1.setTeamId(1);
+        team1.setTeamId(new ObjectId("123456789123456789123456"));
         Team team2 = new Team("Teamtest2");
-        team2.setTeamId(2);
+        team2.setTeamId(new ObjectId("123456789123456789123455"));
         Character character1 = new Character(1, "Cap America", "Adamantium addict");
         Character character2 = new Character(2, "Black Widow", "=)");
         Character character3 = new Character(3, "Hawkeye", "The Dark Age guy");

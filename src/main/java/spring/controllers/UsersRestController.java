@@ -4,9 +4,11 @@ import domain.Character;
 import domain.Team;
 import domain.User;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import repositories.UsersRepository;
 
 import java.util.*;
 
@@ -15,6 +17,9 @@ import java.util.*;
  */
 @RestController
 public class UsersRestController {
+
+    @Autowired
+    private UsersRepository users;
 
     /* URLs a Mapear en el controller.
     * /teams/commons/{id}/{id2} GET
@@ -34,14 +39,14 @@ public class UsersRestController {
     ResponseEntity<?> compareTeams(@PathVariable Integer id,
                                    @PathVariable Integer id2) {
         List<Character> output = new ArrayList<>();
-        Character character = new Character(1,"TACS","Description");
+        Character character = new Character(1, "TACS", "Description");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User input) {
-        input.setUserId(1);
+
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -49,10 +54,10 @@ public class UsersRestController {
     ResponseEntity<?> getUserInfo(@PathVariable Integer id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
         User user = new User();
-        user.setUserId(1);
-        user.setUserName("Pablo");
+        user.setUserName("Pablo" + String.valueOf(new Date().getTime()));
+        user.setUserPassword("123456");
         user.setLastAccess(new Date());
-        Team team = new Team("Pablito");
+        /*Team team = new Team("Pablito");
         team.setTeamId(1);
         List<Character> teamItems = new ArrayList<>();
         Character character = new Character(1,"TACS","TACSDescription");
@@ -63,14 +68,20 @@ public class UsersRestController {
         user.setTeams(teams);
         List<Character> characters = new ArrayList<Character>();
         characters.add(character);
-        user.setFavorites(characters);
+        user.setFavorites(characters);*/
+        String idString = String.format("%1$" + "24" + "s", String.valueOf(new Date().getTime())).replaceAll(" ", "a");
+        //TODO: Remove this
+        ObjectId objectId = new ObjectId(idString);
+        user.setUserId(objectId);
+        users.save(user);
+        user = users.findByUserId(idString);
         return new ResponseEntity<>(user, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable Integer user) {
         List<Character> output = new ArrayList<>();
-        Character character = new Character(123,"TestName","TestDescription");
+        Character character = new Character(123, "TestName", "TestDescription");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
@@ -91,7 +102,8 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Team input) {
-        input.setTeamId(1);
+        //TODO: Remove this
+        input.setTeamId(new ObjectId("123456789123456789123456"));
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -99,8 +111,8 @@ public class UsersRestController {
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
         Team output = new Team("TeamName");
-        output.setTeamId(1);
-        Character character = new Character(1,"CharacterName","DescriptionTest");
+        output.setTeamId(new ObjectId("123456789123456789123456"));
+        Character character = new Character(1, "CharacterName", "DescriptionTest");
         output.getMembers().add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
