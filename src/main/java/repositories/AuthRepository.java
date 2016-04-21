@@ -28,6 +28,8 @@ public class AuthRepository {
     }
 
     public Token login(User aUser){
+        //FIXME: Some day...
+        /*
         User loggedUser = users.findByUserNameAndPassword(aUser.getUserName(), aUser.getUserPassword());
         List<String> scopes = new ArrayList<>();
         scopes.add("admin");
@@ -35,7 +37,9 @@ public class AuthRepository {
         scopes.add("write");
         Token token = new Token(scopes,1);
         //Retorna token o null
-        return (loggedUser != null) ? new Token(scopes,loggedUser.getUserId()) : null ;
+        return (loggedUser != null) ? new Token(scopes,1) : null ;
+        */
+        return null;
     }
 
 
