@@ -31,8 +31,10 @@ public class UsersRepository {
         return ds.getDatastore().find(User.class, "userId", new ObjectId(id)).get();
     }
 
-    public void save(User newUser) {
-        ds.getDatastore().save(newUser);
+    public User save(User newUser) {
+        ObjectId objectId = (ObjectId) ds.getDatastore().save(newUser).getId();
+        newUser.setUserId(objectId);
+        return newUser;
     }
 
     public void saveWithCharacter(User newUser, Character newCharacter) {

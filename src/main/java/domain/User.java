@@ -2,13 +2,16 @@ package domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import exceptions.rest.BadRequestException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 import spring.utils.ObjectIdToStringSerializer;
 import spring.utils.StringToObjectIdDeserializer;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 
 import java.util.ArrayList;
@@ -27,8 +30,9 @@ public class User {
     @Id
     private ObjectId userId;
 
-    @Indexed(name="user", unique=true)
+    @Indexed(name = "user", unique = true)
     private String userName;
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String userPassword;
     @Reference(lazy = true)
     private List<Character> favorites;
@@ -36,7 +40,7 @@ public class User {
     private List<Team> teams;
     private Date lastAccess;
 
-    public User(){/*Necessary for Mongo*/}
+    public User() {/*Necessary for Mongo*/}
 
     public User(String username, String password) {
         this.userName = username;
@@ -55,15 +59,14 @@ public class User {
     }
 
     public void setUserPassword(String password) {
-        this.userPassword = DigestUtils.sha256Hex(password);
+        this.userPassword = password;
     }
 
-    @JsonIgnore
     public String getUserPassword() {
         return this.userPassword;
     }
 
-    public boolean passwordIsCorrect(String password){
+    public boolean passwordIsCorrect(String password) {
         return this.userPassword.equals(DigestUtils.sha256Hex(password));
     }
 
@@ -82,6 +85,7 @@ public class User {
     public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
     }
+
     public void setFavorites(List<Character> favorites) {
         this.favorites = favorites;
     }
@@ -94,8 +98,37 @@ public class User {
         this.userId = userId;
     }
 
+    private void encryptPassword(){
+        this.userPassword = DigestUtils.sha256Hex(this.userPassword);
+    }
+
     public ObjectId getUserId() {
         return userId;
+    }
+
+    public static void validateUser(User userToValidate) {
+        userToValidate.setUserId(null);
+        validatePassword(userToValidate.getUserPassword());
+        userToValidate.encryptPassword();
+    }
+
+    private static void validatePassword(String userPassword) {
+        List<String> causes = new ArrayList<>();
+        if (userPassword.length() < 6) {
+            causes.add("user_password_length_below_6_chars");
+        }
+        if (!userPassword.contains(";") && !userPassword.contains(",") && !userPassword.contains(".") && !userPassword.contains("_") && !userPassword.contains("-")) {
+            causes.add("user_password_must_contain_one_of_|;,._-|");
+        }
+        if (causes.size() != 0) {
+            String[] arrayOfCauses = new String[causes.size()];
+            int index = 0;
+            for (String cause : causes) {
+                arrayOfCauses[index] = cause;
+                index++;
+            }
+            throw new BadRequestException("Unable to create user", "Validation error", arrayOfCauses);
+        }
     }
 
 }

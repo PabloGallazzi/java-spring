@@ -1,8 +1,10 @@
 package spring.controllers;
 
+import com.mongodb.DuplicateKeyException;
 import domain.Character;
 import domain.Team;
 import domain.User;
+import exceptions.rest.BadRequestException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,9 +47,16 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    ResponseEntity<?> createUser(@RequestBody User input) {
-
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> createUser(@RequestBody User userBody) {
+        User.validateUser(userBody);
+        try {
+            users.save(userBody);
+        } catch (com.mongodb.DuplicateKeyException e) {
+            String[] cause = new String[1];
+            cause[0] = "user_name_already_used";
+            throw new BadRequestException("Unable to create user", "Validation error", cause);
+        }
+        return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)

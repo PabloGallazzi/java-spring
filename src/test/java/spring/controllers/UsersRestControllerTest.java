@@ -27,7 +27,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     public void testCreateUser() throws Exception {
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "userTest");
-        request.put("user_password", 12345678);
+        request.put("user_password", "12345678;");
         String body = json(request);
         mockMvc.perform(post("/users")
                 .content(body)
