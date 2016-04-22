@@ -1,11 +1,12 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Reference;
 
 import java.util.Date;
 import java.util.List;
@@ -20,12 +21,14 @@ public class Token {
     @Id
     String accessToken;
     Date expirationDate;
-    //@Reference(lazy = true) Si referencias un usuario y no el ID deberias tener esto
-    Integer userId;
+    ObjectId userId;
     @Embedded //Revisar si esto funciona o estalla porque no se si se embeben listas de strings
     List<String> scopes;
 
-    public Token(List<String> scopes, Integer userId) {
+    public Token(){
+    }
+
+    public Token(List<String> scopes, ObjectId userId) {
         Date date = new Date();
         date.setTime(date.getTime()+120001);
         this.expirationDate = date;
@@ -52,11 +55,11 @@ public class Token {
         this.accessToken = token;
     }
 
-    public Integer getUserId() {
+    public ObjectId getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer user) {
+    public void setUserId(ObjectId user) {
         this.userId = user;
     }
 
@@ -66,6 +69,12 @@ public class Token {
 
     public void setScopes(List<String> scopes) {
         this.scopes = scopes;
+    }
+
+    @JsonIgnore
+    public Boolean isFresh(){
+        //TODO: Redefine this...
+        return true;
     }
 
 }
