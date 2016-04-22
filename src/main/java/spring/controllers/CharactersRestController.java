@@ -2,13 +2,19 @@ package spring.controllers;
 
 import domain.Character;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
-import exceptions.rest.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import services.MarvelApiService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -21,6 +27,9 @@ public class CharactersRestController {
     * /characters/ranking GET
     *
     * */
+
+    @Autowired
+    private MarvelApiService marvelApiService;
 
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     ResponseEntity<?> getCharacters(@RequestParam(value = "sort", required = false) String sort,
@@ -57,7 +66,7 @@ public class CharactersRestController {
     ResponseEntity<?> getCharacterMarvel(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit,
                                          @RequestParam(value = "offset", required = false, defaultValue = "0") String offset,
                                          @RequestParam(value = "name_starts_with", required = false, defaultValue = "") String nameStartsWith) throws Exception {
-        GetMarvelCharacters resp = MarvelApiService.getCharacters(nameStartsWith, limit, offset);
+        GetMarvelCharacters resp = marvelApiService.getCharacters(nameStartsWith, limit, offset);
         return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 

@@ -33,7 +33,7 @@ public class MarvelApiService {
         return "ts=" + timeStamp + "&apikey=" + publicKey + "&hash=" + DigestUtils.md5Hex(stringToHash);
     }
 
-    public static GetMarvelCharacters getCharacters(String nameStartsWith, String limit, String offset) throws Exception {
+    public GetMarvelCharacters getCharacters(String nameStartsWith, String limit, String offset) throws Exception {
         final Map<String, GetMarvelCharacters> resp = new HashMap<>();
         String uri = BASE_URL;
         uri += "characters?" + "orderBy=name&limit=" + limit + "&offset=" + offset + "&" + generateAuthInfo();
