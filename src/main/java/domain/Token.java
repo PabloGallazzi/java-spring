@@ -2,11 +2,13 @@ package domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import spring.utils.ObjectIdToStringSerializer;
 
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Token {
     @Id
     String accessToken;
     Date expirationDate;
+    @JsonSerialize(using = ObjectIdToStringSerializer.class)
     ObjectId userId;
     @Embedded //Revisar si esto funciona o estalla porque no se si se embeben listas de strings
     List<String> scopes;
