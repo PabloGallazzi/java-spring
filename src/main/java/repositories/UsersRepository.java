@@ -20,7 +20,7 @@ public class UsersRepository {
 
     public User findByUserNameAndPassword(String userName, String password) {
         User aUser = ds.getDatastore().find(User.class, "userName", userName).get();
-        return aUser.passwordIsCorrect(password) ? aUser : null;
+        return aUser != null ? aUser.passwordIsCorrect(password) ? aUser : null : null;
     }
 
     public User findByUserId(String id) {
