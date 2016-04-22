@@ -53,6 +53,38 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testCreateUserFailNoPassword() throws Exception {
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("user_name", "userTest");
+        String body = json(request);
+        mockMvc.perform(post("/users")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Unable to create user")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("Validation error")))
+                .andExpect(jsonPath("$.cause", is(Collections.singletonList("must_provide_a_password"))));
+    }
+
+    @Test
+    public void testCreateUserFailNoUserName() throws Exception {
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("user_password", "12345678;");
+        String body = json(request);
+        mockMvc.perform(post("/users")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Unable to create user")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("Validation error")))
+                .andExpect(jsonPath("$.cause", is(Collections.singletonList("must_provide_a_user_name"))));
+    }
+
+    @Test
     public void testCreateUserFailBadPasswordNoSpecialCharacters() throws Exception {
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "userTest");

@@ -97,7 +97,7 @@ public class User {
         this.userId = userId;
     }
 
-    private void encryptPassword(){
+    private void encryptPassword() {
         this.userPassword = DigestUtils.sha256Hex(this.userPassword);
     }
 
@@ -113,11 +113,15 @@ public class User {
 
     private static void validatePassword(String userPassword) {
         List<String> causes = new ArrayList<>();
-        if (userPassword.length() < 6) {
-            causes.add("user_password_length_below_6_chars");
-        }
-        if (!userPassword.contains(";") && !userPassword.contains(",") && !userPassword.contains(".") && !userPassword.contains("_") && !userPassword.contains("-")) {
-            causes.add("user_password_must_contain_one_of_|;,._-|");
+        if (userPassword == null) {
+            causes.add("must_provide_a_password");
+        } else {
+            if (userPassword.length() < 6) {
+                causes.add("user_password_length_below_6_chars");
+            }
+            if (!userPassword.contains(";") && !userPassword.contains(",") && !userPassword.contains(".") && !userPassword.contains("_") && !userPassword.contains("-")) {
+                causes.add("user_password_must_contain_one_of_|;,._-|");
+            }
         }
         if (causes.size() != 0) {
             String[] arrayOfCauses = new String[causes.size()];

@@ -48,6 +48,11 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User userBody) {
+        if (userBody.getUserName() == null) {
+            String[] cause = new String[1];
+            cause[0] = "must_provide_a_user_name";
+            throw new BadRequestException("Unable to create user", "Validation error", cause);
+        }
         User.validateUser(userBody);
         try {
             users.save(userBody);
