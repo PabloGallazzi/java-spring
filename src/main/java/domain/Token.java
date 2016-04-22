@@ -23,9 +23,10 @@ public class Token {
     @Id
     String accessToken;
     Date expirationDate;
+    //No need to link the user
     @JsonSerialize(using = ObjectIdToStringSerializer.class)
     ObjectId userId;
-    @Embedded //Revisar si esto funciona o estalla porque no se si se embeben listas de strings
+    @Embedded
     List<String> scopes;
 
     public Token(){
