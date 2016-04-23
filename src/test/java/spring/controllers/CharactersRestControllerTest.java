@@ -1,22 +1,15 @@
 package spring.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import domain.Character;
-import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import services.DSMongoInterface;
-import services.MarvelApiService;
 import spring.BaseRestTester;
 
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,11 +25,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersOk() throws Exception {
-        String apiResponse = "{\"code\":200,\"status\":\"Ok\",\"data\":{\"offset\":0,\"limit\":10,\"total\":1485,\"results\":[{\"id\":1011334,\"name\":\"3-D Man\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1011334\"},{\"id\":1017100,\"name\":\"A-Bomb (HAS)\",\"description\":\"Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! \",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1017100\"},{\"id\":1009144,\"name\":\"A.I.M.\",\"description\":\"AIM is a terrorist organization bent on destroying the world.\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009144\"},{\"id\":1010699,\"name\":\"Aaron Stack\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1010699\"},{\"id\":1009146,\"name\":\"Abomination (Emil Blonsky)\",\"description\":\"Formerly known as Emil Blonsky, a spy of Soviet Yugoslavian origin working for the KGB, the Abomination gained his powers after receiving a dose of gamma radiation similar to that which transformed Bruce Banner into the incredible Hulk.\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce18691cbf04\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009146\"},{\"id\":1016823,\"name\":\"Abomination (Ultimate)\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1016823\"},{\"id\":1009148,\"name\":\"Absorbing Man\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/1/b0/5269678709fb7\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009148\"},{\"id\":1009149,\"name\":\"Abyss\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/9/30/535feab462a64\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009149\"},{\"id\":1010903,\"name\":\"Abyss (Age of Apocalypse)\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/3/80/4c00358ec7548\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1010903\"},{\"id\":1011266,\"name\":\"Adam Destine\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1011266\"}]}}";
-        Gson gson = new GsonBuilder().create();
-        GetMarvelCharacters getMarvelCharacters = gson.fromJson(apiResponse, GetMarvelCharacters.class);
-        MarvelApiService marvelApiService = mock(MarvelApiService.class);
-        when(marvelApiService.getCharacters(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(getMarvelCharacters);
         mockMvc.perform(get("/characters")
                 .param("offset", "0")
                 .param("limit", "10"))
@@ -71,11 +59,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersOkNoParams() throws Exception {
-        String apiResponse = "{\"code\":200,\"status\":\"Ok\",\"data\":{\"offset\":0,\"limit\":100,\"total\":1485,\"results\":[{\"id\":1011334,\"name\":\"3-D Man\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1011334\"},{\"id\":1017100,\"name\":\"A-Bomb (HAS)\",\"description\":\"Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! \",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1017100\"},{\"id\":1009144,\"name\":\"A.I.M.\",\"description\":\"AIM is a terrorist organization bent on destroying the world.\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009144\"},{\"id\":1010699,\"name\":\"Aaron Stack\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1010699\"},{\"id\":1009146,\"name\":\"Abomination (Emil Blonsky)\",\"description\":\"Formerly known as Emil Blonsky, a spy of Soviet Yugoslavian origin working for the KGB, the Abomination gained his powers after receiving a dose of gamma radiation similar to that which transformed Bruce Banner into the incredible Hulk.\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce18691cbf04\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009146\"},{\"id\":1016823,\"name\":\"Abomination (Ultimate)\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1016823\"},{\"id\":1009148,\"name\":\"Absorbing Man\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/1/b0/5269678709fb7\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009148\"},{\"id\":1009149,\"name\":\"Abyss\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/9/30/535feab462a64\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1009149\"},{\"id\":1010903,\"name\":\"Abyss (Age of Apocalypse)\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/3/80/4c00358ec7548\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1010903\"},{\"id\":1011266,\"name\":\"Adam Destine\",\"description\":\"\",\"elected_times\":0,\"thumbnail\":{\"path\":\"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available\",\"extension\":\"jpg\"},\"resource_uri\":\"http://gateway.marvel.com/v1/public/characters/1011266\"}]}}";
-        Gson gson = new GsonBuilder().create();
-        GetMarvelCharacters getMarvelCharacters = gson.fromJson(apiResponse, GetMarvelCharacters.class);
-        MarvelApiService marvelApiService = mock(MarvelApiService.class);
-        when(marvelApiService.getCharacters(anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(getMarvelCharacters);
         mockMvc.perform(get("/characters"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -84,6 +67,18 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.data.offset", is(0)))
                 .andExpect(jsonPath("$.data.total", is(1485)))
                 .andExpect(jsonPath("$.data.limit", is(100)));
+    }
+
+    @Test
+    public void testGetCharactersFailThrowsException() throws Exception {
+        mockMvc.perform(get("/characters")
+                .param("name_starts_with", "throwException"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Somethig went wrong!")))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.error", is("internal_error")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test

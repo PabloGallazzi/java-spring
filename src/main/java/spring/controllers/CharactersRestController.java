@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repositories.CharactersRepository;
-import services.MarvelApiService;
+import services.MarvelApiServiceInterface;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -25,7 +25,7 @@ public class CharactersRestController {
     * */
 
     @Autowired
-    private MarvelApiService marvelApiService;
+    private MarvelApiServiceInterface marvelApiService;
     @Autowired
     private CharactersRepository charactersRepository;
 
