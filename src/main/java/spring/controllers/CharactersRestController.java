@@ -1,6 +1,5 @@
 package spring.controllers;
 
-import domain.Character;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repositories.CharactersRepository;
 import services.MarvelApiService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -29,6 +26,8 @@ public class CharactersRestController {
 
     @Autowired
     private MarvelApiService marvelApiService;
+    @Autowired
+    private CharactersRepository charactersRepository;
 
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     ResponseEntity<?> getCharacters(@RequestParam(value = "sort", required = false, defaultValue = "name") String sort,
@@ -57,7 +56,7 @@ public class CharactersRestController {
         } catch (NumberFormatException e) {
             throw new BadRequestException("Invalid value for parameter offset, must be a number greater than 0");
         }
-        if ((offsetFromQuery < 0)) {
+        if (offsetFromQuery < 0) {
             throw new BadRequestException("Invalid value for parameter offset, must be a number greater than 0");
         }
         GetMarvelCharacters resp = marvelApiService.getCharacters(nameStartsWith, limit, offset, criteria, sort);
@@ -65,15 +64,17 @@ public class CharactersRestController {
     }
 
     @RequestMapping(value = "/characters/ranking", method = RequestMethod.GET)
-    ResponseEntity<?> getRanking() {
-        List<Character> output = new ArrayList<>();
-        Character character = new Character(2, "Dr. Strange", "Tira magias.");
-        character.setElectedTimes(10);
-        Character character2 = new Character(3, "Hulk", "SMASH SMASH SMASH");
-        character2.setElectedTimes(9);
-        output.add(character);
-        output.add(character2);
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+    ResponseEntity<?> getRanking(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit) {
+        Integer limitFromRequest;
+        try {
+            limitFromRequest = Integer.valueOf(limit);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Invalid value for parameter limit, must be a number greater than 0");
+        }
+        if (limitFromRequest < 1 || limitFromRequest > 100) {
+            throw new BadRequestException("Invalid value for parameter limit, must be a number greater than 0");
+        }
+        return new ResponseEntity<>(charactersRepository.getCharactersOrderedByTimesElectedDesc(limitFromRequest), null, HttpStatus.OK);
     }
 
 }
