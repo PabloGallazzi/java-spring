@@ -5,10 +5,9 @@ import com.pgallazzi.http.utils.callbacks.JavaRestClientCallback;
 import com.pgallazzi.http.utils.response.RestClientResponse;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.InternalServerError;
-import exceptions.rest.RestBaseException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,7 +19,8 @@ import java.util.Map;
  */
 @Service
 @Scope("singleton")
-public class MarvelApiService {
+@Profile({"production","develop"})
+public class MarvelApiService implements MarvelApiServiceInterface{
 
     private static TacsRestClient restClient = new TacsRestClient();
 
