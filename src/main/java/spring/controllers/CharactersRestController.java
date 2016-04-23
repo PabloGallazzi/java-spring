@@ -56,7 +56,7 @@ public class CharactersRestController {
         } catch (NumberFormatException e) {
             throw new BadRequestException("Invalid value for parameter offset, must be a number greater than 0");
         }
-        if ((offsetFromQuery < 0)) {
+        if (offsetFromQuery < 0) {
             throw new BadRequestException("Invalid value for parameter offset, must be a number greater than 0");
         }
         GetMarvelCharacters resp = marvelApiService.getCharacters(nameStartsWith, limit, offset, criteria, sort);
@@ -71,7 +71,7 @@ public class CharactersRestController {
         } catch (NumberFormatException e) {
             throw new BadRequestException("Invalid value for parameter limit, must be a number greater than 0");
         }
-        if (limitFromRequest < 1) {
+        if (limitFromRequest < 1 || limitFromRequest > 100) {
             throw new BadRequestException("Invalid value for parameter limit, must be a number greater than 0");
         }
         return new ResponseEntity<>(charactersRepository.getCharactersOrderedByTimesElectedDesc(limitFromRequest), null, HttpStatus.OK);

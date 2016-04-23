@@ -171,9 +171,21 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetRankingCharactersInvalidLimit() throws Exception {
+    public void testGetRankingCharactersInvalidLimit0() throws Exception {
         mockMvc.perform(get("/characters/ranking")
                 .param("limit", "0"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Invalid value for parameter limit, must be a number greater than 0")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharactersInvalidLimit101() throws Exception {
+        mockMvc.perform(get("/characters/ranking")
+                .param("limit", "101"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Invalid value for parameter limit, must be a number greater than 0")))
