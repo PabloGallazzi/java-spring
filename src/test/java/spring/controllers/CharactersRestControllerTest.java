@@ -2,13 +2,17 @@ package spring.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import domain.Character;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import services.DSMongoInterface;
 import services.MarvelApiService;
 import spring.BaseRestTester;
 
 import java.util.Collections;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -22,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by niko118 on 4/11/16.
  */
 public class CharactersRestControllerTest extends BaseRestTester {
+
+    @Autowired
+    private DSMongoInterface ds;
 
     @Test
     public void testGetCharactersOk() throws Exception {
@@ -161,6 +168,135 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharactersInvalidLimit() throws Exception {
+        mockMvc.perform(get("/characters/ranking")
+                .param("limit", "0"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Invalid value for parameter limit, must be a number greater than 0")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharactersInvalidLimit2() throws Exception {
+        mockMvc.perform(get("/characters/ranking")
+                .param("limit", "askjdba"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Invalid value for parameter limit, must be a number greater than 0")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharacters() throws Exception {
+        Character character;
+        character = new Character(1, "name1", "description1");
+        character.setElectedTimes(10);
+        ds.getDatastore().save(character);
+        character = new Character(2, "name2", "description2");
+        character.setElectedTimes(9);
+        ds.getDatastore().save(character);
+        character = new Character(3, "name3", "description3");
+        character.setElectedTimes(8);
+        ds.getDatastore().save(character);
+        character = new Character(4, "name4", "description4");
+        character.setElectedTimes(7);
+        ds.getDatastore().save(character);
+        character = new Character(5, "name5", "description5");
+        character.setElectedTimes(6);
+        ds.getDatastore().save(character);
+        character = new Character(6, "name6", "description6");
+        character.setElectedTimes(5);
+        ds.getDatastore().save(character);
+        character = new Character(7, "name7", "description7");
+        character.setElectedTimes(4);
+        ds.getDatastore().save(character);
+        character = new Character(8, "name8", "description8");
+        character.setElectedTimes(3);
+        ds.getDatastore().save(character);
+        character = new Character(9, "name9", "description9");
+        character.setElectedTimes(2);
+        ds.getDatastore().save(character);
+        character = new Character(10, "name10", "description10");
+        character.setElectedTimes(1);
+        ds.getDatastore().save(character);
+        mockMvc.perform(get("/characters/ranking")
+                .param("limit", "5"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[3].id", is(4)))
+                .andExpect(jsonPath("$[4].id", is(5)));
+        for (int i = 0; i < 10; i++) {
+            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
+        }
+    }
+
+    @Test
+    public void testGetRankingCharactersTotalIsLessThanAsked() throws Exception {
+        Character character;
+        character = new Character(1, "name1", "description1");
+        character.setElectedTimes(10);
+        ds.getDatastore().save(character);
+        character = new Character(2, "name2", "description2");
+        character.setElectedTimes(9);
+        ds.getDatastore().save(character);
+        character = new Character(3, "name3", "description3");
+        character.setElectedTimes(8);
+        ds.getDatastore().save(character);
+        character = new Character(4, "name4", "description4");
+        character.setElectedTimes(7);
+        ds.getDatastore().save(character);
+        mockMvc.perform(get("/characters/ranking")
+                .param("limit", "4"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[3].id", is(4)));
+        for (int i = 0; i < 5; i++) {
+            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
+        }
+    }
+
+    @Test
+    public void testGetRankingCharactersNoLimitParameter() throws Exception {
+        Character character;
+        character = new Character(1, "name1", "description1");
+        character.setElectedTimes(10);
+        ds.getDatastore().save(character);
+        character = new Character(2, "name2", "description2");
+        character.setElectedTimes(9);
+        ds.getDatastore().save(character);
+        character = new Character(3, "name3", "description3");
+        character.setElectedTimes(8);
+        ds.getDatastore().save(character);
+        character = new Character(4, "name4", "description4");
+        character.setElectedTimes(7);
+        ds.getDatastore().save(character);
+        mockMvc.perform(get("/characters/ranking"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[3].id", is(4)));
+        for (int i = 0; i < 5; i++) {
+            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
+        }
     }
 
 }
