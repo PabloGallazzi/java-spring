@@ -4,8 +4,11 @@ import com.pgallazzi.http.client.TacsRestClient;
 import com.pgallazzi.http.utils.callbacks.JavaRestClientCallback;
 import com.pgallazzi.http.utils.response.RestClientResponse;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
+import exceptions.rest.InternalServerError;
+import exceptions.rest.RestBaseException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -33,11 +36,15 @@ public class MarvelApiService {
         return "ts=" + timeStamp + "&apikey=" + publicKey + "&hash=" + DigestUtils.md5Hex(stringToHash);
     }
 
-    public GetMarvelCharacters getCharacters(String nameStartsWith, String limit, String offset) throws Exception {
+    public GetMarvelCharacters getCharacters(String nameStartsWith, String limit, String offset, String criteria, String sort) throws Exception {
         final Map<String, GetMarvelCharacters> resp = new HashMap<>();
+        String realSort = sort;
+        if (criteria.equals("desc")) {
+            realSort = "-" + sort;
+        }
         String uri = BASE_URL;
-        uri += "characters?" + "orderBy=name&limit=" + limit + "&offset=" + offset + "&" + generateAuthInfo();
-        if (nameStartsWith.length() != 0) {
+        uri += "characters?" + "orderBy=" + realSort + "&limit=" + limit + "&offset=" + offset + "&" + generateAuthInfo();
+        if (!nameStartsWith.isEmpty()) {
             uri += "&nameStartsWith=" + nameStartsWith;
         }
         restClient.get(uri, new JavaRestClientCallback<GetMarvelCharacters>(GetMarvelCharacters.class) {
@@ -49,7 +56,7 @@ public class MarvelApiService {
 
             @Override
             public void handleFailure(RestClientResponse it) {
-                //Handle error
+                throw new InternalServerError();
             }
         });
         return resp.get("response");
