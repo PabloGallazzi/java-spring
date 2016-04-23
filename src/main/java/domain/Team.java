@@ -1,9 +1,14 @@
 package domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
+import spring.utils.ObjectIdToStringSerializer;
+import spring.utils.StringToObjectIdDeserializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +20,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Team {
 
+    @JsonSerialize(using = ObjectIdToStringSerializer.class)
+    @JsonDeserialize(using = StringToObjectIdDeserializer.class)
     @Id
-    private Integer teamId;
+    private ObjectId teamId;
     private String teamName;
     @Reference(lazy = true)
     private List<Character> members;
@@ -29,11 +36,11 @@ public class Team {
         this.members = new ArrayList<>();
     }
 
-    public Integer getTeamId() {
+    public ObjectId getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(Integer teamId) {
+    public void setTeamId(ObjectId teamId) {
         this.teamId = teamId;
     }
 

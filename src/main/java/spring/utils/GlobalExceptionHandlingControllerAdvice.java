@@ -1,4 +1,4 @@
-package spring.globalexceptionhandlers;
+package spring.utils;
 
 import exceptions.rest.ExceptionMapper;
 import exceptions.rest.InternalServerError;
@@ -21,7 +21,7 @@ import java.util.Date;
  * Created by pgallazzi on 3/4/16.
  */
 @ControllerAdvice
-public class GlobalRestExceptionHandlingControllerAdvice {
+public class GlobalExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(RestBaseException.class)
     public ResponseEntity<?> handleError(HttpServletRequest req, Exception exception)

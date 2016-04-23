@@ -18,6 +18,7 @@ public class Character {
     Integer electedTimes = 0;
     Thumbnail thumbnail;
     String resourceURI;
+    private String eTag;
 
     public String getResourceURI() {
         return resourceURI;
@@ -61,8 +62,10 @@ public class Character {
 
     public Character() {/*Necessary for Mongo*/}
 
-    public Character(Integer id) {
+    public Character(Integer id, String name, String description) {
         this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -71,5 +74,21 @@ public class Character {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String geteTag() {
+        return eTag;
+    }
+
+    public void seteTag(String eTag) {
+        this.eTag = eTag;
+    }
+
+    public void selectedAsFavorite(){
+        electedTimes++;
+    }
+
+    public void removedAsFavorite(){
+        electedTimes--;
     }
 }

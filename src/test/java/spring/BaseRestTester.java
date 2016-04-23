@@ -1,6 +1,7 @@
 package spring;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -13,6 +14,7 @@ import java.nio.charset.Charset;
 /**
  * Created by pgallazzi on 3/4/16.
  */
+@Ignore
 public class BaseRestTester extends BaseTester{
 
     protected MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),

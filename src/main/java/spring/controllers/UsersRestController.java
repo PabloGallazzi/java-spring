@@ -3,9 +3,14 @@ package spring.controllers;
 import domain.Character;
 import domain.Team;
 import domain.User;
+import exceptions.rest.BadRequestException;
+import exceptions.rest.NotFoundException;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import repositories.UsersRepository;
 
 import java.util.*;
 
@@ -14,6 +19,9 @@ import java.util.*;
  */
 @RestController
 public class UsersRestController {
+
+    @Autowired
+    private UsersRepository users;
 
     /* URLs a Mapear en el controller.
     * /teams/commons/{id}/{id2} GET
@@ -33,47 +41,48 @@ public class UsersRestController {
     ResponseEntity<?> compareTeams(@PathVariable Integer id,
                                    @PathVariable Integer id2) {
         List<Character> output = new ArrayList<>();
-        Character character = new Character(1);
-        character.setName("TACS");
+        Character character = new Character(1, "TACS", "Description");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    ResponseEntity<?> createUser(@RequestBody User input) {
-        input.setUserId(1);
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> createUser(@RequestBody User userBody) {
+        if (userBody.getUserName() == null) {
+            String[] cause = new String[1];
+            cause[0] = "must_provide_a_user_name";
+            throw new BadRequestException("Unable to create user", "Validation error", cause);
+        }
+        User.validateUser(userBody);
+        try {
+            users.save(userBody);
+        } catch (com.mongodb.DuplicateKeyException e) {
+            String[] cause = new String[1];
+            cause[0] = "user_name_already_used";
+            throw new BadRequestException("Unable to create user", "Validation error", cause);
+        }
+        return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    ResponseEntity<?> getUserInfo(@PathVariable Integer id,
+    ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
-        User user = new User();
-        user.setUserId(1);
-        user.setUserName("Pablo");
-        user.setLastAccess(new Date());
-        Team team = new Team("Pablito");
-        team.setTeamId(1);
-        List<Character> teamItems = new ArrayList<>();
-        Character character = new Character(1);
-        character.setName("TACS");
-        teamItems.add(character);
-        team.setMembers(teamItems);
-        List<Team> teams = new ArrayList<Team>();
-        teams.add(team);
-        user.setTeams(teams);
-        List<Character> characters = new ArrayList<Character>();
-        characters.add(character);
-        user.setFavorites(characters);
+        User user;
+        try{
+            user = users.findByUserId(id);
+        } catch (Exception e){
+            throw new NotFoundException();
+        }
+        if (user == null){
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(user, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable Integer user) {
-        List<Map<String, Object>> output = new ArrayList<>();
-        Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id", 123);
-        character.put("more_info", "");
+        List<Character> output = new ArrayList<>();
+        Character character = new Character(123, "TestName", "TestDescription");
         output.add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
@@ -81,8 +90,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable Integer user,
                                   @RequestBody Character input) {
-        input.setId(1);
-        input.setElectedTimes(1);
+        input.selectedAsFavorite();
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
@@ -95,22 +103,18 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Team input) {
-        input.setTeamId(1);
+        //TODO: Remove this
+        input.setTeamId(new ObjectId("123456789123456789123456"));
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
-        Map<String, Object> output = new LinkedHashMap<String, Object>();
-        output.put("team_id", 123);
-        output.put("team_name", "someName");
-        List<Map<String, Object>> characters = new ArrayList<>();
-        Map<String, Object> character = new LinkedHashMap<String, Object>();
-        character.put("character_id", 123);
-        character.put("more_info", "");
-        characters.add(character);
-        output.put("characters", characters);
+        Team output = new Team("TeamName");
+        output.setTeamId(new ObjectId("123456789123456789123456"));
+        Character character = new Character(1, "CharacterName", "DescriptionTest");
+        output.getMembers().add(character);
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
