@@ -5,6 +5,7 @@ import domain.Team;
 import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
+import exceptions.rest.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -160,6 +161,8 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
+        User thisUser = users.findByUserId(userId);
+        validateTeamBelongsToUser(thisUser, team);
         return new ResponseEntity<>(team, null, HttpStatus.OK);
     }
 
@@ -172,6 +175,8 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
+        User thisUser = users.findByUserId(userId);
+        validateTeamBelongsToUser(thisUser, team);
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 == null) {
             charactersRepository.save(character);
@@ -190,6 +195,8 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
+        User thisUser = users.findByUserId(userId);
+        validateTeamBelongsToUser(thisUser, team);
         Integer charId = validateCharacterId(characterId);
         team.removeMember(charId);
         teams.update(team);
@@ -220,6 +227,16 @@ public class UsersRestController {
             throw new BadRequestException("Unable to remove character", "bad_id", cause);
         }
         return charId;
+    }
+
+    private void validateTeamBelongsToUser(User user, Team team){
+        List<Team> userTeams = user.getTeams();
+        for (Team team1 : userTeams){
+            if (team.getTeamId().toString().equals(team1.getTeamId().toString())){
+                return;
+            }
+        }
+        throw new NotFoundException("Team with id " + team.getTeamId().toString() + " was not found");
     }
 
 }
