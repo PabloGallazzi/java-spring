@@ -157,6 +157,8 @@ public class UsersRestController {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
+
+    //Auxiliary methods
     private List<Character> findIntersection(List<Character> team1, List<Character> team2) {
         List<Character> charactersToReturn = new ArrayList<Character>();
         for (Character character : team1) {
