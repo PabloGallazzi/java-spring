@@ -108,7 +108,6 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
-        //TODO: Validate invalid Id for character
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 != null) {
             character = character1;
@@ -153,7 +152,7 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado faltan tests
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable String userId,
                               @PathVariable String teamId,
@@ -173,7 +172,6 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
-        //TODO: Validate invalid Id for character
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 == null) {
             charactersRepository.save(character);
