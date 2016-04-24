@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import services.DSMongoInterface;
+import spring.utils.ScopesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,11 @@ public class AuthRepository {
             }
         }
         List<String> scopes = new ArrayList<>();
-        scopes.add("read");
-        scopes.add("write");
+        scopes.add(ScopesHelper.READ);
+        scopes.add(ScopesHelper.WRITE);
+        if(user.isAdmin()){
+            scopes.add(ScopesHelper.ADMIN);
+        }
         token = new Token(scopes,user.getUserId());
         ds.getDatastore().save(token);
         return token;

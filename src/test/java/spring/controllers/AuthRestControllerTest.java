@@ -7,12 +7,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import services.DSMongoInterface;
 import spring.BaseRestTester;
+import spring.utils.ScopesHelper;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,7 +27,56 @@ public class AuthRestControllerTest extends BaseRestTester {
     private DSMongoInterface ds;
 
     @Test
-    public void testLoginSuccessFull() throws Exception {
+    public void testLoginSuccessFullNotAdmin() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("user_name", "TACS");
+        request.put("user_password", "testPass123;");
+        String body = json(request);
+        mockMvc.perform(post("/users/authenticate")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
+                .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE))));
+        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testLoginSuccessFullAdmin() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(true);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("user_name", "TACS");
+        request.put("user_password", "testPass123;");
+        String body = json(request);
+        mockMvc.perform(post("/users/authenticate")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
+                .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE, ScopesHelper.ADMIN))));
+        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testLoginSuccessFullExpiredToken() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
@@ -45,6 +94,16 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
         Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
+        token.setExpirationDate(new Date(new Date().getTime() - 1));
+        ds.getDatastore().save(token);
+        mockMvc.perform(post("/users/authenticate")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.access_token", not(token.getAccessToken())))
+                .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
+        token = ds.getDatastore().find(Token.class, "userId", objectId).get();
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }

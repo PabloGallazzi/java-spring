@@ -38,6 +38,15 @@ public class User {
     @Reference(lazy = true)
     private List<Team> teams;
     private Date lastAccess;
+    private boolean isAdmin = false;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public User() {/*Necessary for Mongo*/}
 
