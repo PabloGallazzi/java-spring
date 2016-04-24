@@ -166,7 +166,7 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.OK);
     }
 
-    //Ya está terminado faltan tests
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters", method = RequestMethod.POST)
     ResponseEntity<?> addToTeam(@PathVariable String userId,
                                 @PathVariable String teamId,
@@ -186,7 +186,7 @@ public class UsersRestController {
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado faltan tests
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters/{characterId}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFromTeam(@PathVariable String userId,
                                      @PathVariable String teamId,
