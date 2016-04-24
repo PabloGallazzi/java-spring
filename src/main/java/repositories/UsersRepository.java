@@ -3,6 +3,7 @@ package repositories;
 import domain.Character;
 import domain.Team;
 import domain.User;
+import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -24,7 +25,16 @@ public class UsersRepository {
     }
 
     public User findByUserId(String id) {
-        return ds.getDatastore().find(User.class, "userId", new ObjectId(id)).get();
+        User user;
+        try {
+            user = ds.getDatastore().find(User.class, "userId", new ObjectId(id)).get();
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return user;
     }
 
     public User save(User newUser) {
