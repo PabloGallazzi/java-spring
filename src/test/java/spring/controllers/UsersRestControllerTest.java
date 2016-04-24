@@ -16,6 +16,7 @@ import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -743,8 +744,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
-        user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -791,6 +790,139 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.name", is("3-D Man")));
         ds.getDatastore().delete(thumbnail1);
         ds.getDatastore().delete(character1);
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testDeleteFavoritesMismatchToken() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        String id2 = "012345678901234567890000";
+        User user2 = new User("TACS2", "testPass123;");
+        User.validateUser(user2);
+        ds.getDatastore().save(user);
+        mockMvc.perform(delete("/users/" + id2 + "/characters/favorites/1?access_token=" + token.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
+    }
+
+    @Test
+    public void testDeleteFavoritesNotFoundToken() throws Exception {
+        mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1?access_token=1234"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testDeleteFavoritesNotFreshToken() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        token.setExpirationDate(new Date(new Date().getTime() - 1));
+        ds.getDatastore().save(token);
+        mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1?access_token=" + token.getAccessToken()))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testDeleteFavoritesOk() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        charactersRepository.save(character1);
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        user.addAsFavorite(character1);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1011334?access_token=" + token.getAccessToken()))
+                .andExpect(status().isNoContent());
+        ds.getDatastore().delete(character1);
+        ds.getDatastore().delete(thumbnail1);
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testPostFavoritesNotAFavorite() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/123?access_token=" + token.getAccessToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Unable to remove character")))
+                .andExpect(jsonPath("$.status", is(404)))
+                .andExpect(jsonPath("$.error", is("character_not_found")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testPostFavoritesInvalidId() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/abc?access_token=" + token.getAccessToken()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Unable to remove character")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_id")))
+                .andExpect(jsonPath("$.cause", is(Collections.singletonList("character_id_must_be_a_natural_number"))));
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }
