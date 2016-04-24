@@ -102,7 +102,7 @@ public class UsersRestController {
     }
 
     //Ya está terminado falta testear
-    @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/{userId}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable String userId,
                                   @RequestBody Character character,
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
