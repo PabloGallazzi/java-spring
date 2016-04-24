@@ -1201,4 +1201,39 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }
+
+    @Test
+    public void testGetTeamDoesNotBelongToThatUser() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        Team team1 = new Team();
+        team1.setTeamName("uno");
+        team1.addMember(character1);
+        team1 = teamsRepository.save(team1);
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.addAsFavorite(character1);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(get("/users/123456789012345678901234/teams/" + team1.getTeamId() + "?access_token=" + token.getAccessToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Team with id " + team1.getTeamId() + " was not found")))
+                .andExpect(jsonPath("$.status", is(404)))
+                .andExpect(jsonPath("$.error", is("not_found")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        ds.getDatastore().delete(character1);
+        ds.getDatastore().delete(thumbnail1);
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
 }
