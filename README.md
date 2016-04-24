@@ -18,14 +18,25 @@ mongo-java-server: v1.6.0
 
 commons-codec: v1.10
 
+## How do I run the tests with coverage ?
+
+```
+mvn clean
+mvn cobertura:cobertura
+```
+
+Results at: ${project}/target/site/cobertura/index.html
+
 ## How do I run the tests?
 
 ```
+mvn clean
 mvn test
 ```
 
 ## How do I run the app ?
 
 ```
+mvn clean
 mvn spring-boot:run
 ```
