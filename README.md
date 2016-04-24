@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/niko118/tp-tacs.svg?token=yWHUWReDvcqkbLeRzp1p&branch=master)](https://magnum.travis-ci.com/niko118/tp-tacs)
+
 ## This is the repository for the TACS assignment.
 
 For detailed information abuot the API see the [wiki] (https://github.com/niko118/tp-tacs/wiki)
