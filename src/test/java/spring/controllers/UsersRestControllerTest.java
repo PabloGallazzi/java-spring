@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import repositories.AuthRepository;
+import repositories.CharactersRepository;
 import repositories.TeamsRepository;
 import services.DSMongoInterface;
 import spring.BaseRestTester;
@@ -34,6 +35,8 @@ public class UsersRestControllerTest extends BaseRestTester {
     private TeamsRepository teamsRepository;
     @Autowired
     private AuthRepository authRepository;
+    @Autowired
+    private CharactersRepository charactersRepository;
 
     @Test
     public void testGetCharactersIntersectionBadIds() throws Exception {
@@ -437,7 +440,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testUnableToGetIdLessThan24CharactersReturnsNotFound() throws Exception {
+    public void testUnableToGetUserIdLessThan24CharactersReturnsNotFound() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "test");
         ObjectId objectId = new ObjectId(id);
@@ -461,7 +464,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testUnableToGetRetrievesNotFound() throws Exception {
+    public void testUnableToGetUserRetrievesNotFound() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "test");
         ObjectId objectId = new ObjectId(id);
@@ -485,7 +488,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetSuccessFull() throws Exception {
+    public void testGetUserSuccessFull() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "test");
         ObjectId objectId = new ObjectId(id);
@@ -503,6 +506,99 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.user_name", is("TACS")));
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
         ds.getDatastore().delete(aToken);
+    }
+
+    @Test
+    public void testGetUserNotAdmin() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(get("/users/" + id + "?access_token=" + token.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testGetFavoritesMismatchToken() throws Exception {
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        String id2 = "012345678901234567890000";
+        User user2 = new User("TACS2", "testPass123;");
+        User.validateUser(user2);
+        ds.getDatastore().save(user);
+        mockMvc.perform(get("/users/" + id2 + "/characters/favorites?access_token=" + token.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
+    }
+
+    @Test
+    public void testGetFavoritesNotFoundToken() throws Exception {
+        mockMvc.perform(get("/users/123456789012345678901234/characters/favorites?access_token=1234"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetFavoritesNotFreshToken() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        charactersRepository.save(character1);
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setAdmin(false);
+        user.addAsFavorite(character1);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token token = authRepository.login(user);
+        mockMvc.perform(get("/users/" + id + "/characters/favorites?access_token=" + token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1011334)));
+        ds.getDatastore().delete(thumbnail1);
+        ds.getDatastore().delete(character1);
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }
 
 }

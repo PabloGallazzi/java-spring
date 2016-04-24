@@ -91,7 +91,7 @@ public class UsersRestController {
         return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
     }
 
-    //Ya está terminado falta testear
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable String user,
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
@@ -101,25 +101,25 @@ public class UsersRestController {
         return new ResponseEntity<>(thisUser.getFavorites(), null, HttpStatus.OK);
     }
 
-    //Faltan los updates
+    //Ya está terminado falta testear
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
-    ResponseEntity<?> addFavorite(@PathVariable String user,
+    ResponseEntity<?> addFavorite(@PathVariable String userId,
                                   @RequestBody Character character,
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token aToken = auth.findById(accessToken);
-        aToken.validateUserCredentials(user);
-        User thisUser = users.findByUserId(user);
+        aToken.validateUserCredentials(userId);
+        User thisUser = users.findByUserId(userId);
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 != null) {
             character = character1;
             character.selectedAsFavorite();
-            //TODO: Update character
+            charactersRepository.update(character);
         } else {
             character.setElectedTimes(1);
             charactersRepository.save(character);
         }
         thisUser.addAsFavorite(character);
-        //TODO: Update user
+        users.update(thisUser);
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 

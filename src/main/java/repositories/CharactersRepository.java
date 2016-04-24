@@ -47,4 +47,10 @@ public class CharactersRepository {
         }
         return character;
     }
+
+    public void update(Character character){
+        //TODO: This is ugly...
+        ds.getDatastore().delete(character);
+        ds.getDatastore().save(character);
+    }
 }

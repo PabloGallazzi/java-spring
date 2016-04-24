@@ -43,6 +43,12 @@ public class UsersRepository {
         return newUser;
     }
 
+    public void update(User user){
+        //TODO: This is ugly...
+        ds.getDatastore().delete(user);
+        ds.getDatastore().save(user);
+    }
+
     public void saveWithCharacter(User newUser, Character newCharacter) {
         ds.getDatastore().save(newCharacter);
         ds.getDatastore().save(newUser);
