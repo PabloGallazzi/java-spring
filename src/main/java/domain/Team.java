@@ -3,6 +3,7 @@ package domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -52,6 +53,21 @@ public class Team {
 
     public void addMember(Character character) {
         this.members.add(character);
+    }
+
+    public Character removeMember(Integer characterId){
+        Character characterToRemove = null;
+        for (Character character : members) {
+            if (character.getId().equals(characterId))
+                characterToRemove = character;
+        }
+        if (characterToRemove != null) {
+            members.remove(characterToRemove);
+            characterToRemove.removedAsFavorite();
+        } else {
+            throw new NotFoundException("Unable to remove character", "character_not_found", new String[0]);
+        }
+        return characterToRemove;
     }
 
     public List<Character> getMembers() {

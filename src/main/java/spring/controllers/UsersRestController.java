@@ -5,7 +5,6 @@ import domain.Team;
 import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,6 +108,7 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
+        //TODO: Validate invalid Id for character
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 != null) {
             character = character1;
@@ -128,17 +128,10 @@ public class UsersRestController {
     ResponseEntity<?> removeFavorite(@PathVariable String userId,
                                      @PathVariable String id,
                                      @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
-        Integer integerId;
-        try {
-            integerId = Integer.valueOf(id);
-        } catch (NumberFormatException e) {
-            String[] cause = new String[1];
-            cause[0] = "character_id_must_be_a_natural_number";
-            throw new BadRequestException("Unable to remove character", "bad_id", cause);
-        }
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
+        Integer integerId = validateCharacterId(id);
         Character character = thisUser.deleteFavorite(integerId);
         charactersRepository.update(character);
         users.update(thisUser);
@@ -160,31 +153,48 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.CREATED);
     }
 
-    //TODO: Hacer
-    @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
-    ResponseEntity<?> getTeam(@PathVariable Integer user,
-                              @PathVariable Integer team) {
-        Team output = new Team("TeamName");
-        output.setTeamId(new ObjectId("123456789123456789123456"));
-        Character character = new Character(1, "CharacterName", "DescriptionTest");
-        output.getMembers().add(character);
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+    //Ya está terminado faltan tests
+    @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.GET)
+    ResponseEntity<?> getTeam(@PathVariable String userId,
+                              @PathVariable String teamId,
+                              @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(userId);
+        Team team = teams.findByTeamId(teamId);
+        return new ResponseEntity<>(team, null, HttpStatus.OK);
     }
 
-    //TODO: Hacer
-    @RequestMapping(value = "/users/{user}/teams/{team}/characters", method = RequestMethod.POST)
-    ResponseEntity<?> addToTeam(@PathVariable Integer user,
-                                @PathVariable Integer team,
-                                @RequestBody Character input) {
-        input.setId(1);
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    //Ya está terminado faltan tests
+    @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters", method = RequestMethod.POST)
+    ResponseEntity<?> addToTeam(@PathVariable String userId,
+                                @PathVariable String teamId,
+                                @RequestBody Character character,
+                                @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(userId);
+        Team team = teams.findByTeamId(teamId);
+        //TODO: Validate invalid Id for character
+        Character character1 = charactersRepository.findById(character.getId());
+        if (character1 == null) {
+            charactersRepository.save(character);
+        }
+        team.addMember(character);
+        teams.update(team);
+        return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
-    //TODO: Hacer
-    @RequestMapping(value = "/users/{user}/teams/{team}/characters/{id}", method = RequestMethod.DELETE)
-    ResponseEntity<?> removeFromTeam(@PathVariable Integer user,
-                                     @PathVariable Integer team,
-                                     @PathVariable Integer id) {
+    //Ya está terminado faltan tests
+    @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters/{characterId}", method = RequestMethod.DELETE)
+    ResponseEntity<?> removeFromTeam(@PathVariable String userId,
+                                     @PathVariable String teamId,
+                                     @PathVariable String characterId,
+                                     @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(userId);
+        Team team = teams.findByTeamId(teamId);
+        Integer charId = validateCharacterId(characterId);
+        team.removeMember(charId);
+        teams.update(team);
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
@@ -200,6 +210,18 @@ public class UsersRestController {
             }
         }
         return charactersToReturn;
+    }
+
+    private Integer validateCharacterId(String id) {
+        Integer charId = null;
+        try {
+            charId = Integer.valueOf(id);
+        } catch (NumberFormatException e) {
+            String[] cause = new String[1];
+            cause[0] = "character_id_must_be_a_natural_number";
+            throw new BadRequestException("Unable to remove character", "bad_id", cause);
+        }
+        return charId;
     }
 
 }

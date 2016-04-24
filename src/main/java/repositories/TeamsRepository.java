@@ -43,6 +43,12 @@ public class TeamsRepository {
         return team;
     }
 
+    public void update(Team team) {
+        //TODO: This is ugly...
+        ds.getDatastore().delete(team);
+        ds.getDatastore().save(team).getId();
+    }
+
     private void iterateCharacters(List<Character> characters){
         for (Character character : characters){
             charactersRepository.save(character);
