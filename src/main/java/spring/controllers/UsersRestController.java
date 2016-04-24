@@ -5,7 +5,6 @@ import domain.Team;
 import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
-import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,21 +50,9 @@ public class UsersRestController {
                                    @PathVariable String id2,
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token aToken = auth.findById(accessToken);
-        Team team1;
-        Team team2;
         aToken.validateAdminCredentials();
-        try {
-            team1 = teams.findByTeamId(id);
-            team2 = teams.findByTeamId(id2);
-        } catch (Exception e) {
-            throw new BadRequestException("Invalid id's");
-        }
-        if (team1 == null) {
-            throw new NotFoundException("Team with id " + id + " was not found");
-        }
-        if (team2 == null) {
-            throw new NotFoundException("Team with id " + id2 + " was not found");
-        }
+        Team team1 = teams.findByTeamId(id);
+        Team team2 = teams.findByTeamId(id2);
         List<Character> characters = findIntersection(team1.getMembers(), team2.getMembers());
         return new ResponseEntity<>(characters, null, HttpStatus.OK);
     }
@@ -90,21 +77,16 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo(@PathVariable String id,
-                                  @RequestParam(value = "attributes", required = false) String attributes) {
-        User user;
-        try {
-            user = users.findByUserId(id);
-        } catch (Exception e) {
-            throw new NotFoundException();
-        }
-        if (user == null) {
-            throw new NotFoundException();
-        }
-        return new ResponseEntity<>(user, null, HttpStatus.OK);
+                                  @RequestParam(value = "attributes", required = false) String attributes,
+                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateAdminCredentials();
+        //TODO: Filter by attributes
+        return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
-    ResponseEntity<?> getFavorites(@PathVariable Integer user) {
+    ResponseEntity<?> getFavorites(@PathVariable String user) {
         List<Character> output = new ArrayList<>();
         Character character = new Character(123, "TestName", "TestDescription");
         output.add(character);
@@ -157,6 +139,8 @@ public class UsersRestController {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
+
+    //Auxiliary methods
     private List<Character> findIntersection(List<Character> team1, List<Character> team2) {
         List<Character> charactersToReturn = new ArrayList<Character>();
         for (Character character : team1) {
