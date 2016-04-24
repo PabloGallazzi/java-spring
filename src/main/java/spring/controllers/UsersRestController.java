@@ -101,7 +101,7 @@ public class UsersRestController {
         return new ResponseEntity<>(thisUser.getFavorites(), null, HttpStatus.OK);
     }
 
-    //Ya está terminado falta testear
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable String userId,
                                   @RequestBody Character character,
