@@ -3,6 +3,7 @@ package repositories;
 import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
+import exceptions.rest.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,11 @@ public class AuthRepository {
     private UsersRepository users;
 
     public Token findById(String accessToken) {
-        return ds.getDatastore().find(Token.class, "accessToken", accessToken).get();
+        Token aToken = ds.getDatastore().find(Token.class, "accessToken", accessToken).get();
+        if (aToken == null || !aToken.isFresh()){
+            throw new InvalidTokenException("invalid_token");
+        }
+        return aToken;
     }
 
     public Token login(User aUser) {
