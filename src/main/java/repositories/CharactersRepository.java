@@ -37,7 +37,6 @@ public class CharactersRepository {
         return character;
     }
 
-    //TODO: Change this or add an update method for updates!
     public Character save(Character character) {
         if (ds.getDatastore().find(Character.class, "id", character.getId()).get() == null){
             ds.getDatastore().save(character.getThumbnail());
