@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import exceptions.rest.BadRequestException;
+import exceptions.rest.NotFoundException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
@@ -114,8 +115,23 @@ public class User {
         return userId;
     }
 
-    public void addAsFavorite(Character character){
+    public void addAsFavorite(Character character) {
         favorites.add(character);
+    }
+
+    public Character deleteFavorite(Integer id) {
+        Character characterToRemove = null;
+        for (Character character : favorites) {
+            if (character.getId().equals(id))
+                characterToRemove = character;
+        }
+        if (characterToRemove != null) {
+            favorites.remove(characterToRemove);
+            characterToRemove.removedAsFavorite();
+        } else {
+            throw new NotFoundException("Unable to remove character", "character_not_found", new String[0]);
+        }
+        return characterToRemove;
     }
 
     public static void validateUser(User userToValidate) {

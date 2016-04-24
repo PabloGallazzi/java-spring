@@ -123,10 +123,25 @@ public class UsersRestController {
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
-    //TODO: Hacer
-    @RequestMapping(value = "/users/{user}/characters/favorites/{id}", method = RequestMethod.DELETE)
-    ResponseEntity<?> removeFavorite(@PathVariable Integer user,
-                                     @PathVariable Integer id) {
+    //Ya está terminado y testeado
+    @RequestMapping(value = "/users/{userId}/characters/favorites/{id}", method = RequestMethod.DELETE)
+    ResponseEntity<?> removeFavorite(@PathVariable String userId,
+                                     @PathVariable String id,
+                                     @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Integer integerId;
+        try {
+            integerId = Integer.valueOf(id);
+        } catch (NumberFormatException e) {
+            String[] cause = new String[1];
+            cause[0] = "character_id_must_be_a_natural_number";
+            throw new BadRequestException("Unable to remove character", "bad_id", cause);
+        }
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(userId);
+        User thisUser = users.findByUserId(userId);
+        Character character = thisUser.deleteFavorite(integerId);
+        charactersRepository.update(character);
+        users.update(thisUser);
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 

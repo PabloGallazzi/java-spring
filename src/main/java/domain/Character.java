@@ -75,11 +75,13 @@ public class Character {
         this.eTag = eTag;
     }
 
-    public void selectedAsFavorite(){
+    public void selectedAsFavorite() {
         electedTimes++;
     }
 
-    public void removedAsFavorite(){
-        electedTimes--;
+    public void removedAsFavorite() {
+        if (electedTimes != 0) {
+            electedTimes--;
+        }
     }
 }
