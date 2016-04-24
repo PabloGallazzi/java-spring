@@ -21,6 +21,8 @@ public class AuthRestController {
     * /user/authenticate POST
     *
     * */
+
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/authenticate", method = RequestMethod.POST)
     ResponseEntity<?> login(@RequestBody User input) {
         if (input.getUserName() == null || input.getUserName().isEmpty() || input.getUserPassword() == null || input.getUserPassword().isEmpty()) {

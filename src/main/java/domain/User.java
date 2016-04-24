@@ -114,6 +114,10 @@ public class User {
         return userId;
     }
 
+    public void addAsFavorite(Character character){
+        favorites.add(character);
+    }
+
     public static void validateUser(User userToValidate) {
         userToValidate.setUserId(null);
         validatePassword(userToValidate.getUserPassword());

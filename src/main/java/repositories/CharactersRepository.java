@@ -1,6 +1,7 @@
 package repositories;
 
 import domain.Character;
+import exceptions.rest.BadRequestException;
 import org.mongodb.morphia.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +23,18 @@ public class CharactersRepository {
     public List<Character> getCharactersOrderedByTimesElectedDesc(int limit) {
         Query q = ds.getDatastore().createQuery(Character.class).order("-electedTimes").limit(limit);
         return q.asList();
+    }
+
+    public Character findById(Integer characterId){
+        return ds.getDatastore().find(Character.class, "id", characterId).get();
+    }
+
+    public Character findbyIdVerifiedExistance(Integer characterId){
+        Character character = findById(characterId);
+        if (character == null){
+            throw new BadRequestException("Character not found");
+        }
+        return character;
     }
 
     //TODO: Change this or add an update method for updates!

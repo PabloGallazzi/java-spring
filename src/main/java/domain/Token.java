@@ -82,8 +82,14 @@ public class Token {
         return expirationDate.after(new Date());
     }
 
-    public void validateAdminCredentials(){
-        if (!this.getScopes().contains(ScopesHelper.ADMIN)){
+    public void validateAdminCredentials() {
+        if (!this.getScopes().contains(ScopesHelper.ADMIN)) {
+            throw new UnauthorizedException("Forbidden");
+        }
+    }
+
+    public void validateUserCredentials(String userId) {
+        if (!this.getUserId().toString().equals(userId)) {
             throw new UnauthorizedException("Forbidden");
         }
     }
