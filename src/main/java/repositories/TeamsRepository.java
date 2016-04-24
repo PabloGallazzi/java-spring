@@ -2,6 +2,8 @@ package repositories;
 
 import domain.Character;
 import domain.Team;
+import exceptions.rest.BadRequestException;
+import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +24,16 @@ public class TeamsRepository {
     private CharactersRepository charactersRepository;
 
     public Team findByTeamId(String id) {
-        return ds.getDatastore().find(Team.class, "teamId", new ObjectId(id)).get();
+        Team team;
+        try {
+            team = ds.getDatastore().find(Team.class, "teamId", new ObjectId(id)).get();
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid id " + id);
+        }
+        if (team == null) {
+            throw new NotFoundException("Team with id " + id + " was not found");
+        }
+        return team;
     }
 
     public Team save(Team team) {
