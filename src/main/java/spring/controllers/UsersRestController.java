@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import repositories.AuthRepository;
+import repositories.CharactersRepository;
 import repositories.TeamsRepository;
 import repositories.UsersRepository;
 
@@ -29,6 +30,8 @@ public class UsersRestController {
     private TeamsRepository teams;
     @Autowired
     private AuthRepository auth;
+    @Autowired
+    private CharactersRepository charactersRepository;
 
 
     /* URLs a Mapear en el controller.
@@ -45,6 +48,7 @@ public class UsersRestController {
     *
     * */
 
+    //Ya está terminado y testeado
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
     ResponseEntity<?> compareTeams(@PathVariable String id,
                                    @PathVariable String id2,
@@ -57,6 +61,7 @@ public class UsersRestController {
         return new ResponseEntity<>(characters, null, HttpStatus.OK);
     }
 
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User userBody) {
         if (userBody.getUserName() == null) {
@@ -75,6 +80,7 @@ public class UsersRestController {
         return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
+    //Ya está casi terminado y testeado
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes,
@@ -85,27 +91,46 @@ public class UsersRestController {
         return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
     }
 
+    //Ya está terminado falta testear
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
-    ResponseEntity<?> getFavorites(@PathVariable String user) {
-        List<Character> output = new ArrayList<>();
-        Character character = new Character(123, "TestName", "TestDescription");
-        output.add(character);
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+    ResponseEntity<?> getFavorites(@PathVariable String user,
+                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(user);
+        User thisUser = users.findByUserId(user);
+        return new ResponseEntity<>(thisUser.getFavorites(), null, HttpStatus.OK);
     }
 
+    //Faltan los updates
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.POST)
-    ResponseEntity<?> addFavorite(@PathVariable Integer user,
-                                  @RequestBody Character input) {
-        input.selectedAsFavorite();
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    ResponseEntity<?> addFavorite(@PathVariable String user,
+                                  @RequestBody Character character,
+                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(user);
+        User thisUser = users.findByUserId(user);
+        Character character1 = charactersRepository.findById(character.getId());
+        if (character1 != null) {
+            character = character1;
+            character.selectedAsFavorite();
+            //TODO: Update character
+        } else {
+            character.setElectedTimes(1);
+            charactersRepository.save(character);
+        }
+        thisUser.addAsFavorite(character);
+        //TODO: Update user
+        return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
+    //TODO: Hacer
     @RequestMapping(value = "/users/{user}/characters/favorites/{id}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFavorite(@PathVariable Integer user,
                                      @PathVariable Integer id) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
+    //TODO: Hacer
     @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable Integer user,
                                  @RequestBody Team input) {
@@ -114,6 +139,7 @@ public class UsersRestController {
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
+    //TODO: Hacer
     @RequestMapping(value = "/users/{user}/teams/{team}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable Integer user,
                               @PathVariable Integer team) {
@@ -124,6 +150,7 @@ public class UsersRestController {
         return new ResponseEntity<>(output, null, HttpStatus.OK);
     }
 
+    //TODO: Hacer
     @RequestMapping(value = "/users/{user}/teams/{team}/characters", method = RequestMethod.POST)
     ResponseEntity<?> addToTeam(@PathVariable Integer user,
                                 @PathVariable Integer team,
@@ -132,6 +159,7 @@ public class UsersRestController {
         return new ResponseEntity<>(input, null, HttpStatus.CREATED);
     }
 
+    //TODO: Hacer
     @RequestMapping(value = "/users/{user}/teams/{team}/characters/{id}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFromTeam(@PathVariable Integer user,
                                      @PathVariable Integer team,
