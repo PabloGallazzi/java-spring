@@ -27,10 +27,11 @@ public class GlobalExceptionHandlingControllerAdvice {
     public ResponseEntity<?> handleError(HttpServletRequest req, Exception exception)
             throws Exception {
 
+        //Add this to use annotation based exceptions
         // Rethrow annotated exceptions or they will be processed here instead.
-        if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
+        /*if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
             throw exception;
-        }
+        }*/
 
         ExceptionMapper exceptionMapper = new ExceptionMapper((RestBaseException) exception);
         return new ResponseEntity<>(exceptionMapper, null, ((RestBaseException) exception).getStatus());
@@ -41,10 +42,11 @@ public class GlobalExceptionHandlingControllerAdvice {
     public ResponseEntity<?> handleExceptionError(HttpServletRequest req, Exception exception)
             throws Exception {
 
+        //Add this to use annotation based exceptions
         // Rethrow annotated exceptions or they will be processed here instead.
-        if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
+        /*if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
             throw exception;
-        }
+        }*/
 
         // Rethrow custom exceptions or they will be processed here instead.
         if (exception instanceof RestBaseException || exception instanceof WebBaseException) {
@@ -59,10 +61,11 @@ public class GlobalExceptionHandlingControllerAdvice {
     public ModelAndView handleError(HttpServletRequest req, Exception exception, HttpServletResponse httpServletResponse)
             throws Exception {
 
+        //Add this to use annotation based exceptions
         // Rethrow annotated exceptions or they will be processed here instead.
-        if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
+        /*f (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
             throw exception;
-        }
+        }*/
 
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", ((WebBaseException) exception).getError());

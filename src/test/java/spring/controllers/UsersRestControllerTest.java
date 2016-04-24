@@ -1638,4 +1638,15 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }
 
+    @Test
+    public void testBasicExceptionHandler() throws Exception {
+        mockMvc.perform(delete("/users"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message", is("Somethig went wrong!")))
+                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(jsonPath("$.error", is("internal_error")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+
+    }
+
 }

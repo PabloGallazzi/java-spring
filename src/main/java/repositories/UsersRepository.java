@@ -49,13 +49,4 @@ public class UsersRepository {
         ds.getDatastore().save(user);
     }
 
-    public void saveWithCharacter(User newUser, Character newCharacter) {
-        ds.getDatastore().save(newCharacter);
-        ds.getDatastore().save(newUser);
-    }
-
-    public void saveWithTeam(User newUser, Team newTeam) {
-        ds.getDatastore().save(newTeam);
-        ds.getDatastore().save(newUser);
-    }
 }
