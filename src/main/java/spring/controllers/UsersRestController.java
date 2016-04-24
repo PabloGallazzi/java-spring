@@ -145,13 +145,19 @@ public class UsersRestController {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
-    //TODO: Hacer
-    @RequestMapping(value = "/users/{user}/teams", method = RequestMethod.POST)
-    ResponseEntity<?> createTeam(@PathVariable Integer user,
-                                 @RequestBody Team input) {
-        //TODO: Remove this
-        input.setTeamId(new ObjectId("123456789123456789123456"));
-        return new ResponseEntity<>(input, null, HttpStatus.CREATED);
+    //Ya está terminado y testeado
+    @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.POST)
+    ResponseEntity<?> createTeam(@PathVariable String userId,
+                                 @RequestBody Team team,
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        aToken.validateUserCredentials(userId);
+        User thisUser = users.findByUserId(userId);
+        team.setTeamId(null);
+        team = teams.save(team);
+        thisUser.addNewTeam(team);
+        users.update(thisUser);
+        return new ResponseEntity<>(team, null, HttpStatus.CREATED);
     }
 
     //TODO: Hacer

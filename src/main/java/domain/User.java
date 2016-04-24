@@ -119,6 +119,10 @@ public class User {
         favorites.add(character);
     }
 
+    public void addNewTeam(Team team){
+        teams.add(team);
+    }
+
     public Character deleteFavorite(Integer id) {
         Character characterToRemove = null;
         for (Character character : favorites) {
