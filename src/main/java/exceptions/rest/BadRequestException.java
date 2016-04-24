@@ -16,11 +16,6 @@ public class BadRequestException extends RestBaseException {
         this.status = HttpStatus.BAD_REQUEST;
     }
 
-    public BadRequestException(String message, String[] internalCause) {
-        super(message, "bad_request", internalCause);
-        this.status = HttpStatus.BAD_REQUEST;
-    }
-
     public BadRequestException(String message) {
         super(message, "bad_request", new String[0]);
         this.status = HttpStatus.BAD_REQUEST;

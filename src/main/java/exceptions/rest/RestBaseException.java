@@ -35,13 +35,6 @@ public class RestBaseException extends RuntimeException {
         this.status = status;
     }
 
-    public RestBaseException(HttpStatus status, String message, String error, String[] internalCause) {
-        super(message);
-        this.status = status;
-        this.error = error;
-        this.internalCause = internalCause;
-    }
-
     public RestBaseException(String message, String error, String[] cause) {
         super(message);
         this.error = error;
