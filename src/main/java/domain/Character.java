@@ -17,16 +17,7 @@ public class Character {
     String description;
     Integer electedTimes = 0;
     Thumbnail thumbnail;
-    String resourceURI;
     private String eTag;
-
-    public String getResourceURI() {
-        return resourceURI;
-    }
-
-    public void setResourceURI(String resourceURI) {
-        this.resourceURI = resourceURI;
-    }
 
     public Thumbnail getThumbnail() {
         return thumbnail;

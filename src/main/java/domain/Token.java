@@ -3,12 +3,14 @@ package domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import exceptions.rest.UnauthorizedException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import spring.utils.ObjectIdToStringSerializer;
+import spring.utils.ScopesHelper;
 
 import java.util.Date;
 import java.util.List;
@@ -78,6 +80,12 @@ public class Token {
     @JsonIgnore
     public Boolean isFresh() {
         return expirationDate.after(new Date());
+    }
+
+    public void validateAdminCredentials(){
+        if (!this.getScopes().contains(ScopesHelper.ADMIN)){
+            throw new UnauthorizedException("Forbidden");
+        }
     }
 
 }

@@ -12,6 +12,11 @@ public class NotFoundException extends RestBaseException {
         this.status = HttpStatus.NOT_FOUND;
     }
 
+    public NotFoundException(String message) {
+        super(message, "not_found", new String[0]);
+        this.status = HttpStatus.NOT_FOUND;
+    }
+
     public NotFoundException() {
         super("Unable to find resource", "not_found", new String[0]);
         this.status = HttpStatus.NOT_FOUND;

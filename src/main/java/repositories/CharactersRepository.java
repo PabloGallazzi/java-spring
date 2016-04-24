@@ -24,5 +24,14 @@ public class CharactersRepository {
         return q.asList();
     }
 
-
+    //TODO: Change this or add an update method for updates!
+    public Character save(Character character) {
+        if (ds.getDatastore().find(Character.class, "id", character.getId()).get() == null){
+            ds.getDatastore().save(character.getThumbnail());
+            Integer objectId = (Integer) ds.getDatastore().save(character).getId();
+            character.setId(objectId);
+            return character;
+        }
+        return character;
+    }
 }

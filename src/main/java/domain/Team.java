@@ -26,14 +26,12 @@ public class Team {
     private ObjectId teamId;
     private String teamName;
     @Reference(lazy = true)
-    private List<Character> members;
+    private List<Character> members = new ArrayList<>();
 
     public Team(){/*Necessary for Mongo*/}
 
     public Team(String name) {
         this.teamName = name;
-        //this.id = new ObjectId();
-        this.members = new ArrayList<>();
     }
 
     public ObjectId getTeamId() {
@@ -50,6 +48,10 @@ public class Team {
 
     public void setTeamName(String name) {
         this.teamName = name;
+    }
+
+    public void addMember(Character character) {
+        this.members.add(character);
     }
 
     public List<Character> getMembers() {

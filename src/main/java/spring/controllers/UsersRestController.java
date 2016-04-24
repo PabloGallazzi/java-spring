@@ -2,6 +2,7 @@ package spring.controllers;
 
 import domain.Character;
 import domain.Team;
+import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
@@ -10,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import repositories.AuthRepository;
+import repositories.TeamsRepository;
 import repositories.UsersRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by niko118 on 11/4/16.
@@ -22,6 +26,11 @@ public class UsersRestController {
 
     @Autowired
     private UsersRepository users;
+    @Autowired
+    private TeamsRepository teams;
+    @Autowired
+    private AuthRepository auth;
+
 
     /* URLs a Mapear en el controller.
     * /teams/commons/{id}/{id2} GET
@@ -38,12 +47,27 @@ public class UsersRestController {
     * */
 
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
-    ResponseEntity<?> compareTeams(@PathVariable Integer id,
-                                   @PathVariable Integer id2) {
-        List<Character> output = new ArrayList<>();
-        Character character = new Character(1, "TACS", "Description");
-        output.add(character);
-        return new ResponseEntity<>(output, null, HttpStatus.OK);
+    ResponseEntity<?> compareTeams(@PathVariable String id,
+                                   @PathVariable String id2,
+                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token aToken = auth.findById(accessToken);
+        Team team1;
+        Team team2;
+        aToken.validateAdminCredentials();
+        try {
+            team1 = teams.findByTeamId(id);
+            team2 = teams.findByTeamId(id2);
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid id's");
+        }
+        if (team1 == null) {
+            throw new NotFoundException("Team with id " + id + " was not found");
+        }
+        if (team2 == null) {
+            throw new NotFoundException("Team with id " + id2 + " was not found");
+        }
+        List<Character> characters = findIntersection(team1.getMembers(), team2.getMembers());
+        return new ResponseEntity<>(characters, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
@@ -68,12 +92,12 @@ public class UsersRestController {
     ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes) {
         User user;
-        try{
+        try {
             user = users.findByUserId(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new NotFoundException();
         }
-        if (user == null){
+        if (user == null) {
             throw new NotFoundException();
         }
         return new ResponseEntity<>(user, null, HttpStatus.OK);
@@ -131,6 +155,18 @@ public class UsersRestController {
                                      @PathVariable Integer team,
                                      @PathVariable Integer id) {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
+    }
+
+    private List<Character> findIntersection(List<Character> team1, List<Character> team2) {
+        List<Character> charactersToReturn = new ArrayList<Character>();
+        for (Character character : team1) {
+            for (Character character2 : team2) {
+                if (character.getId().equals(character2.getId())) {
+                    charactersToReturn.add(character);
+                }
+            }
+        }
+        return charactersToReturn;
     }
 
 }
