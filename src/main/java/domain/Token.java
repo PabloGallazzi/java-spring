@@ -29,12 +29,12 @@ public class Token {
     @Embedded
     List<String> scopes;
 
-    public Token(){
+    public Token() {
     }
 
     public Token(List<String> scopes, ObjectId userId) {
         Date date = new Date();
-        date.setTime(date.getTime()+120001);
+        date.setTime(date.getTime() + 5184000); //1 month
         this.expirationDate = date;
         this.scopes = scopes;
         this.userId = userId;
@@ -76,9 +76,8 @@ public class Token {
     }
 
     @JsonIgnore
-    public Boolean isFresh(){
-        //TODO: Redefine this...
-        return true;
+    public Boolean isFresh() {
+        return expirationDate.after(new Date());
     }
 
 }
