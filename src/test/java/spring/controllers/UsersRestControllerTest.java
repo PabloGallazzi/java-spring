@@ -9,6 +9,7 @@ import repositories.AuthRepository;
 import repositories.TeamsRepository;
 import services.DSMongoInterface;
 import spring.BaseRestTester;
+import spring.utils.ScopesHelper;
 
 import java.util.*;
 
@@ -45,10 +46,10 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().save(user);
         user.setUserPassword("testPass123;");
         Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + "^^¨" + "/" + "^^¨" + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/" + "id123" + "/" + "id123" + "?access_token=" + token.getAccessToken()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.message", is("Invalid id's")))
+                .andExpect(jsonPath("$.message", is("Invalid id id123")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
@@ -437,24 +438,50 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testUnableToGetIdLessThan24CharactersReturnsNotFound() throws Exception {
-        mockMvc.perform(get("/users/123"))
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "test");
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        List<String> scopes = new ArrayList<>();
+        scopes.add(ScopesHelper.READ);
+        scopes.add(ScopesHelper.WRITE);
+        scopes.add(ScopesHelper.ADMIN);
+        Token aToken = new Token(scopes, objectId);
+        ds.getDatastore().save(aToken);
+        mockMvc.perform(get("/users/123" + "?access_token=" + aToken.getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Unable to find resource")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        ds.getDatastore().delete(aToken);
     }
 
     @Test
     public void testUnableToGetRetrievesNotFound() throws Exception {
-        mockMvc.perform(get("/users/123456789012345678901234"))
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "test");
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        List<String> scopes = new ArrayList<>();
+        scopes.add(ScopesHelper.READ);
+        scopes.add(ScopesHelper.WRITE);
+        scopes.add(ScopesHelper.ADMIN);
+        Token aToken = new Token(scopes, objectId);
+        ds.getDatastore().save(aToken);
+        mockMvc.perform(get("/users/123456789012345678900000" + "?access_token=" + aToken.getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Unable to find resource")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        ds.getDatastore().delete(aToken);
     }
 
     @Test
@@ -464,11 +491,18 @@ public class UsersRestControllerTest extends BaseRestTester {
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
-        mockMvc.perform(get("/users/" + id))
+        List<String> scopes = new ArrayList<>();
+        scopes.add(ScopesHelper.READ);
+        scopes.add(ScopesHelper.WRITE);
+        scopes.add(ScopesHelper.ADMIN);
+        Token aToken = new Token(scopes, objectId);
+        ds.getDatastore().save(aToken);
+        mockMvc.perform(get("/users/" + id + "?access_token=" + aToken.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_name", is("TACS")));
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        ds.getDatastore().delete(aToken);
     }
 
 }
