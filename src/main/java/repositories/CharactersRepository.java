@@ -29,13 +29,14 @@ public class CharactersRepository {
         return ds.getDatastore().find(Character.class, "id", characterId).get();
     }
 
-    public Character findbyIdVerifiedExistance(Integer characterId){
+    //Add this in case we need to verify existence
+    /*public Character findByIdVerifiedExistence(Integer characterId){
         Character character = findById(characterId);
         if (character == null){
             throw new BadRequestException("Character not found");
         }
         return character;
-    }
+    }*/
 
     public Character save(Character character) {
         if (ds.getDatastore().find(Character.class, "id", character.getId()).get() == null){

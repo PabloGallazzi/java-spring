@@ -15,24 +15,12 @@ public class RestBaseException extends RuntimeException {
         return internalCause;
     }
 
-    public void setCause(String[] internalCause) {
-        this.internalCause = internalCause;
-    }
-
     public String getError() {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
-
     public HttpStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
     }
 
     public RestBaseException(String message, String error, String[] cause) {
