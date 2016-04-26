@@ -3,6 +3,6 @@ branches:
     - master
 jdk: oraclejdk7
 language: java
-install: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dcobertura.skip=true -B -V
+install: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dcobertura.skip=true -B -V | egrep -v "(^\[INFO\]|^\[DEBUG\])"
 script: mvn clean cobertura:check -B -V | egrep -v "(^\[INFO\]|^\[DEBUG\])"
 after_script: mvn cobertura:dump-datafile
