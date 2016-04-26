@@ -3,4 +3,13 @@ branches:
     - master
 jdk: oraclejdk7
 language: java
-script: "mvn test"
+install: true
+script: mvn clean cobertura:check | egrep -v "(^\[INFO\]|^\[DEBUG\])"
+after_script: mvn cobertura:dump-datafile
+notifications:
+  email:
+    recipients:
+      - pablogallazzi@gmail.com
+      - nicolas.g.garcia1@gmail.com
+    on_success: never
+    on_failure: always
