@@ -80,7 +80,7 @@ public class UsersRestController {
         return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
-    //Ya está casi terminado y testeado
+    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes,
