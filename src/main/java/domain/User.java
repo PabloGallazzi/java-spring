@@ -40,6 +40,7 @@ public class User {
     @Reference(lazy = true)
     private List<Team> teams;
     private Date lastAccess;
+
     @JsonIgnore
     private boolean isAdmin = false;
 
@@ -47,7 +48,7 @@ public class User {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setIsAdmin(boolean admin) {
         isAdmin = admin;
     }
 

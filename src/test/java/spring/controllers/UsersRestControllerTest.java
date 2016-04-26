@@ -14,6 +14,7 @@ import spring.utils.ScopesHelper;
 
 import java.util.*;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -44,7 +45,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -66,7 +67,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -99,7 +100,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -135,7 +136,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -160,7 +161,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -229,7 +230,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -293,7 +294,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -316,6 +317,24 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(team2);
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testCreateUserSuccessCheckAdminNotSet() throws Exception {
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("user_name", "userTestSuccess");
+        request.put("user_password", "12345678;");
+        request.put("is_admin", true);
+        String body = json(request);
+        mockMvc.perform(post("/users")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.user_name", is("userTestSuccess")));
+        User userCreated = ds.getDatastore().find(User.class, "userName", "userTestSuccess").get();
+        assertFalse(userCreated.isAdmin());
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "userTestSuccess"));
     }
 
     @Test
@@ -514,7 +533,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -537,7 +556,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -584,7 +603,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -619,7 +638,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -649,7 +668,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -709,7 +728,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -774,7 +793,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -799,7 +818,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -838,7 +857,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -870,7 +889,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -943,7 +962,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -1008,7 +1027,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -1045,7 +1064,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.addAsFavorite(character1);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
@@ -1069,7 +1088,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -1250,7 +1269,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
@@ -1472,7 +1491,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
