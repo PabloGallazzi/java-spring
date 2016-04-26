@@ -3,4 +3,4 @@ branches:
     - master
 jdk: oraclejdk7
 language: java
-script: "mvn test"
+script: "mvn cobertura: cobertura"
