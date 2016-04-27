@@ -55,7 +55,7 @@ public class AuthRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.setAdmin(true);
+        user.setIsAdmin(true);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
