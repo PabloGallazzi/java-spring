@@ -1,6 +1,7 @@
 branches: 
   only: 
     - master
+    - develop
 jdk: oraclejdk7
 language: java
 install: true
