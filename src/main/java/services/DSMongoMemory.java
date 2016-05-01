@@ -18,17 +18,18 @@ import java.net.InetSocketAddress;
  */
 @Service
 @Scope("singleton")
-@Profile("test")
+@Profile({"test", "develop"})
 public class DSMongoMemory implements DSMongoInterface {
 
     Datastore ds;
     private MongoClient client;
     private MongoServer server;
 
-    public DSMongoMemory(){}
+    public DSMongoMemory() {
+    }
 
     @PostConstruct
-    public void initialize(){
+    public void initialize() {
         // create memory server
         server = new MongoServer(new MemoryBackend());
         // bind on a random local port
@@ -37,7 +38,7 @@ public class DSMongoMemory implements DSMongoInterface {
         client = new MongoClient(new ServerAddress(serverAddress));
         Morphia morphia = new Morphia();
         morphia.mapPackage("domain");
-        ds = morphia.createDatastore(client,"bdtptacs_test");
+        ds = morphia.createDatastore(client, "bdtptacs_test");
         ds.ensureIndexes();
     }
 

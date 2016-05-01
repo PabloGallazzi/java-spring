@@ -4,7 +4,7 @@ import com.pgallazzi.http.client.TacsRestClient;
 import com.pgallazzi.http.utils.callbacks.JavaRestClientCallback;
 import com.pgallazzi.http.utils.response.RestClientResponse;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
-import exceptions.rest.InternalServerError;
+import exceptions.rest.ServiceUnavailableException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
@@ -56,7 +56,7 @@ public class MarvelApiService implements MarvelApiServiceInterface{
 
             @Override
             public void handleFailure(RestClientResponse it) {
-                throw new InternalServerError();
+                throw new ServiceUnavailableException();
             }
         });
         return resp.get("response");
