@@ -53,6 +53,7 @@ public class UsersRestController {
     ResponseEntity<?> compareTeams(@PathVariable String id,
                                    @PathVariable String id2,
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateAdminCredentials();
         Team team1 = teams.findByTeamId(id);
@@ -85,6 +86,7 @@ public class UsersRestController {
     ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes,
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateAdminCredentials();
         //TODO: Filter by attributes
@@ -95,6 +97,7 @@ public class UsersRestController {
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable String user,
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(user);
         User thisUser = users.findByUserId(user);
@@ -106,6 +109,7 @@ public class UsersRestController {
     ResponseEntity<?> addFavorite(@PathVariable String userId,
                                   @RequestBody Character character,
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
@@ -128,6 +132,7 @@ public class UsersRestController {
     ResponseEntity<?> removeFavorite(@PathVariable String userId,
                                      @PathVariable String id,
                                      @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
@@ -143,6 +148,7 @@ public class UsersRestController {
     ResponseEntity<?> createTeam(@PathVariable String userId,
                                  @RequestBody Team team,
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
@@ -158,6 +164,7 @@ public class UsersRestController {
     ResponseEntity<?> getTeam(@PathVariable String userId,
                               @PathVariable String teamId,
                               @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
@@ -172,6 +179,7 @@ public class UsersRestController {
                                 @PathVariable String teamId,
                                 @RequestBody Character character,
                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
@@ -192,6 +200,7 @@ public class UsersRestController {
                                      @PathVariable String teamId,
                                      @PathVariable String characterId,
                                      @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);

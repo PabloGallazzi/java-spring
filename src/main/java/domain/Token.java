@@ -3,6 +3,7 @@ package domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import exceptions.rest.ForbiddenException;
 import exceptions.rest.UnauthorizedException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
@@ -84,13 +85,19 @@ public class Token {
 
     public void validateAdminCredentials() {
         if (!this.getScopes().contains(ScopesHelper.ADMIN)) {
-            throw new UnauthorizedException("Forbidden");
+            throw new ForbiddenException("Forbidden");
         }
     }
 
     public void validateUserCredentials(String userId) {
         if (!this.getUserId().toString().equals(userId)) {
-            throw new UnauthorizedException("Forbidden");
+            throw new ForbiddenException("Forbidden");
+        }
+    }
+
+    public static void validateNonEmptyToken(String token){
+        if (token.isEmpty()){
+            throw new UnauthorizedException("Access token must be provided");
         }
     }
 

@@ -1,9 +1,16 @@
 package spring.controllers;
 
 import domain.Character;
+import domain.Token;
+import domain.User;
+import org.bson.types.ObjectId;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import repositories.AuthRepository;
 import services.DSMongoInterface;
+import spock.lang.Shared;
 import spring.BaseRestTester;
 
 import java.util.Collections;
@@ -14,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Created by niko118 on 4/11/16.
@@ -22,10 +30,33 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Autowired
     private DSMongoInterface ds;
+    @Autowired
+    private AuthRepository authRepository;
+    Token token;
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        String id = "123456789012345678901234";
+        User user = new User("TACS", "testPass123;");
+        User.validateUser(user);
+        user.setIsAdmin(true);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        token = authRepository.login(user);
+    }
+
+    @After
+    public void tearDown() {
+        ds.getDatastore().delete(token);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
 
     @Test
     public void testGetCharactersOk() throws Exception {
-        mockMvc.perform(get("/characters")
+        mockMvc.perform(get("/characters" + "?access_token=" + token.getAccessToken())
                 .param("offset", "0")
                 .param("limit", "10"))
                 .andExpect(status().isOk())
@@ -73,12 +104,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     public void testGetCharactersFailThrowsException() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("name_starts_with", "throwException"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.message", is("Somethig went wrong!")))
-                .andExpect(jsonPath("$.status", is(500)))
-                .andExpect(jsonPath("$.error", is("internal_error")))
-                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+                .andExpect(status().isServiceUnavailable());
     }
 
     @Test
@@ -166,8 +192,55 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetRankingCharactersInvalidLimit0() throws Exception {
+    public void testGetRankingCharactersInvalidToken() throws Exception {
+        mockMvc.perform(get("/characters/ranking" + "?access_token=123")
+                .param("limit", "askjdba"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharactersTokenMustBeProvided() throws Exception {
         mockMvc.perform(get("/characters/ranking")
+                .param("limit", "askjdba"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetRankingCharactersNotAdmin() throws Exception {
+        String id = "123456789012345678900000";
+        User user = new User("TACSNOTADMIN", "testPass123;");
+        User.validateUser(user);
+        user.setIsAdmin(false);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        Token notAdmin = authRepository.login(user);
+        mockMvc.perform(get("/characters/ranking?access_token=" + notAdmin.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+
+        ds.getDatastore().delete(notAdmin);
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACSNOTADMIN"));
+    }
+
+    @Test
+    public void testGetRankingCharactersInvalidLimit0() throws Exception {
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -179,7 +252,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharactersInvalidLimit101() throws Exception {
-        mockMvc.perform(get("/characters/ranking")
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "101"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -191,7 +264,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharactersInvalidLimit2() throws Exception {
-        mockMvc.perform(get("/characters/ranking")
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "askjdba"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -234,7 +307,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
         character = new Character(10, "name10", "description10");
         character.setElectedTimes(1);
         ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking")
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "5"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -264,7 +337,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
         character = new Character(4, "name4", "description4");
         character.setElectedTimes(7);
         ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking")
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "4"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -293,7 +366,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
         character = new Character(4, "name4", "description4");
         character.setElectedTimes(7);
         ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking"))
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(4)))

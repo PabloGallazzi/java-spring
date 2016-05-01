@@ -41,6 +41,17 @@ public class UsersRestControllerTest extends BaseRestTester {
     private CharactersRepository charactersRepository;
 
     @Test
+    public void testGetCharactersIntersectionTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/teams/commons/" + "id123" + "/" + "id123"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
     public void testGetCharactersIntersectionBadIds() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
@@ -460,6 +471,17 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testUnableToGetUserTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/users/123"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
     public void testUnableToGetUserIdLessThan24CharactersReturnsNotFound() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "test");
@@ -549,6 +571,17 @@ public class UsersRestControllerTest extends BaseRestTester {
 
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testGetFavoritesTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/users/123/characters/favorites"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test
@@ -654,6 +687,27 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(character1);
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testPostFavoritesTokenMustBeProvided() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        String body = json(character1);
+        mockMvc.perform(post("/users/123/characters/favorites")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test
@@ -814,6 +868,17 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testDeleteFavoritesTokenMustBeProvided() throws Exception {
+        mockMvc.perform(delete("/users/123/characters/favorites/1"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
     public void testDeleteFavoritesMismatchToken() throws Exception {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
@@ -944,6 +1009,30 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.cause", is(Collections.singletonList("character_id_must_be_a_natural_number"))));
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testPostNewTeamTokenMustBeProvided() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        Team team1 = new Team();
+        team1.setTeamName("uno");
+        team1.addMember(character1);
+        String body = json(team1);
+        mockMvc.perform(post("/users/123/teams")
+                .content(body)
+                .contentType(contentType))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test
@@ -1082,6 +1171,16 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
     }
 
+    @Test
+    public void testGetTeamTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/users/123/teams/1"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
 
     @Test
     public void testGetTeamMismatchToken() throws Exception {
@@ -1254,6 +1353,26 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testPostTeamTokenMustBeProvided() throws Exception {
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        String body = json(character1);
+        mockMvc.perform(post("/users/123/teams/1/characters")
+                .content(body).contentType(contentType))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test
@@ -1484,6 +1603,17 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().delete(token);
         ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+    }
+
+    @Test
+    public void testDeleteFromTeamTokenMustBeProvided() throws Exception {
+        mockMvc.perform(delete("/users/123/teams/1/characters/1"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
     @Test

@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @Scope("singleton")
-@Profile({"production","staging"})
+@Profile({"production"})
 public class DSMongoReal implements DSMongoInterface {
 
     Datastore ds;

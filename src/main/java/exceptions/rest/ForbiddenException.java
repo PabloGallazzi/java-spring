@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 /**
  * Created by pgallazzi on 3/4/16.
  */
-public class UnauthorizedException extends RestBaseException {
+public class ForbiddenException extends RestBaseException {
 
-    public UnauthorizedException(String message) {
+    public ForbiddenException(String message) {
         super(message, "unauthorized", new String[0]);
-        this.status = HttpStatus.UNAUTHORIZED;
+        this.status = HttpStatus.FORBIDDEN;
     }
 
 }
