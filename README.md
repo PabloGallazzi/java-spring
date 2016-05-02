@@ -47,4 +47,8 @@ mvn spring-boot:run
 ./populate_data.sh
 ```
 
-Results at: ${project}/output.txt
+You can see the results at: ${project}/output.txt, the report includes:
+All users created by the script (with access_tokens), it also includes the admin user with its 
+access_token to test all the services that need admin privileges.
+All teams, and characters created by the script are in this file with some pointers to
+identify which team belongs to each user and which characters belong to each team.
