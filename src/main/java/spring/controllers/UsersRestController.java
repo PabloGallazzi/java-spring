@@ -72,6 +72,10 @@ public class UsersRestController {
         }
         User.validateUser(userBody);
         try {
+            //TODO: Remove this if for production.
+            if (userBody.getUserName().equals("Admin")){
+                userBody.setIsAdmin(true);
+            }
             users.save(userBody);
         } catch (com.mongodb.DuplicateKeyException e) {
             String[] cause = new String[1];
@@ -187,6 +191,7 @@ public class UsersRestController {
         validateTeamBelongsToUser(thisUser, team);
         Character character1 = charactersRepository.findById(character.getId());
         if (character1 == null) {
+            character.setElectedTimes(0);
             charactersRepository.save(character);
         }
         team.addMember(character);
