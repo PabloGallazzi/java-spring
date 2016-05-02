@@ -46,3 +46,5 @@ mvn spring-boot:run
 ```
 ./populate_data.sh
 ```
+
+Results at: ${project}/output.txt
