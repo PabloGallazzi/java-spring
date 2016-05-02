@@ -44,10 +44,12 @@ public class User {
     @JsonIgnore
     private boolean isAdmin = false;
 
+    @JsonIgnore
     public boolean isAdmin() {
         return isAdmin;
     }
 
+    @JsonIgnore
     public void setIsAdmin(boolean admin) {
         isAdmin = admin;
     }
