@@ -40,3 +40,9 @@ mvn test
 mvn clean
 mvn spring-boot:run
 ```
+
+## How do I populate the database ?
+
+```
+./populate_data.sh
+```
