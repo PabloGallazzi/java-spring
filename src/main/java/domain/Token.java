@@ -43,7 +43,7 @@ public class Token {
         this.userId = userId;
         Random random = new Random();
         Double doubleValue = random.nextDouble();
-        this.accessToken = userId.toString() + "-" + DigestUtils.sha256Hex(doubleValue.toString()) + "-" + DigestUtils.sha256Hex(this.expirationDate.toString());
+        this.accessToken = userId.toString() + "-" + DigestUtils.sha256Hex(doubleValue.toString() + this.expirationDate.toString());
     }
 
     public Date getExpirationDate() {
@@ -95,8 +95,8 @@ public class Token {
         }
     }
 
-    public static void validateNonEmptyToken(String token){
-        if (token.isEmpty()){
+    public static void validateNonEmptyToken(String token) {
+        if (token.isEmpty()) {
             throw new UnauthorizedException("Access token must be provided");
         }
     }
