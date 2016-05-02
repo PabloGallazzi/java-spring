@@ -43,6 +43,8 @@ mvn spring-boot:run
 
 ## How do I populate the database ?
 
+With the server running, run the following command from your console.
+
 ```
 ./populate_data.sh
 ```
