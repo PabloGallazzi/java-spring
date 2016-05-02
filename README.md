@@ -4,6 +4,8 @@
 
 For detailed information abuot the API see the [wiki] (https://github.com/niko118/tp-tacs/wiki)
 
+For usage information see the [API-usage-examples] (https://github.com/niko118/tp-tacs/wiki/API-usage-examples-(CURLs))
+
 ## Frameworks:
 
 JAVA: v1.7
