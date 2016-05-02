@@ -51,12 +51,14 @@ JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_1}/teams?access_toke
 echo "Team: PabloTeam" >> output.txt
 TEAM_ID_1=$(get_field_from_json ${JSON} "team_id")
 echo "ID: ${TEAM_ID_1}" >> output.txt
+echo "This team belongs to the user: "${USER_ID_1} >> output.txt
 echo "" >> output.txt
 
 JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_2}/teams?access_token=${USER_TOKEN_2}" -H "Content-Type: application/json" -d '{"team_name":"NicoTeam"}')
 echo "Team: NicoTeam" >> output.txt
 TEAM_ID_2=$(get_field_from_json ${JSON} "team_id")
 echo "ID: ${TEAM_ID_2}" >> output.txt
+echo "This team belongs to the user: "${USER_ID_2} >> output.txt
 echo "" >> output.txt
 
 echo "CHARACTERS:" >> output.txt
@@ -67,6 +69,7 @@ JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_2}/characters/favori
 echo "Character: 3-D Man" >> output.txt
 echo "ID: 1011334" >> output.txt
 echo "Elected times as favorite: 2" >> output.txt
+echo "This character belongs to the teams: "${TEAM_ID_1}" and "${TEAM_ID_2} >> output.txt
 echo "" >> output.txt
 
 JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_1}/teams/${TEAM_ID_1}/characters?access_token=${USER_TOKEN_1}" -H "Content-Type: application/json" -d '{"id":1011266,"name":"Adam Destine","description":"","elected_times":0,"thumbnail":{"path":"http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available","extension":"jpg"}}')
@@ -75,16 +78,19 @@ JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_1}/characters/favori
 echo "Character: Adam Destine" >> output.txt
 echo "ID: 1011266" >> output.txt
 echo "Elected times as favorite: 1" >> output.txt
-echo "" >> output.txt
-
-JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_2}/teams/${TEAM_ID_2}/characters?access_token=${USER_TOKEN_2}" -H "Content-Type: application/json" -d '{"id":1010903,"name":"Abyss (Age of Apocalypse)","description":"","elected_times":0,"thumbnail":{"path":"http://i.annihil.us/u/prod/marvel/i/mg/3/80/4c00358ec7548","extension":"jpg"}}')
-echo "Character: Abyss (Age of Apocalypse)" >> output.txt
-echo "ID: 1010903" >> output.txt
-echo "Elected times as favorite: 0" >> output.txt
+echo "This character belongs to the teams: "${TEAM_ID_1}" and "${TEAM_ID_2} >> output.txt
 echo "" >> output.txt
 
 JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_1}/teams/${TEAM_ID_1}/characters?access_token=${USER_TOKEN_1}" -H "Content-Type: application/json" -d '{"id":1009146,"name":"Abomination (Emil Blonsky)","description":"Formerly known as Emil Blonsky, a spy of Soviet Yugoslavian origin working for the KGB, the Abomination gained his powers after receiving a dose of gamma radiation similar to that which transformed Bruce Banner into the incredible Hulk.","elected_times":0,"thumbnail":{"path":"http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce18691cbf04","extension":"jpg"}}')
 echo "Character: Abomination (Emil Blonsky)" >> output.txt
 echo "ID: 1009146" >> output.txt
 echo "Elected times as favorite: 0" >> output.txt
+echo "This character belongs to the team: "${TEAM_ID_1} >> output.txt
+echo "" >> output.txt
+
+JSON=$(curl -sX POST "http://localhost:8080/users/${USER_ID_2}/teams/${TEAM_ID_2}/characters?access_token=${USER_TOKEN_2}" -H "Content-Type: application/json" -d '{"id":1010903,"name":"Abyss (Age of Apocalypse)","description":"","elected_times":0,"thumbnail":{"path":"http://i.annihil.us/u/prod/marvel/i/mg/3/80/4c00358ec7548","extension":"jpg"}}')
+echo "Character: Abyss (Age of Apocalypse)" >> output.txt
+echo "ID: 1010903" >> output.txt
+echo "Elected times as favorite: 0" >> output.txt
+echo "This character belongs to the team: "${TEAM_ID_2} >> output.txt
 echo "" >> output.txt
