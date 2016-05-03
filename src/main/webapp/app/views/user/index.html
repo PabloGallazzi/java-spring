@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="MarvelApiPOC">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,24 +7,20 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>TACS ApiMarvel</title>
-		<link rel="icon" type="content/images/png" href="content/images/favicon.png">
+		<link rel="icon" type="../../../content/images/png" href="favicon.png">
 		<!-- Bootstrap Core CSS -->
-		<link href="content/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../../content/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom CSS -->
-		<link href="content/css/home_user.css" rel="stylesheet">
+		<link href="../../../content/css/home_user.css" rel="stylesheet">
 		<!-- jQuery -->
-		<script src="scripts/jquery.js"></script>
+		<script src="../../../scripts/jquery.js"></script>
 		<!-- Bootstrap Core JavaScript -->
-		<script src="scripts/bootstrap.min.js"></script>
+		<script src="../../../scripts/bootstrap.min.js"></script>
 		<!-- Angular -->
-		<script src="scripts/angular_1.5.5.js"></script>
-		<script src="scripts/angular-route.min.js"></script>
-		<script src="scripts/angular-resource.js"></script>
-		<script src="app/app.js"></script>
-		<script src="app/controllers/character_controller.js"></script>
-		<script src="app/services/character_service.js"></script>
-
-		
+		<script src="../../../scripts/angular_1.5.5.js"></script>
+		<script src="../../../scripts/angular-route.min.js"></script>
+		<script src="../../../app/app.js"></script>
+		<script src="../../../app/controllers/userhome_controller.js"></script>
 	</head>
 	<body ng-app="MarvelApiPOC">
 		<!-- Navigation -->
@@ -38,19 +34,19 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#/">TACS MarvelApi</a>
+					<a class="navbar-brand" href="#/A">TACS MarvelApi</a>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="#/characters">Characters</a>
+							<a href="#/characters">Personajes</a>
 						</li>
 						<li>
-							<a href="#/teams">Teams</a>
+							<a href="#/teams">Equipos</a>
 						</li>
 						<li>
-							<a href="#/favorites">Favorites</a>
+							<a href="#/favorites">Favoritos</a>
 						</li>
 					</ul>
 				</div>
