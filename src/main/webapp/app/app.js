@@ -2,7 +2,7 @@ var app = angular.module('MarvelApiPOC', ['ngRoute','ngResource']);
 
 app.config(function ($routeProvider) {
 
-    $routeProvider.when("/", {
+    $routeProvider.when("/home", {
         controller: "homeController",
         templateUrl: "app/views/user/home.html"
     });
@@ -27,7 +27,12 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/user/character.html"
     });
 
-    // $routeProvider.otherwise({ redirectTo: "/" });
+    $routeProvider.when("/register", {
+        controller: "registerController",
+        templateUrl: "sign_up.html"
+    })
+
+    $routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
@@ -37,6 +42,6 @@ app.controller('homeController', function($scope) {
 });
 
 app.controller('characterController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
-    var self = this;
+    var controller = this;
     $scope.selectedCharacter = characterService.getSelectedCharacter();
 }]);

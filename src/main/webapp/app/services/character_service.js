@@ -18,8 +18,9 @@ app.factory('characterService', ['$http', '$q', function($http, $q){
                             );
             },
              
-            getCharacter: function(){
-                    return $http.get('http://localhost:8080/chracters/:id', {id:1011334})
+            getCharacter: function(id){
+                    var id = 1011334
+                    return $http.get('http://localhost:8080/characters/:id'+id)
                             .then(
                                     function(response){
                                         return response.data;
