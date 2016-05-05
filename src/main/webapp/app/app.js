@@ -27,9 +27,9 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/user/character.html"
     });
 
-    $routeProvider.when("/register", {
-        controller: "registerController",
-        templateUrl: "sign_up.html"
+    $routeProvider.when("/login", {
+        controller: "loginController",
+        templateUrl: "login.html"
     })
 
     $routeProvider.otherwise({ redirectTo: "/home" });
