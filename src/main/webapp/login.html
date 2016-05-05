@@ -42,12 +42,12 @@
 		</nav>
 		
 		<div class="container">
-			<div class="card card-container">				
+			<div class="card card-container" ng-controller= "loginController">
 				<img id="profile-img" class="profile-img-card" src="content/images/icon-user.png" />				
-				<form class="form-signin">					
-					<input type="text" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
-					<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>					
-					<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+				<form class="form-signin">
+					<input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="userEmail"required autofocus>
+					<input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="userPassword"required>
+					<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="login()">Sign in</button>
 				</form><!-- /form -->
 				<a href="sign_up.html" >
 					Sign Up
