@@ -7,19 +7,25 @@ app.factory('loginService', ['$http', '$q', function($http, $q){
 
     return {
         login: function(email, password) {
-            var request = $.param({
-                json: JSON.stringify({
-                    user_name: email,
-                    user_password: password
+
+            var data = {
+                user_name: email,
+                user_password: password
+            };
+
+            var config = {
+                headers : {
+                    'Content-Type': 'application/json;charset=utf-8;'
+                }
+            };
+
+            $http.post('/users/authenticate', data, config)
+                .success(function (data, status, headers, config) {
+                    console.log(data)
                 })
-            });
-
-            console.log(request);
-
-            $http.post('http://localhost:8080/users/authenticate/', request)
-                .success(function(response) {
-                    console.log(response);
-                    return response;
+                .error(function (data, status, header, config) {
+                    console.log(data);
+                    console.log(status);
                 });
         }
     }
