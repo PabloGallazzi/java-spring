@@ -20,9 +20,7 @@ app.factory('loginService', ['$http', '$q', function($http, $q){
                 .success(function(response) {
                     console.log(response);
                     return response;
-                }
-            )
+                });
         }
     }
-    
 }]);
