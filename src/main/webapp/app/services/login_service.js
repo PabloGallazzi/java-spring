@@ -8,9 +8,13 @@ app.factory('loginService', ['$http', '$q', function($http, $q){
     return {
         login: function(email, password) {
             var request = $.param({
-                user_name: email,
-                user_password: password
+                json: JSON.stringify({
+                    user_name: email,
+                    user_password: password
+                })
             });
+
+            console.log(request);
 
             $http.post('http://localhost:8080/users/authenticate/', request)
                 .success(function(response) {
