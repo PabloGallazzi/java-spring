@@ -1,4 +1,4 @@
-var app = angular.module('appMarvelApi', ['ngRoute','ngResource']);
+var app = angular.module('appMarvelApi', ['ngRoute','ngResource','ngCookies']);
 
 app.config(function ($routeProvider) {
 
@@ -17,16 +17,9 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/singup.html"
     });
 
-    // $routeProvider.otherwise({ redirectTo: "/" });
-
+    //$routeProvider.otherwise({ redirectTo: "/" });
 });
 
-app.controller('signupController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
-    var self = this;
-    $scope.selectedCharacter = characterService.getSelectedCharacter();
-}]);
-
-app.controller('signinController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
-    var self = this;
-    $scope.selectedCharacter = characterService.getSelectedCharacter();
+app.controller('signupController', ['$scope', '$location', function($scope, $location) {
+    // TODO: Agregar lógica del controlador.
 }]);

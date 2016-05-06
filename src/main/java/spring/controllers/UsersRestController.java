@@ -22,7 +22,7 @@ import java.util.List;
  * Created by niko118 on 11/4/16.
  */
 @RestController
-public class UsersRestController {
+public class    UsersRestController {
 
     @Autowired
     private UsersRepository users;

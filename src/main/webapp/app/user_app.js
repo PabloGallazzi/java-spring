@@ -1,8 +1,8 @@
-var app = angular.module('MarvelApiPOC', ['ngRoute','ngResource']);
+var app = angular.module('appUser', ['ngRoute','ngResource', 'ngCookies']);
 
 app.config(function ($routeProvider) {
 
-    $routeProvider.when("/", {
+    $routeProvider.when("/home", {
         controller: "",
         templateUrl: "app/views/user/home.html"
     });
@@ -27,11 +27,16 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/user/character.html"
     });
 
-    // $routeProvider.otherwise({ redirectTo: "/" });
+    $routeProvider.when("/login", {
+        controller: "loginController",
+        templateUrl: "login.html"
+    })
+
+    $routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
 app.controller('characterController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
-    var self = this;
+    var controller = this;
     $scope.selectedCharacter = characterService.getSelectedCharacter();
 }]);

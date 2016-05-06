@@ -20,14 +20,18 @@
 		<script src="scripts/angular_1.5.5.js"></script>
 		<script src="scripts/angular-route.min.js"></script>
 		<script src="scripts/angular-resource.js"></script>
+		<script src="scripts/angular-cookies.js"></script>
 		<script src="app/app.js"></script>
-		<script src="app/controllers/character_controller.js"></script>
-		<script src="app/services/character_service.js"></script>
+		<script src="app/services/user_service.js"></script>
+		<script src="app/services/login_service.js"></script>
+		<script src="app/controllers/login_controller.js"></script>
+
 	</head>
 	<body ng-app="appMarvelApi">
 		<header class="navbar navbar-inverse navbar-fixed-top">
 			<a class="navbar-brand" href="#/">TACS MarvelApi</a>
 		</header>
+
 		<div ng-view>
 		</div>
 
