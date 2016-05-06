@@ -3,13 +3,29 @@ app.controller('charactersController', ['$scope', '$location', 'characterService
     var self = this;
 
     // Evento para manejar el páginado de los personajes.
-    $('.pagination').children('li[type=number]').click(function(evt){
+    $('li[type=number]').click(function(evt){
         $('.pagination').children('li[type=number]').removeClass('active');
         $(evt.currentTarget).addClass("active");
         var page = evt.currentTarget.textContent;
         var limit= 9,
             offset= page * 9 - limit;
         self.fetchAllCharacters(offset,limit);
+    });
+
+    $('.nextpage').click(function(evt){
+        $('li[type=number]').children().each(function(){
+            var pageNumber = parseInt(this.textContent);
+            this.textContent = pageNumber + 5;
+        });
+        $('li[type=number]').first().click();
+    });
+
+    $('.previouspage').click(function(evt){
+        $('li[type=number]').children().each(function(){
+            var pageNumber = parseInt(this.textContent);
+            this.textContent = pageNumber + 5;
+        });
+        $('li[type=number]').first().click();
     });
 
     $scope.characters = [];
@@ -28,7 +44,7 @@ app.controller('charactersController', ['$scope', '$location', 'characterService
                             $scope.characters = d.data.results;
                        },
                         function(errResponse){
-                            console.error('Error while fetching Currencies');
+                            console.error('Error while fetching characters');
                         }
                );
     };

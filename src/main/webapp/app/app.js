@@ -1,42 +1,32 @@
-var app = angular.module('MarvelApiPOC', ['ngRoute','ngResource']);
+var app = angular.module('appMarvelApi', ['ngRoute','ngResource']);
 
 app.config(function ($routeProvider) {
 
     $routeProvider.when("/", {
-        controller: "homeController",
-        templateUrl: "app/views/user/home.html"
+        controller: "",
+        templateUrl: "app/views/home.html"
     });
 
-    $routeProvider.when("/characters", {
-        controller: "charactersController",
-        templateUrl: "app/views/user/characters.html"
+    $routeProvider.when("/login", {
+        controller: "loginController",
+        templateUrl: "app/views/login.html"
     });
 
-    $routeProvider.when("/teams", {
-        controller: "teamController",
-        templateUrl: "app/views/user/teams.html"
-    });
-
-    $routeProvider.when("/favorites", {
-        controller: "favoriteController",
-        templateUrl: "app/views/user/favorites.html"
-    });
-
-    $routeProvider.when("/characters/:id", {
-        controller: "characterController",
-        templateUrl: "app/views/user/character.html"
+    $routeProvider.when("/register", {
+        controller: "signupController",
+        templateUrl: "app/views/singup.html"
     });
 
     // $routeProvider.otherwise({ redirectTo: "/" });
 
 });
 
-'use strict';
-app.controller('homeController', function($scope) {
+app.controller('signupController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
+    var self = this;
+    $scope.selectedCharacter = characterService.getSelectedCharacter();
+}]);
 
-});
-
-app.controller('characterController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
+app.controller('signinController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
     var self = this;
     $scope.selectedCharacter = characterService.getSelectedCharacter();
 }]);

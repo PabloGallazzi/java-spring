@@ -1,0 +1,13 @@
+html{
+    height:100%;
+}
+
+body {
+    height:100%;
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+div[ng-view]
+{
+    height:100%;
+}
