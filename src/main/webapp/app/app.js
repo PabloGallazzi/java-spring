@@ -1,4 +1,5 @@
-var app = angular.module('MarvelApiPOC', ['ngRoute','ngResource']);
+var app = angular.module('MarvelApiPOC', ['ngRoute','ngResource', 'ngCookies']);
+
 
 app.config(function ($routeProvider) {
 

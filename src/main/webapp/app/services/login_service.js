@@ -3,30 +3,22 @@
  */
 'use strict';
 
-app.factory('loginService', ['$http', '$q', function($http, $q){
+app.factory('loginService', ['$http', '$q', 'userService', function($http, $q, userService){
 
-    return {
-        login: function(email, password) {
+    var loginService = this;
 
-            var data = {
-                user_name: email,
-                user_password: password
-            };
+    loginService.login = login;
+    loginService.userService = userService;
 
-            var config = {
-                headers : {
-                    'Content-Type': 'application/json;charset=utf-8;'
-                }
-            };
+    return loginService;
 
-            $http.post('/users/authenticate', data, config)
-                .success(function (data, status, headers, config) {
-                    console.log(data)
-                })
-                .error(function (data, status, header, config) {
-                    console.log(data);
-                    console.log(status);
-                });
-        }
+    function login(username, password) {
+
+        var data = { user_name: username, user_password: password };
+        var config = { headers: {'Content-Type': 'application/json;charset=utf-8;'} };
+
+        return $http.post('/users/authenticate', data, config); // Returning promise of authentication
+
     }
+
 }]);
