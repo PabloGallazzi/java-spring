@@ -1,5 +1,6 @@
 package spring.controllers;
 
+import domain.Token;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repositories.AuthRepository;
 import repositories.CharactersRepository;
 import services.MarvelApiServiceInterface;
 
@@ -28,6 +30,8 @@ public class CharactersRestController {
     private MarvelApiServiceInterface marvelApiService;
     @Autowired
     private CharactersRepository charactersRepository;
+    @Autowired
+    private AuthRepository auth;
 
     //Ya está terminado y testeado
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
@@ -66,7 +70,11 @@ public class CharactersRestController {
 
     //Ya está terminado y testeado
     @RequestMapping(value = "/characters/ranking", method = RequestMethod.GET)
-    ResponseEntity<?> getRanking(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit) {
+    ResponseEntity<?> getRanking(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit,
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        aToken.validateAdminCredentials();
         Integer limitFromRequest;
         try {
             limitFromRequest = Integer.valueOf(limit);
@@ -78,4 +86,5 @@ public class CharactersRestController {
         }
         return new ResponseEntity<>(charactersRepository.getCharactersOrderedByTimesElectedDesc(limitFromRequest), null, HttpStatus.OK);
     }
+
 }
