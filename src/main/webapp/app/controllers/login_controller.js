@@ -11,7 +11,7 @@ app.controller('loginController', ['$scope', '$location','$cookieStore', 'loginS
 
         var username = $scope.userEmail;
         var password = $scope.userPassword;
-
+        $location.path('/home');
         loginService.login(username, password).success(function(user) {
             $scope.userLogged = user;
             $cookieStore.put('access_token', user.access_token);
@@ -19,5 +19,4 @@ app.controller('loginController', ['$scope', '$location','$cookieStore', 'loginS
         });
     };
 
-    $('.active').click();
 }]);

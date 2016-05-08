@@ -2,7 +2,7 @@ var app = angular.module('appUser', ['ngRoute','ngResource', 'ngCookies']);
 
 app.config(function ($routeProvider) {
 
-    $routeProvider.when("/home", {
+    $routeProvider.when("/", {
         controller: "",
         templateUrl: "app/views/user/home.html"
     });
@@ -27,12 +27,7 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/user/character.html"
     });
 
-    $routeProvider.when("/login", {
-        controller: "loginController",
-        templateUrl: "login.html"
-    })
-
-    $routeProvider.otherwise({ redirectTo: "/home" });
+    //$routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
