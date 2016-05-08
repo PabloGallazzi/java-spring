@@ -16,8 +16,8 @@ echo "" >> output.txt
 
 echo "ADMIN USERS:" >> output.txt
 JSON=$(curl -sX POST "http://localhost:8080/users" -H "Content-Type: application/json" -d '{"user_name":"Admin","user_password":"admin123;"}')
-echo "User: Pablo" >> output.txt
-echo "Pass: pablo123" >> output.txt
+echo "User: Admin" >> output.txt
+echo "Pass: admin123;" >> output.txt
 USER_ID_ADMIN=$(get_field_from_json ${JSON} "user_id")
 echo "ID: ${USER_ID_ADMIN}" >> output.txt
 JSON=$(curl -sX POST "http://localhost:8080/users/authenticate" -H "Content-Type: application/json" -d '{"user_name":"Admin","user_password":"admin123;"}')
@@ -28,7 +28,7 @@ echo "" >> output.txt
 echo "NORMAL USERS:" >> output.txt
 JSON=$(curl -sX POST "http://localhost:8080/users" -H "Content-Type: application/json" -d '{"user_name":"Pablo","user_password":"pablo123;"}')
 echo "User: Pablo" >> output.txt
-echo "Pass: pablo123" >> output.txt
+echo "Pass: pablo123;" >> output.txt
 USER_ID_1=$(get_field_from_json ${JSON} "user_id")
 echo "ID: ${USER_ID_1}" >> output.txt
 JSON=$(curl -sX POST "http://localhost:8080/users/authenticate" -H "Content-Type: application/json" -d '{"user_name":"Pablo","user_password":"pablo123;"}')
@@ -38,7 +38,7 @@ echo "" >> output.txt
 
 JSON=$(curl -sX POST "http://localhost:8080/users" -H "Content-Type: application/json" -d '{"user_name":"Nico","user_password":"nico123;"}')
 echo "User: Nico" >> output.txt
-echo "Pass: nico123" >> output.txt
+echo "Pass: nico123;" >> output.txt
 USER_ID_2=$(get_field_from_json ${JSON} "user_id")
 echo "ID: ${USER_ID_1}" >> output.txt
 JSON=$(curl -sX POST "http://localhost:8080/users/authenticate" -H "Content-Type: application/json" -d '{"user_name":"Nico","user_password":"nico123;"}')
