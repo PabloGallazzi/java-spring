@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ApiStatus {
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo() {
         return new ResponseEntity<>("pong", null, HttpStatus.OK);

@@ -48,7 +48,6 @@ public class UsersRestController {
     *
     * */
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
     ResponseEntity<?> compareTeams(@PathVariable String id,
                                    @PathVariable String id2,
@@ -62,7 +61,6 @@ public class UsersRestController {
         return new ResponseEntity<>(characters, null, HttpStatus.OK);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     ResponseEntity<?> createUser(@RequestBody User userBody) {
         if (userBody.getUserName() == null) {
@@ -85,7 +83,6 @@ public class UsersRestController {
         return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     ResponseEntity<?> getUserInfo(@PathVariable String id,
                                   @RequestParam(value = "attributes", required = false) String attributes,
@@ -97,7 +94,6 @@ public class UsersRestController {
         return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{user}/characters/favorites", method = RequestMethod.GET)
     ResponseEntity<?> getFavorites(@PathVariable String user,
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
@@ -108,7 +104,6 @@ public class UsersRestController {
         return new ResponseEntity<>(thisUser.getFavorites(), null, HttpStatus.OK);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/characters/favorites", method = RequestMethod.POST)
     ResponseEntity<?> addFavorite(@PathVariable String userId,
                                   @RequestBody Character character,
@@ -131,7 +126,6 @@ public class UsersRestController {
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/characters/favorites/{id}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFavorite(@PathVariable String userId,
                                      @PathVariable String id,
@@ -147,7 +141,6 @@ public class UsersRestController {
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.POST)
     ResponseEntity<?> createTeam(@PathVariable String userId,
                                  @RequestBody Team team,
@@ -163,7 +156,6 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable String userId,
                               @PathVariable String teamId,
@@ -177,7 +169,6 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.OK);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters", method = RequestMethod.POST)
     ResponseEntity<?> addToTeam(@PathVariable String userId,
                                 @PathVariable String teamId,
@@ -199,7 +190,6 @@ public class UsersRestController {
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters/{characterId}", method = RequestMethod.DELETE)
     ResponseEntity<?> removeFromTeam(@PathVariable String userId,
                                      @PathVariable String teamId,

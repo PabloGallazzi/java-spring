@@ -33,7 +33,6 @@ public class CharactersRestController {
     @Autowired
     private AuthRepository auth;
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     ResponseEntity<?> getCharacters(@RequestParam(value = "sort", required = false, defaultValue = "name") String sort,
                                     @RequestParam(value = "criteria", required = false, defaultValue = "asc") String criteria,
@@ -68,7 +67,6 @@ public class CharactersRestController {
         return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 
-    //Ya está terminado y testeado
     @RequestMapping(value = "/characters/ranking", method = RequestMethod.GET)
     ResponseEntity<?> getRanking(@RequestParam(value = "limit", required = false, defaultValue = "10") String limit,
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
