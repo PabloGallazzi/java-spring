@@ -28,12 +28,7 @@ public class AuthRestControllerTest extends BaseRestTester {
 
     @Test
     public void testLoginSuccessFullNotAdmin() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        createTACSTestUser();
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "testPass123;");
@@ -45,20 +40,12 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
                 .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE))));
-        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testLoginSuccessFullAdmin() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        createTACSAdminTestUser();
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "testPass123;");
@@ -70,19 +57,12 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
                 .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE, ScopesHelper.ADMIN))));
-        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testLoginSuccessFullExpiredToken() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        User user = createTACSTestUser();
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "testPass123;");
@@ -93,7 +73,7 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
+        Token token = ds.getDatastore().find(Token.class, "userId", user.getUserId()).get();
         token.setExpirationDate(new Date(new Date().getTime() - 1));
         ds.getDatastore().save(token);
         mockMvc.perform(post("/users/authenticate")
@@ -103,19 +83,12 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.access_token", not(token.getAccessToken())))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        token = ds.getDatastore().find(Token.class, "userId", objectId).get();
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testLoginSuccessFullResolvesTheSameTokenTwice() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        createTACSTestUser();
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "testPass123;");
@@ -126,7 +99,7 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        Token token = ds.getDatastore().find(Token.class, "userId", objectId).get();
+        Token token = getTACSTestUserToken();
         mockMvc.perform(post("/users/authenticate")
                 .content(body)
                 .contentType(contentType))
@@ -134,8 +107,7 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.access_token", is(token.getAccessToken())))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -223,12 +195,7 @@ public class AuthRestControllerTest extends BaseRestTester {
 
     @Test
     public void testWrongPasswordShouldThrowBadRequest() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        createTACSTestUser();
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "wrongTestPass;");
@@ -242,7 +209,7 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("invalid_credentials")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUser();
     }
 
 }
