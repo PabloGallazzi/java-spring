@@ -132,7 +132,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetCharactersFailBadLimit1() throws Exception {
+    public void testGetCharactersFailBadLimitNotANumber() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("limit", "cualquiera"))
                 .andExpect(status().isBadRequest())
@@ -144,7 +144,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetCharactersFailBadLimit2() throws Exception {
+    public void testGetCharactersFailBadLimitLowerThan1() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("limit", "0"))
                 .andExpect(status().isBadRequest())
@@ -156,7 +156,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetCharactersFailBadLimit3() throws Exception {
+    public void testGetCharactersFailBadLimitHigherThan100() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("limit", "101"))
                 .andExpect(status().isBadRequest())
@@ -168,7 +168,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetCharactersFailBadOffset1() throws Exception {
+    public void testGetCharactersFailBadOffsetNotANumber() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("offset", "cualquiera"))
                 .andExpect(status().isBadRequest())
@@ -180,7 +180,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetCharactersFailBadOffset3() throws Exception {
+    public void testGetCharactersFailBadOffsetLowerThan0() throws Exception {
         mockMvc.perform(get("/characters")
                 .param("offset", "-1"))
                 .andExpect(status().isBadRequest())
@@ -239,7 +239,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetRankingCharactersInvalidLimit0() throws Exception {
+    public void testGetRankingCharactersInvalidLimitLowerThan1() throws Exception {
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "0"))
                 .andExpect(status().isBadRequest())
@@ -251,7 +251,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetRankingCharactersInvalidLimit101() throws Exception {
+    public void testGetRankingCharactersInvalidLimitGreaterThan100() throws Exception {
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "101"))
                 .andExpect(status().isBadRequest())
@@ -263,7 +263,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
     }
 
     @Test
-    public void testGetRankingCharactersInvalidLimit2() throws Exception {
+    public void testGetRankingCharactersInvalidLimitNotANumber() throws Exception {
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
                 .param("limit", "askjdba"))
                 .andExpect(status().isBadRequest())
