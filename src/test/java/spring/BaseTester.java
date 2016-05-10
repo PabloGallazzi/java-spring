@@ -52,8 +52,12 @@ public class BaseTester {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    private User getTACSTestUserVO() {
-        String id = "123456789012345678901234";
+    protected String getTACDId(){
+        return "123456789012345678901234";
+    }
+
+    protected User getTACSTestUserVO() {
+        String id = getTACDId();
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
         ObjectId objectId = new ObjectId(id);
