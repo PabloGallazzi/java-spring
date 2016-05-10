@@ -89,6 +89,13 @@ public class BaseTester {
         return team;
     }
 
+    public Team getTACSTestTeamWithMemberVO() {
+        Team team = getTACSTestTeamVO();
+        team.setTeamName("uno");
+        team.addMember(createTACSTestCharacter());
+        return team;
+    }
+
     public User createTACSTestUser() {
         User user = getTACSTestUserVO();
         ds.getDatastore().save(user);
@@ -114,10 +121,7 @@ public class BaseTester {
     }
 
     public Team createTACSTestTeamWithMember() {
-        Team team = getTACSTestTeamVO();
-        team.setTeamName("uno");
-        team.addMember(createTACSTestCharacter());
-        return teamsRepository.save(team);
+        return teamsRepository.save(getTACSTestTeamWithMemberVO());
     }
 
     public Character createTACSTestCharacter() {
