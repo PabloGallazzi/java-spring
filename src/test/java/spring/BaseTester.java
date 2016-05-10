@@ -36,16 +36,16 @@ public class BaseTester {
     protected WebApplicationContext webApplicationContext;
 
     @Autowired
-    private DSMongoInterface ds;
+    protected DSMongoInterface ds;
 
     @Autowired
-    private AuthRepository authRepository;
+    protected AuthRepository authRepository;
 
     @Autowired
-    private TeamsRepository teamsRepository;
+    protected TeamsRepository teamsRepository;
 
     @Autowired
-    private CharactersRepository charactersRepository;
+    protected CharactersRepository charactersRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -61,20 +61,20 @@ public class BaseTester {
         return user;
     }
 
-    private User getTACSAdminTestUserVO() {
+    protected User getTACSAdminTestUserVO() {
         User user = getTACSTestUserVO();
         user.setIsAdmin(true);
         return user;
     }
 
-    public Thumbnail getTACSTestThumbnailVO() {
+    protected Thumbnail getTACSTestThumbnailVO() {
         Thumbnail thumbnail = new Thumbnail();
         thumbnail.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
         thumbnail.setExtension("JPG");
         return thumbnail;
     }
 
-    public Character getTACSTestCharacterVO() {
+    protected Character getTACSTestCharacterVO() {
         Character character = new Character();
         Thumbnail thumbnail = getTACSTestThumbnailVO();
         character.setThumbnail(thumbnail);
@@ -83,91 +83,91 @@ public class BaseTester {
         return character;
     }
 
-    private Team getTACSTestTeamVO() {
+    protected Team getTACSTestTeamVO() {
         Team team = new Team();
         team.setTeamName("uno");
         return team;
     }
 
-    public Team getTACSTestTeamWithMemberVO() {
+    protected Team getTACSTestTeamWithMemberVO() {
         Team team = getTACSTestTeamVO();
         team.setTeamName("uno");
         team.addMember(createTACSTestCharacter());
         return team;
     }
 
-    public User createTACSTestUser() {
+    protected User createTACSTestUser() {
         User user = getTACSTestUserVO();
         ds.getDatastore().save(user);
         return user;
     }
 
-    public User createTACSAdminTestUser() {
+    protected User createTACSAdminTestUser() {
         User user = getTACSAdminTestUserVO();
         ds.getDatastore().save(user);
         return user;
     }
 
-    public Token createAndLogInTACSTestUser() {
+    protected Token createAndLogInTACSTestUser() {
         User user = createTACSTestUser();
         user.setUserPassword("testPass123;");
         return authRepository.login(user);
     }
 
-    public Token createAndLogInTACSAdminTestUser() {
+    protected Token createAndLogInTACSAdminTestUser() {
         User user = createTACSAdminTestUser();
         user.setUserPassword("testPass123;");
         return authRepository.login(user);
     }
 
-    public Team createTACSTestTeamWithMember() {
+    protected Team createTACSTestTeamWithMember() {
         return teamsRepository.save(getTACSTestTeamWithMemberVO());
     }
 
-    public Character createTACSTestCharacter() {
+    protected Character createTACSTestCharacter() {
         return charactersRepository.save(getTACSTestCharacterVO());
     }
 
-    public void deleteTACSTestUser() {
+    protected void deleteTACSTestUser() {
         ds.getDatastore().delete(getTACSTestUser());
     }
 
-    public void deleteTACSTestUserToken() {
+    protected void deleteTACSTestUserToken() {
         Token token = getTACSTestUserToken();
         ds.getDatastore().delete(token);
     }
 
-    public void deleteTACSTestUserWithToken() {
+    protected void deleteTACSTestUserWithToken() {
         deleteTACSTestUserToken();
         ds.getDatastore().delete(getTACSTestUser());
     }
 
-    public void deleteTACSTestCharacter() {
+    protected void deleteTACSTestCharacter() {
         Character character = getTACSTestCharacter();
         Thumbnail thumbnail = getTACSTestThumbnail();
         ds.getDatastore().delete(thumbnail);
         ds.getDatastore().delete(character);
     }
 
-    public void deleteTACSTestTeamWithMember() {
+    protected void deleteTACSTestTeamWithMember() {
         deleteTACSTestCharacter();
         Team team = ds.getDatastore().find(Team.class, "teamName", "uno").get();
         ds.getDatastore().delete(team);
     }
 
-    public Token getTACSTestUserToken() {
+    protected Token getTACSTestUserToken() {
         return ds.getDatastore().find(Token.class, "userId", getTACSTestUser().getUserId()).get();
     }
 
-    public User getTACSTestUser() {
+    protected User getTACSTestUser() {
         return ds.getDatastore().find(User.class, "userName", "TACS").get();
     }
 
-    public Character getTACSTestCharacter() {
+    protected Character getTACSTestCharacter() {
         return ds.getDatastore().find(Character.class, "id", 1011334).get();
     }
 
-    public Thumbnail getTACSTestThumbnail() {
+    protected Thumbnail getTACSTestThumbnail() {
         return ds.getDatastore().find(Thumbnail.class, "path", "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784").get();
     }
 

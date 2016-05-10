@@ -4,13 +4,7 @@ import domain.*;
 import domain.Character;
 import org.bson.types.ObjectId;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import repositories.AuthRepository;
-import repositories.CharactersRepository;
-import repositories.TeamsRepository;
-import services.DSMongoInterface;
 import spring.BaseRestTester;
-import spring.utils.ScopesHelper;
 
 import java.util.*;
 
@@ -30,15 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 public class UsersRestControllerTest extends BaseRestTester {
-
-    @Autowired
-    private DSMongoInterface ds;
-    @Autowired
-    private TeamsRepository teamsRepository;
-    @Autowired
-    private AuthRepository authRepository;
-    @Autowired
-    private CharactersRepository charactersRepository;
 
     @Test
     public void testGetCharactersIntersectionTokenMustBeProvided() throws Exception {
@@ -102,9 +87,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionNotFresh() throws Exception {
-        User user = createTACSTestUser();
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUser();
         token.setExpirationDate(new Date(new Date().getTime() - 1));
         ds.getDatastore().save(token);
         mockMvc.perform(get("/teams/commons/1/2?access_token=" + token.getAccessToken()))
@@ -114,7 +97,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-
         deleteTACSTestUserWithToken();
     }
 
@@ -273,7 +255,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testCreateUserSuccessCheckAdminNotSet() throws Exception {
         Map<String, Object> request = new LinkedHashMap<String, Object>();
-        request.put("user_name", "userTestSuccess");
+        request.put("user_name", "TACS");
         request.put("user_password", "12345678;");
         request.put("is_admin", true);
         String body = json(request);
@@ -282,10 +264,10 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .contentType(contentType))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.user_name", is("userTestSuccess")));
-        User userCreated = ds.getDatastore().find(User.class, "userName", "userTestSuccess").get();
+                .andExpect(jsonPath("$.user_name", is("TACS")));
+        User userCreated = ds.getDatastore().find(User.class, "userName", "TACS").get();
         assertFalse(userCreated.isAdmin());
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "userTestSuccess"));
+        deleteTACSTestUser();
     }
 
     @Test
@@ -423,94 +405,47 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testUnableToGetUserIdLessThan24CharactersReturnsNotFound() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "test");
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        List<String> scopes = new ArrayList<>();
-        scopes.add(ScopesHelper.READ);
-        scopes.add(ScopesHelper.WRITE);
-        scopes.add(ScopesHelper.ADMIN);
-        Token aToken = new Token(scopes, objectId);
-        ds.getDatastore().save(aToken);
-        mockMvc.perform(get("/users/123" + "?access_token=" + aToken.getAccessToken()))
+        mockMvc.perform(get("/users/123" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Unable to find resource")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
-        ds.getDatastore().delete(aToken);
+        deleteTACSTestUser();
     }
 
     @Test
     public void testUnableToGetUserRetrievesNotFound() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "test");
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        List<String> scopes = new ArrayList<>();
-        scopes.add(ScopesHelper.READ);
-        scopes.add(ScopesHelper.WRITE);
-        scopes.add(ScopesHelper.ADMIN);
-        Token aToken = new Token(scopes, objectId);
-        ds.getDatastore().save(aToken);
-        mockMvc.perform(get("/users/123456789012345678900000" + "?access_token=" + aToken.getAccessToken()))
+        mockMvc.perform(get("/users/123456789012345678900000" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Unable to find resource")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
-        ds.getDatastore().delete(aToken);
+        deleteTACSTestUser();
     }
 
     @Test
     public void testGetUserSuccessFull() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "test");
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        List<String> scopes = new ArrayList<>();
-        scopes.add(ScopesHelper.READ);
-        scopes.add(ScopesHelper.WRITE);
-        scopes.add(ScopesHelper.ADMIN);
-        Token aToken = new Token(scopes, objectId);
-        ds.getDatastore().save(aToken);
-        mockMvc.perform(get("/users/" + id + "?access_token=" + aToken.getAccessToken()))
+        mockMvc.perform(get("/users/123456789012345678901234?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_name", is("TACS")));
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
-        ds.getDatastore().delete(aToken);
+        deleteTACSTestUser();
     }
 
     @Test
     public void testGetUserNotAdmin() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/users/" + id + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/users/123456789012345678901234?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUser();
     }
 
     @Test
@@ -526,29 +461,18 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetFavoritesMismatchToken() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
         String id2 = "012345678901234567890000";
         User user2 = new User("TACS2", "testPass123;");
         User.validateUser(user2);
-        ds.getDatastore().save(user);
-        mockMvc.perform(get("/users/" + id2 + "/characters/favorites?access_token=" + token.getAccessToken()))
+        ds.getDatastore().save(user2);
+        mockMvc.perform(get("/users/" + id2 + "/characters/favorites?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUser();
         ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
@@ -565,14 +489,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetFavoritesNotFreshToken() throws Exception {
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        charactersRepository.save(character1);
+        Character character1 = createTACSTestCharacter();
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
@@ -592,22 +509,13 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestCharacter();
+        deleteTACSTestUser();
     }
 
     @Test
     public void testGetFavoritesOk() throws Exception {
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        charactersRepository.save(character1);
+        Character character1 = createTACSTestCharacter();
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
@@ -623,10 +531,8 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1011334)));
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUser();
+        deleteTACSTestCharacter();
     }
 
     @Test
