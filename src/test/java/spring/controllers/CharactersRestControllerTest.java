@@ -2,8 +2,6 @@ package spring.controllers;
 
 import domain.Character;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import services.DSMongoInterface;
 import spring.BaseRestTester;
 
 import java.util.Collections;
@@ -19,9 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by niko118 on 4/11/16.
  */
 public class CharactersRestControllerTest extends BaseRestTester {
-
-    @Autowired
-    private DSMongoInterface ds;
 
     @Test
     public void testGetCharactersOk() throws Exception {
