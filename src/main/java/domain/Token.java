@@ -83,8 +83,12 @@ public class Token {
         return expirationDate.after(new Date());
     }
 
+    public boolean isAdmin(){
+        return this.getScopes().contains(ScopesHelper.ADMIN);
+    }
+
     public void validateAdminCredentials() {
-        if (!this.getScopes().contains(ScopesHelper.ADMIN)) {
+        if (!isAdmin()) {
             throw new ForbiddenException("Forbidden");
         }
     }

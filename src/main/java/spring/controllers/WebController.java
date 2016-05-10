@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import repositories.AuthRepository;
-import spring.utils.ScopesHelper;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +24,7 @@ public class WebController {
                         @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
-        if (aToken.getScopes().contains(ScopesHelper.ADMIN)) {
+        if (aToken.isAdmin()) {
             //Es admin
         } else {
             //No es admin
