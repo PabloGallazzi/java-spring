@@ -1258,7 +1258,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.addAsFavorite(team1.getMembers().get(0));
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         user.addNewTeam(team1);
@@ -1277,7 +1276,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
-        user.addAsFavorite(team1.getMembers().get(0));
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
         ds.getDatastore().save(user);
