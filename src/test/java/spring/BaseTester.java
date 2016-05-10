@@ -1,7 +1,7 @@
 package spring;
 
-import domain.Token;
-import domain.User;
+import domain.*;
+import domain.Character;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -14,6 +14,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import repositories.AuthRepository;
+import repositories.CharactersRepository;
+import repositories.TeamsRepository;
 import services.DSMongoInterface;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -39,12 +41,18 @@ public class BaseTester {
     @Autowired
     private AuthRepository authRepository;
 
+    @Autowired
+    private TeamsRepository teamsRepository;
+
+    @Autowired
+    private CharactersRepository charactersRepository;
+
     @Before
     public void setUp() throws Exception {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    private User getTACSTestUserVO(){
+    private User getTACSTestUserVO() {
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
@@ -53,10 +61,32 @@ public class BaseTester {
         return user;
     }
 
-    private User getTACSAdminTestUserVO(){
+    private User getTACSAdminTestUserVO() {
         User user = getTACSTestUserVO();
         user.setIsAdmin(true);
         return user;
+    }
+
+    public Thumbnail getTACSTestThumbnailVO() {
+        Thumbnail thumbnail = new Thumbnail();
+        thumbnail.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail.setExtension("JPG");
+        return thumbnail;
+    }
+
+    public Character getTACSTestCharacterVO() {
+        Character character = new Character();
+        Thumbnail thumbnail = getTACSTestThumbnailVO();
+        character.setThumbnail(thumbnail);
+        character.setId(1011334);
+        character.setName("3-D Man");
+        return character;
+    }
+
+    private Team getTACSTestTeamVO() {
+        Team team = new Team();
+        team.setTeamName("uno");
+        return team;
     }
 
     public User createTACSTestUser() {
@@ -71,16 +101,27 @@ public class BaseTester {
         return user;
     }
 
-    public Token createAndLogInTACSTestUser(){
+    public Token createAndLogInTACSTestUser() {
         User user = createTACSTestUser();
         user.setUserPassword("testPass123;");
         return authRepository.login(user);
     }
 
-    public Token createAndLogInTACSAdminTestUser(){
+    public Token createAndLogInTACSAdminTestUser() {
         User user = createTACSAdminTestUser();
         user.setUserPassword("testPass123;");
         return authRepository.login(user);
+    }
+
+    public Team createTACSTestTeamWithMember() {
+        Team team = getTACSTestTeamVO();
+        team.setTeamName("uno");
+        team.addMember(createTACSTestCharacter());
+        return teamsRepository.save(team);
+    }
+
+    public Character createTACSTestCharacter() {
+        return charactersRepository.save(getTACSTestCharacterVO());
     }
 
     public void deleteTACSTestUser() {
@@ -97,6 +138,19 @@ public class BaseTester {
         ds.getDatastore().delete(getTACSTestUser());
     }
 
+    public void deleteTACSTestCharacter() {
+        Character character = getTACSTestCharacter();
+        Thumbnail thumbnail = getTACSTestThumbnail();
+        ds.getDatastore().delete(thumbnail);
+        ds.getDatastore().delete(character);
+    }
+
+    public void deleteTACSTestTeamWithMember() {
+        deleteTACSTestCharacter();
+        Team team = ds.getDatastore().find(Team.class, "teamName", "uno").get();
+        ds.getDatastore().delete(team);
+    }
+
     public Token getTACSTestUserToken() {
         return ds.getDatastore().find(Token.class, "userId", getTACSTestUser().getUserId()).get();
     }
@@ -105,5 +159,12 @@ public class BaseTester {
         return ds.getDatastore().find(User.class, "userName", "TACS").get();
     }
 
+    public Character getTACSTestCharacter() {
+        return ds.getDatastore().find(Character.class, "id", 1011334).get();
+    }
+
+    public Thumbnail getTACSTestThumbnail() {
+        return ds.getDatastore().find(Thumbnail.class, "path", "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784").get();
+    }
 
 }

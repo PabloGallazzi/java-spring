@@ -53,82 +53,40 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionBadIds() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + "id123" + "/" + "id123" + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/" + "id123" + "/" + "id123" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Invalid id id123")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetCharactersIntersectionId1NotFound() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + "123456789012345678901234" + "/" + "432109876543210987654321" + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/" + "123456789012345678901234" + "/" + "432109876543210987654321" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Team with id " + "123456789012345678901234" + " was not found")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetCharactersIntersectionId2NotFound() throws Exception {
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        Team team1 = new Team();
-        team1.setTeamName("uno");
-        team1.addMember(character1);
-        team1 = teamsRepository.save(team1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + "432109876543210987654321" + "/" + "123456789012345678901234" + "?access_token=" + token.getAccessToken()))
+        createTACSTestTeamWithMember();
+        mockMvc.perform(get("/teams/commons/" + "432109876543210987654321" + "/" + "123456789012345678901234" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Team with id " + "432109876543210987654321" + " was not found")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(team1);
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestTeamWithMember();
+        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -144,13 +102,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionNotFresh() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
+        User user = createTACSTestUser();
         user.setUserPassword("testPass123;");
         Token token = authRepository.login(user);
         token.setExpirationDate(new Date(new Date().getTime() - 1));
@@ -163,31 +115,19 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
 
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetCharactersIntersectionNotAdmin() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/1/2?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/1/2?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
