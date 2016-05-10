@@ -669,20 +669,11 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFavoritesMismatchToken() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
         String id2 = "012345678901234567890000";
         User user2 = new User("TACS2", "testPass123;");
         User.validateUser(user2);
-        ds.getDatastore().save(user);
-        mockMvc.perform(delete("/users/" + id2 + "/characters/favorites/1?access_token=" + token.getAccessToken()))
+        ds.getDatastore().save(user2);
+        mockMvc.perform(delete("/users/" + id2 + "/characters/favorites/1?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
@@ -690,6 +681,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
         deleteTACSTestUserWithToken();
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -895,15 +887,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetTeamInvalidId() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/users/" + getTACDId() + "/teams/asd?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams/asd?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Invalid id asd")))
@@ -1064,14 +1048,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testPostTeamNotFreshToken() throws Exception {
         String body = json(getTACSTestCharacterVO());
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUser();
         token.setExpirationDate(new Date(new Date().getTime() - 1));
         ds.getDatastore().save(token);
         mockMvc.perform(post("/users/" + getTACDId() + "/teams/1/characters?access_token=" + token.getAccessToken()).content(body).contentType(contentType))
