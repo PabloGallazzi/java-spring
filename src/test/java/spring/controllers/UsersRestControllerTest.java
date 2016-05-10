@@ -1232,14 +1232,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFromTeamNotFreshToken() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUser();
         token.setExpirationDate(new Date(new Date().getTime() - 1));
         ds.getDatastore().save(token);
         mockMvc.perform(delete("/users/" + getTACDId() + "/teams/1/characters/1?access_token=" + token.getAccessToken()))
@@ -1273,15 +1266,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testDeleteFromTeamDoesNotBelongToThatUser() throws Exception {
         Team team1 = createTACSTestTeamWithMember();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(delete("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters/1?access_token=" + token.getAccessToken()))
+        mockMvc.perform(delete("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters/1?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Team with id " + team1.getTeamId() + " was not found")))
                 .andExpect(jsonPath("$.status", is(404)))
