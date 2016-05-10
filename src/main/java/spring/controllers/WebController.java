@@ -1,7 +1,13 @@
 package spring.controllers;
 
+import domain.Token;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import repositories.AuthRepository;
+import spring.utils.ScopesHelper;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,8 +17,19 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class WebController {
 
-    @RequestMapping("/home")
-    public String login(HttpServletResponse httpServletResponse) {
+    @Autowired
+    private AuthRepository auth;
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String login(HttpServletResponse httpServletResponse,
+                        @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        if (aToken.getScopes().contains(ScopesHelper.ADMIN)) {
+            //Es admin
+        } else {
+            //No es admin
+        }
         httpServletResponse.setStatus(200);
         return "index_user";
     }
