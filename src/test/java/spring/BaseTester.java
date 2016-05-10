@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import repositories.AuthRepository;
 import services.DSMongoInterface;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -35,34 +36,60 @@ public class BaseTester {
     @Autowired
     private DSMongoInterface ds;
 
+    @Autowired
+    private AuthRepository authRepository;
+
     @Before
     public void setUp() throws Exception {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    public User createTACSTestUser() {
+    private User getTACSTestUserVO(){
         String id = "123456789012345678901234";
         User user = new User("TACS", "testPass123;");
         User.validateUser(user);
         ObjectId objectId = new ObjectId(id);
         user.setUserId(objectId);
+        return user;
+    }
+
+    private User getTACSAdminTestUserVO(){
+        User user = getTACSTestUserVO();
+        user.setIsAdmin(true);
+        return user;
+    }
+
+    public User createTACSTestUser() {
+        User user = getTACSTestUserVO();
         ds.getDatastore().save(user);
         return user;
     }
 
     public User createTACSAdminTestUser() {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
+        User user = getTACSAdminTestUserVO();
         ds.getDatastore().save(user);
         return user;
     }
 
+    public Token createAndLogInTACSTestUser(){
+        User user = createTACSTestUser();
+        user.setUserPassword("testPass123;");
+        return authRepository.login(user);
+    }
+
+    public Token createAndLogInTACSAdminTestUser(){
+        User user = createTACSAdminTestUser();
+        user.setUserPassword("testPass123;");
+        return authRepository.login(user);
+    }
+
     public void deleteTACSTestUser() {
         ds.getDatastore().delete(getTACSTestUser());
+    }
+
+    public void deleteTACSTestUserToken() {
+        Token token = getTACSTestUserToken();
+        ds.getDatastore().delete(token);
     }
 
     public void deleteTACSTestUserWithToken() {
@@ -78,9 +105,5 @@ public class BaseTester {
         return ds.getDatastore().find(User.class, "userName", "TACS").get();
     }
 
-    public void deleteTACSTestUserToken() {
-        Token token = getTACSTestUserToken();
-        ds.getDatastore().delete(token);
-    }
 
 }

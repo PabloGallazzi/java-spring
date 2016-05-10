@@ -1,16 +1,9 @@
 package spring.controllers;
 
 import domain.Character;
-import domain.Token;
-import domain.User;
-import org.bson.types.ObjectId;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import repositories.AuthRepository;
 import services.DSMongoInterface;
-import spock.lang.Shared;
 import spring.BaseRestTester;
 
 import java.util.Collections;
@@ -21,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Created by niko118 on 4/11/16.
@@ -30,33 +22,10 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Autowired
     private DSMongoInterface ds;
-    @Autowired
-    private AuthRepository authRepository;
-    Token token;
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        token = authRepository.login(user);
-    }
-
-    @After
-    public void tearDown() {
-        ds.getDatastore().delete(token);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS"));
-    }
 
     @Test
     public void testGetCharactersOk() throws Exception {
-        mockMvc.perform(get("/characters" + "?access_token=" + token.getAccessToken())
+        mockMvc.perform(get("/characters" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("offset", "0")
                 .param("limit", "10"))
                 .andExpect(status().isOk())
@@ -86,6 +55,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.data.results[8].name", is("Abyss (Age of Apocalypse)")))
                 .andExpect(jsonPath("$.data.results[9].id", is(1011266)))
                 .andExpect(jsonPath("$.data.results[9].name", is("Adam Destine")));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -217,30 +187,19 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharactersNotAdmin() throws Exception {
-        String id = "123456789012345678900000";
-        User user = new User("TACSNOTADMIN", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token notAdmin = authRepository.login(user);
-        mockMvc.perform(get("/characters/ranking?access_token=" + notAdmin.getAccessToken()))
+        mockMvc.perform(get("/characters/ranking?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-
-        ds.getDatastore().delete(notAdmin);
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACSNOTADMIN"));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharactersInvalidLimitLowerThan1() throws Exception {
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -248,11 +207,12 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharactersInvalidLimitGreaterThan100() throws Exception {
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "101"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -260,11 +220,12 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharactersInvalidLimitNotANumber() throws Exception {
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "askjdba"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
@@ -272,42 +233,13 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharacters() throws Exception {
-        Character character;
-        character = new Character(1, "name1", "description1");
-        character.setElectedTimes(10);
-        ds.getDatastore().save(character);
-        character = new Character(2, "name2", "description2");
-        character.setElectedTimes(9);
-        ds.getDatastore().save(character);
-        character = new Character(3, "name3", "description3");
-        character.setElectedTimes(8);
-        ds.getDatastore().save(character);
-        character = new Character(4, "name4", "description4");
-        character.setElectedTimes(7);
-        ds.getDatastore().save(character);
-        character = new Character(5, "name5", "description5");
-        character.setElectedTimes(6);
-        ds.getDatastore().save(character);
-        character = new Character(6, "name6", "description6");
-        character.setElectedTimes(5);
-        ds.getDatastore().save(character);
-        character = new Character(7, "name7", "description7");
-        character.setElectedTimes(4);
-        ds.getDatastore().save(character);
-        character = new Character(8, "name8", "description8");
-        character.setElectedTimes(3);
-        ds.getDatastore().save(character);
-        character = new Character(9, "name9", "description9");
-        character.setElectedTimes(2);
-        ds.getDatastore().save(character);
-        character = new Character(10, "name10", "description10");
-        character.setElectedTimes(1);
-        ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
+        getCharacters(10);
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "5"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -317,27 +249,14 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)))
                 .andExpect(jsonPath("$[4].id", is(5)));
-        for (int i = 0; i < 10; i++) {
-            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
-        }
+        deleteCharacters(10);
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharactersTotalIsLessThanAsked() throws Exception {
-        Character character;
-        character = new Character(1, "name1", "description1");
-        character.setElectedTimes(10);
-        ds.getDatastore().save(character);
-        character = new Character(2, "name2", "description2");
-        character.setElectedTimes(9);
-        ds.getDatastore().save(character);
-        character = new Character(3, "name3", "description3");
-        character.setElectedTimes(8);
-        ds.getDatastore().save(character);
-        character = new Character(4, "name4", "description4");
-        character.setElectedTimes(7);
-        ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken())
+        getCharacters(5);
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "4"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -346,27 +265,14 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)));
-        for (int i = 0; i < 5; i++) {
-            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
-        }
+        deleteCharacters(5);
+        deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testGetRankingCharactersNoLimitParameter() throws Exception {
-        Character character;
-        character = new Character(1, "name1", "description1");
-        character.setElectedTimes(10);
-        ds.getDatastore().save(character);
-        character = new Character(2, "name2", "description2");
-        character.setElectedTimes(9);
-        ds.getDatastore().save(character);
-        character = new Character(3, "name3", "description3");
-        character.setElectedTimes(8);
-        ds.getDatastore().save(character);
-        character = new Character(4, "name4", "description4");
-        character.setElectedTimes(7);
-        ds.getDatastore().save(character);
-        mockMvc.perform(get("/characters/ranking" + "?access_token=" + token.getAccessToken()))
+        getCharacters(4);
+        mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(4)))
@@ -374,7 +280,27 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)));
-        for (int i = 0; i < 5; i++) {
+        deleteCharacters(4);
+        deleteTACSTestUserWithToken();
+    }
+
+    private void getCharacters(int qty) {
+        if (qty > 10) {
+            throw new IllegalArgumentException("The quantity must be up to 10.");
+        }
+        Character character;
+        for (int i = 1; i <= qty; i++) {
+            character = new Character(i, "name" + i, "description" + i);
+            character.setElectedTimes(qty - i);
+            ds.getDatastore().save(character);
+        }
+    }
+
+    private void deleteCharacters(int qty) {
+        if (qty > 10) {
+            throw new IllegalArgumentException("The quantity must be up to 10.");
+        }
+        for (int i = 1; i <= qty; i++) {
             ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
         }
     }
