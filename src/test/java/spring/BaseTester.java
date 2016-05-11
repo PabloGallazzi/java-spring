@@ -18,6 +18,8 @@ import repositories.CharactersRepository;
 import repositories.TeamsRepository;
 import services.DSMongoInterface;
 
+import java.util.Date;
+
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -116,6 +118,17 @@ public class BaseTester {
         User user = createTACSTestUser();
         user.setUserPassword("testPass123;");
         return authRepository.login(user);
+    }
+
+    protected Token createAndLogInTACSTestUserWithNotFreshToken() {
+        Token token = createAndLogInTACSTestUser();
+        return setNotFreshExpirationDateToToken(token);
+    }
+
+    protected Token setNotFreshExpirationDateToToken(Token token) {
+        token.setExpirationDate(new Date(new Date().getTime() - 1));
+        ds.getDatastore().save(token);
+        return token;
     }
 
     protected Token createAndLogInTACSAdminTestUser() {
