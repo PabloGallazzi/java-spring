@@ -493,6 +493,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestCharacter();
         deleteTACSTestUserWithToken();
     }
 

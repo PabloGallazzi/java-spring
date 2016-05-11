@@ -233,7 +233,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharacters() throws Exception {
-        getCharacters(10);
+        createCharacters(10);
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "5"))
                 .andExpect(status().isOk())
@@ -250,7 +250,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharactersTotalIsLessThanAsked() throws Exception {
-        getCharacters(5);
+        createCharacters(5);
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken())
                 .param("limit", "4"))
                 .andExpect(status().isOk())
@@ -266,7 +266,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetRankingCharactersNoLimitParameter() throws Exception {
-        getCharacters(4);
+        createCharacters(4);
         mockMvc.perform(get("/characters/ranking" + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -279,7 +279,7 @@ public class CharactersRestControllerTest extends BaseRestTester {
         deleteTACSTestUserWithToken();
     }
 
-    private void getCharacters(int qty) {
+    private void createCharacters(int qty) {
         if (qty > 10) {
             throw new IllegalArgumentException("The quantity must be up to 10.");
         }
