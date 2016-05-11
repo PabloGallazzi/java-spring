@@ -112,76 +112,29 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionNull() throws Exception {
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        Character character2 = new Character();
-        Thumbnail thumbnail2 = new Thumbnail();
-        Character character3 = new Character();
-        Thumbnail thumbnail3 = new Thumbnail();
-        Character character4 = new Character();
-        Thumbnail thumbnail4 = new Thumbnail();
-        Character character5 = new Character();
-        Thumbnail thumbnail5 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        character2.setThumbnail(thumbnail2);
-        character2.setId(1011335);
-        character2.setName("Iron Man");
-        thumbnail2.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9785");
-        thumbnail2.setExtension("JPG");
-        character3.setThumbnail(thumbnail3);
-        character3.setId(1011336);
-        character3.setName("Batman");
-        thumbnail3.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9786");
-        thumbnail3.setExtension("JPG");
-        character4.setThumbnail(thumbnail4);
-        character4.setId(1011337);
-        character4.setName("Captain America");
-        thumbnail4.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9787");
-        thumbnail4.setExtension("JPG");
-        character5.setThumbnail(thumbnail5);
-        character5.setId(1011338);
-        character5.setName("Ant Man");
-        thumbnail5.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9788");
-        thumbnail5.setExtension("JPG");
         Team team1 = new Team();
         team1.setTeamName("uno");
-        team1.addMember(character1);
-        team1.addMember(character2);
-        team1.addMember(character3);
+        team1.addMember(getCharactersPool().get(0));
+        team1.addMember(getCharactersPool().get(1));
+        team1.addMember(getCharactersPool().get(2));
         Team team2 = new Team();
         team2.setTeamName("dos");
-        team1.addMember(character4);
-        team1.addMember(character5);
+        team2.addMember(getCharactersPool().get(3));
+        team2.addMember(getCharactersPool().get(4));
         team1 = teamsRepository.save(team1);
         team2 = teamsRepository.save(team2);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + team1.getTeamId().toString() + "/" + team2.getTeamId().toString() + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/" + team1.getTeamId().toString() + "/" + team2.getTeamId().toString() + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(0)));
-
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(thumbnail2);
-        ds.getDatastore().delete(thumbnail3);
-        ds.getDatastore().delete(thumbnail4);
-        ds.getDatastore().delete(thumbnail5);
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(character2);
-        ds.getDatastore().delete(character3);
-        ds.getDatastore().delete(character4);
-        ds.getDatastore().delete(character5);
+        for (int i = 0; i < 3; i++) {
+            ds.getDatastore().delete(team1.getMembers().get(i).getThumbnail());
+            ds.getDatastore().delete(team1.getMembers().get(i));
+        }
+        for (int i = 0; i < 2; i++) {
+            ds.getDatastore().delete(team2.getMembers().get(i).getThumbnail());
+            ds.getDatastore().delete(team2.getMembers().get(i));
+        }
         ds.getDatastore().delete(team1);
         ds.getDatastore().delete(team2);
         deleteTACSTestUserWithToken();
@@ -189,60 +142,27 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionNotNull() throws Exception {
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        Character character2 = new Character();
-        Thumbnail thumbnail2 = new Thumbnail();
-        Character character3 = new Character();
-        Thumbnail thumbnail3 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        character2.setThumbnail(thumbnail2);
-        character2.setId(1011335);
-        character2.setName("Iron Man");
-        thumbnail2.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9785");
-        thumbnail2.setExtension("JPG");
-        character3.setThumbnail(thumbnail3);
-        character3.setId(1011336);
-        character3.setName("Batman");
-        thumbnail3.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9786");
-        thumbnail3.setExtension("JPG");
         Team team1 = new Team();
         team1.setTeamName("uno");
-        team1.addMember(character1);
-        team1.addMember(character2);
-        team1.addMember(character3);
+        team1.addMember(getCharactersPool().get(0));
+        team1.addMember(getCharactersPool().get(1));
+        team1.addMember(getCharactersPool().get(2));
         Team team2 = new Team();
         team2.setTeamName("dos");
         team1 = teamsRepository.save(team1);
         team2.addMember(team1.getMembers().get(1));
         team2.addMember(team1.getMembers().get(2));
         team2 = teamsRepository.save(team2);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(true);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/teams/commons/" + team1.getTeamId().toString() + "/" + team2.getTeamId().toString() + "?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/teams/commons/" + team1.getTeamId().toString() + "/" + team2.getTeamId().toString() + "?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1011335)))
                 .andExpect(jsonPath("$[1].id", is(1011336)));
-
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(thumbnail2);
-        ds.getDatastore().delete(thumbnail3);
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(character2);
-        ds.getDatastore().delete(character3);
+        for (int i = 0; i < 3; i++) {
+            ds.getDatastore().delete(team1.getMembers().get(i).getThumbnail());
+            ds.getDatastore().delete(team1.getMembers().get(i));
+        }
         ds.getDatastore().delete(team1);
         ds.getDatastore().delete(team2);
         deleteTACSTestUserWithToken();
@@ -485,19 +405,9 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetFavoritesNotFreshToken() throws Exception {
-        Character character1 = createTACSTestCharacter();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
         token = setNotFreshExpirationDateToToken(token);
-        mockMvc.perform(get("/users/" + id + "/characters/favorites?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("invalid_token")))
@@ -510,18 +420,8 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetFavoritesOk() throws Exception {
-        Character character1 = createTACSTestCharacter();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/users/" + id + "/characters/favorites?access_token=" + token.getAccessToken()))
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites?access_token=" + token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -581,18 +481,8 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testPostFavoritesNotFreshToken() throws Exception {
-        Character character1 = getTACSTestCharacterVO();
-        String body = json(character1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        String body = json(getTACSTestCharacterVO());
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
         token = setNotFreshExpirationDateToToken(token);
         mockMvc.perform(post("/users/123456789012345678901234/characters/favorites?access_token=" + token.getAccessToken())
                 .content(body)
@@ -609,15 +499,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testPostFavoritesOk() throws Exception {
         String body = json(getTACSTestCharacterVO());
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(post("/users/123456789012345678901234/characters/favorites?access_token=" + token.getAccessToken())
+        mockMvc.perform(post("/users/123456789012345678901234/characters/favorites?access_token=" + createAndLogInTACSTestUser().getAccessToken())
                 .content(body)
                 .contentType(contentType))
                 .andExpect(status().isCreated())
@@ -629,18 +511,8 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testPostFavoritesOkAlreadyInDatabase() throws Exception {
-        Character character = createTACSTestCharacter();
-        String body = json(createTACSTestCharacter());
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(character);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        String body = json(getTACSTestCharacterVO());
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
         mockMvc.perform(post("/users/123456789012345678901234/characters/favorites?access_token=" + token.getAccessToken())
                 .content(body)
                 .contentType(contentType))
@@ -706,18 +578,8 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFavoritesOk() throws Exception {
-        Character character1 = getTACSTestCharacterVO();
-        charactersRepository.save(character1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Character character1 = createTACSTestCharacter();
+        Token token = createAndLogInTACSTestUserWithFavorite(character1);
         mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1011334?access_token=" + token.getAccessToken()))
                 .andExpect(status().isNoContent());
         deleteTACSTestCharacter();
@@ -815,19 +677,8 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testPostNewTeamOk() throws Exception {
-        Team team1 = getTACSTestTeamWithMemberVO();
-        String body = json(team1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.setIsAdmin(false);
-        user.addAsFavorite(team1.getMembers().get(0));
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + token.getAccessToken()).content(body).contentType(contentType))
+        String body = json(getTACSTestTeamWithMemberVO());
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.team_name", is("uno")))
                 .andExpect(jsonPath("$.members", hasSize(1)));
@@ -889,15 +740,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetTeamInvalidIdNotFound() throws Exception {
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(get("/users/" + getTACDId() + "/teams/123456734512345678901234?access_token=" + token.getAccessToken()))
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams/123456734512345678901234?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Team with id 123456734512345678901234 was not found")))
@@ -923,16 +766,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testGetTeamOk() throws Exception {
         Team team1 = createTACSTestTeamWithMember();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.addAsFavorite(team1.getMembers().get(0));
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        user.addNewTeam(team1);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
         mockMvc.perform(get("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "?access_token=" + token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.team_name", is("uno")))
@@ -944,15 +778,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testGetTeamDoesNotBelongToThatUser() throws Exception {
         Team team1 = createTACSTestTeamWithMember();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.addAsFavorite(team1.getMembers().get(0));
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUserWithFavorite(team1.getMembers().get(0));
         mockMvc.perform(get("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "?access_token=" + token.getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Team with id " + team1.getTeamId() + " was not found")))
@@ -1049,84 +875,30 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testPostTeamOk() throws Exception {
-        Character character = new Character();
-        Thumbnail thumbnail = new Thumbnail();
-        character.setThumbnail(thumbnail);
+        Character character = getTACSTestCharacterVO();
         character.setId(1011335);
-        character.setName("3-D Man");
-        thumbnail.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9781");
-        thumbnail.setExtension("JPG");
         String body = json(character);
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        Team team1 = new Team();
-        team1.setTeamName("uno");
-        team1.addMember(character1);
-        team1 = teamsRepository.save(team1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        user.addNewTeam(team1);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Team team1 = createTACSTestTeamWithMember();
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
         mockMvc.perform(post("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters?access_token=" + token.getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1011335)))
                 .andExpect(jsonPath("$.name", is("3-D Man")));
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
+        deleteTACSTestTeamWithMember();
         deleteTACSTestUserWithToken();
     }
 
     @Test
     public void testPostTeamDoesNotBelongToThatUser() throws Exception {
-        Character character = new Character();
-        Thumbnail thumbnail = new Thumbnail();
-        character.setThumbnail(thumbnail);
-        character.setId(1011334);
-        character.setName("3-D Man");
-        thumbnail.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9781");
-        thumbnail.setExtension("JPG");
-        String body = json(character);
-        Character character1 = new Character();
-        Thumbnail thumbnail1 = new Thumbnail();
-        character1.setThumbnail(thumbnail1);
-        character1.setId(1011334);
-        character1.setName("3-D Man");
-        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
-        thumbnail1.setExtension("JPG");
-        Team team1 = new Team();
-        team1.setTeamName("uno");
-        team1.addMember(character1);
-        team1 = teamsRepository.save(team1);
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        user.addAsFavorite(character1);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        mockMvc.perform(post("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters?access_token=" + token.getAccessToken()).content(body).contentType(contentType))
+        String body = json(getTACSTestCharacterVO());
+        Team team1 = createTACSTestTeamWithMember();
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Team with id " + team1.getTeamId() + " was not found")))
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        ds.getDatastore().delete(character1);
-        ds.getDatastore().delete(thumbnail1);
-        ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
+        deleteTACSTestTeamWithMember();
         deleteTACSTestUserWithToken();
     }
 
@@ -1209,15 +981,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testDeleteFromTeamOk() throws Exception {
         Team team1 = createTACSTestTeamWithMember();
-        String id = "123456789012345678901234";
-        User user = new User("TACS", "testPass123;");
-        User.validateUser(user);
-        ObjectId objectId = new ObjectId(id);
-        user.setUserId(objectId);
-        user.addNewTeam(team1);
-        ds.getDatastore().save(user);
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
         mockMvc.perform(delete("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters/1011334?access_token=" + token.getAccessToken()))
                 .andExpect(status().isNoContent());
         deleteTACSTestTeamWithMember();
@@ -1245,6 +1009,51 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(500)))
                 .andExpect(jsonPath("$.error", is("internal_error")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    private List<Character> getCharactersPool() {
+        List<Character> characters = new ArrayList<>();
+        Character character1 = new Character();
+        Thumbnail thumbnail1 = new Thumbnail();
+        Character character2 = new Character();
+        Thumbnail thumbnail2 = new Thumbnail();
+        Character character3 = new Character();
+        Thumbnail thumbnail3 = new Thumbnail();
+        Character character4 = new Character();
+        Thumbnail thumbnail4 = new Thumbnail();
+        Character character5 = new Character();
+        Thumbnail thumbnail5 = new Thumbnail();
+        character1.setThumbnail(thumbnail1);
+        character1.setId(1011334);
+        character1.setName("3-D Man");
+        thumbnail1.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784");
+        thumbnail1.setExtension("JPG");
+        character2.setThumbnail(thumbnail2);
+        character2.setId(1011335);
+        character2.setName("Iron Man");
+        thumbnail2.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9785");
+        thumbnail2.setExtension("JPG");
+        character3.setThumbnail(thumbnail3);
+        character3.setId(1011336);
+        character3.setName("Batman");
+        thumbnail3.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9786");
+        thumbnail3.setExtension("JPG");
+        character4.setThumbnail(thumbnail4);
+        character4.setId(1011337);
+        character4.setName("Captain America");
+        thumbnail4.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9787");
+        thumbnail4.setExtension("JPG");
+        character5.setThumbnail(thumbnail5);
+        character5.setId(1011338);
+        character5.setName("Ant Man");
+        thumbnail5.setPath("http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9788");
+        thumbnail5.setExtension("JPG");
+        characters.add(character1);
+        characters.add(character2);
+        characters.add(character3);
+        characters.add(character4);
+        characters.add(character5);
+        return characters;
     }
 
 }

@@ -108,6 +108,22 @@ public class BaseTester {
         return user;
     }
 
+    protected Token createAndLogInTACSTestUserWithTeam(Team team) {
+        User user = getTACSTestUserVO();
+        user.addNewTeam(team);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        return authRepository.login(user);
+    }
+
+    protected Token createAndLogInTACSTestUserWithFavorite(Character character) {
+        User user = getTACSTestUserVO();
+        user.addAsFavorite(character);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        return authRepository.login(user);
+    }
+
     protected User createTACSAdminTestUser() {
         User user = getTACSAdminTestUserVO();
         ds.getDatastore().save(user);
