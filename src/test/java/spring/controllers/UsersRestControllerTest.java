@@ -87,9 +87,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetCharactersIntersectionNotFresh() throws Exception {
-        Token token = createAndLogInTACSTestUser();
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(get("/teams/commons/1/2?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
@@ -498,8 +496,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().save(user);
         user.setUserPassword("testPass123;");
         Token token = authRepository.login(user);
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        token = setNotFreshExpirationDateToToken(token);
         mockMvc.perform(get("/users/" + id + "/characters/favorites?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
@@ -596,8 +593,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         ds.getDatastore().save(user);
         user.setUserPassword("testPass123;");
         Token token = authRepository.login(user);
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        token = setNotFreshExpirationDateToToken(token);
         mockMvc.perform(post("/users/123456789012345678901234/characters/favorites?access_token=" + token.getAccessToken())
                 .content(body)
                 .contentType(contentType))
@@ -697,11 +693,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFavoritesNotFreshToken() throws Exception {
-        User user = createTACSTestUser();
-        user.setUserPassword("testPass123;");
-        Token token = authRepository.login(user);
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
@@ -808,9 +800,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testPostNewTeamNotFreshToken() throws Exception {
         String body = json(getTACSTestTeamWithMemberVO());
-        Token token = createAndLogInTACSTestUser();
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + token.getAccessToken())
                 .content(body)
                 .contentType(contentType))
@@ -919,9 +909,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testGetTeamNotFreshToken() throws Exception {
-        Token token = createAndLogInTACSTestUser();
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(get("/users/" + getTACDId() + "/teams/1?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
@@ -1048,9 +1036,7 @@ public class UsersRestControllerTest extends BaseRestTester {
     @Test
     public void testPostTeamNotFreshToken() throws Exception {
         String body = json(getTACSTestCharacterVO());
-        Token token = createAndLogInTACSTestUser();
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(post("/users/" + getTACDId() + "/teams/1/characters?access_token=" + token.getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
@@ -1209,9 +1195,7 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFromTeamNotFreshToken() throws Exception {
-        Token token = createAndLogInTACSTestUser();
-        token.setExpirationDate(new Date(new Date().getTime() - 1));
-        ds.getDatastore().save(token);
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
         mockMvc.perform(delete("/users/" + getTACDId() + "/teams/1/characters/1?access_token=" + token.getAccessToken()))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentType(contentType))
