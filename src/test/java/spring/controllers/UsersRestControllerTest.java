@@ -1011,6 +1011,20 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
+    @Test
+    public void testMalformedBodyExceptionHandler() throws Exception {
+        Map<String, Object> request = new LinkedHashMap<String, Object>();
+        request.put("id", "cualquierCosa");
+        String body = json(request);
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams/1/characters?access_token=1234").content(body).contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Invalid body, check the structure.")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
     private List<Character> getCharactersPool() {
         List<Character> characters = new ArrayList<>();
         Character character1 = new Character();
