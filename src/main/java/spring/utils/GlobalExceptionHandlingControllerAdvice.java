@@ -1,13 +1,11 @@
 package spring.utils;
 
-import exceptions.rest.ExceptionMapper;
-import exceptions.rest.InternalServerError;
-import exceptions.rest.RestBaseException;
-import exceptions.rest.ServiceUnavailableException;
+import exceptions.rest.*;
 import exceptions.web.WebBaseException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,12 +49,17 @@ public class GlobalExceptionHandlingControllerAdvice {
 
         // Rethrow custom exceptions or they will be processed here instead.
 
-        if (exception instanceof ServiceUnavailableException){
+        if (exception instanceof ServiceUnavailableException) {
             return new ResponseEntity<>(null, null, HttpStatus.SERVICE_UNAVAILABLE);
         }
 
         if (exception instanceof RestBaseException || exception instanceof WebBaseException) {
             throw exception;
+        }
+
+        if (exception instanceof HttpMessageNotReadableException) {
+            ExceptionMapper exceptionMapper = new ExceptionMapper(new BadRequestException("Invalid body, check the structure."));
+            return new ResponseEntity<>(exceptionMapper, null, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(new ExceptionMapper(new InternalServerError()), null, HttpStatus.INTERNAL_SERVER_ERROR);
