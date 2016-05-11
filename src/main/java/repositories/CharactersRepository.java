@@ -1,7 +1,7 @@
 package repositories;
 
 import domain.Character;
-import exceptions.rest.BadRequestException;
+import domain.Thumbnail;
 import org.mongodb.morphia.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -40,7 +40,9 @@ public class CharactersRepository {
 
     public Character save(Character character) {
         if (ds.getDatastore().find(Character.class, "id", character.getId()).get() == null){
-            ds.getDatastore().save(character.getThumbnail());
+            if (ds.getDatastore().find(Thumbnail.class, "path", character.getThumbnail().getPath()).get() == null){
+                ds.getDatastore().save(character.getThumbnail());
+            }
             Integer objectId = (Integer) ds.getDatastore().save(character).getId();
             character.setId(objectId);
             return character;
