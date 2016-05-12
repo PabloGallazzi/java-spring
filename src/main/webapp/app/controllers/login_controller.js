@@ -15,7 +15,7 @@ app.controller('loginController', ['$scope', '$location','$cookieStore', 'loginS
         loginService.login(username, password).success(function(user) {
             $scope.userLogged = user;
             $cookieStore.put('access_token', user.access_token);
-            $location.path('/home');
+            $location.path('/user/home');
         });
     };
 

@@ -12,15 +12,11 @@ app.factory('favoritesService', ['$http', '$q', function($http, $q){
     return favoritesService;
 
     function getFavoritesByToken(user_id, token) {
-
-        console.log("giladaservice");
-
+        
         var params = { access_token: token };
         var config = { params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'} };
 
-        return $http.get('/users/' + user_id + '/characters/favorites', config).success(function(favorites) {
-            return favorites;
-        });
+        return $http.get('/users/' + user_id + '/characters/favorites', config);
 
     }
 

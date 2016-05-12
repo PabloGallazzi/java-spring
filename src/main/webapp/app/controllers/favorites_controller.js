@@ -5,11 +5,14 @@
 app.controller('favoritesController', ['$scope', '$location', '$cookieStore', 'favoritesService', function($scope, $location, $cookieStore, favoritesService) {
 
     $scope.token = $cookieStore.get('access_token');
+    obtainFavorites();
 
-    getFavoritesByToken($scope.token);
-
-    function getFavoritesByToken(token) {
-        var userFavorites = favoritesService.getFavoritesByToken(token);
-        console.log(userFavorites);
+    function obtainFavorites() {
+        var token = $scope.token;
+        var delimiterPosition = token.indexOf("-");
+        var userId = token.slice(0, delimiterPosition);
+        favoritesService.getFavoritesByToken(userId, token).success(function(favorites) {
+            $scope.favorites = favorites;
+        });
     }
 }]);
