@@ -1,12 +1,12 @@
 <div class="Container">
-	This is the characters page, where you can view all of the Marvel's Characters!
+	<h3 class="imgTitle" >Hi! Here are your favorites characters!</h3>
 
 	<div ng-controller="favoritesController">
 		<ul>
 			<li ng-repeat="character in favorites">
 				<a ng-href="#/character/{{character.id}}">
-					{{character.name}}
-					<img class="img-circle img-center" height="236px" width="300" ng-src="{{character.thumbnail.path + '.' + character.thumbnail.extension}}" alt="">
+                    <h4 class="imgTitle">{{character.name}}</h4>
+					<img class="img-circle img-center" height="60px" width="75" ng-src="{{character.image_path}}" alt="">
 				</a>
 			</li>
 		</ul>
