@@ -415,7 +415,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
         deleteTACSTestCharacter();
-        deleteTACSTestUser();
+        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -426,7 +426,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1011334)));
-        deleteTACSTestUser();
+        deleteTACSTestUserWithToken();
         deleteTACSTestCharacter();
     }
 
@@ -684,7 +684,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.team_name", is("uno")))
                 .andExpect(jsonPath("$.members", hasSize(1)));
-        deleteTACSTestCharacter();
+        deleteTACSTestTeamWithMember();
         deleteTACSTestUserWithToken();
         ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
     }
