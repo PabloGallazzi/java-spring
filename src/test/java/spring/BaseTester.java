@@ -3,6 +3,7 @@ package spring;
 import domain.*;
 import domain.Character;
 import org.bson.types.ObjectId;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import services.DSMongoInterface;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -54,7 +56,16 @@ public class BaseTester {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    protected String getTACDId(){
+    @After
+    public void tearDown() throws Exception {
+        assertTrue(ds.getDatastore().find(Thumbnail.class).asList().isEmpty());
+        assertTrue(ds.getDatastore().find(Character.class).asList().isEmpty());
+        assertTrue(ds.getDatastore().find(Team.class).asList().isEmpty());
+        assertTrue(ds.getDatastore().find(User.class).asList().isEmpty());
+        assertTrue(ds.getDatastore().find(Token.class).asList().isEmpty());
+    }
+
+    protected String getTACDId() {
         return "123456789012345678901234";
     }
 
@@ -98,7 +109,7 @@ public class BaseTester {
     protected Team getTACSTestTeamWithMemberVO() {
         Team team = getTACSTestTeamVO();
         team.setTeamName("uno");
-        team.addMember(createTACSTestCharacter());
+        team.addMember(getTACSTestCharacterVO());
         return team;
     }
 
