@@ -4,7 +4,7 @@
 	<div ng-controller="favoritesController">
 		<ul>
 			<li ng-repeat="character in favorites">
-				<a href="#">
+				<a ng-href="#/character/{{character.id}}">
 					{{character.name}}
 					<img class="img-circle img-center" height="236px" width="300" ng-src="{{character.thumbnail.path + '.' + character.thumbnail.extension}}" alt="">
 				</a>
