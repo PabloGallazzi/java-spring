@@ -1,3 +1,3 @@
 #!/bin/bash
 cd $OPENSHIFT_REPO_DIR
-java -jar -Dserver.address=$OPENSHIFT_DIY_IP -Dserver.port=$OPENSHIFT_DIY_PORT -Dspring.profiles.active=production target/tp-tacs-1.0.jar
+nohup java -jar -Dserver.address=$OPENSHIFT_DIY_IP -Dserver.port=$OPENSHIFT_DIY_PORT -Dspring.profiles.active=production target/tp-tacs-1.0.jar 2>&1 &
