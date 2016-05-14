@@ -7,7 +7,9 @@ language: java
 install: true
 script: mvn clean cobertura:check | egrep -v "(^\[INFO\]|^\[DEBUG\])"
 after_success:
-    - bash "deploy.sh"
+  - bash "deploy.sh"
+addons:
+  ssh_known_hosts: tptacsutnfrba-pablogallazzi.rhcloud.com
 notifications:
   email:
     recipients:
