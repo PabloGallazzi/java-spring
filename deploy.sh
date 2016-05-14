@@ -10,6 +10,7 @@ if [[ ! $TRAVIS_BRANCH =~ ^master.*$ ]]; then
   exit 1
 fi
 
+git clone ssh://5737931a7628e17321000043@tptacsutnfrba-pablogallazzi.rhcloud.com/~/git/tptacsutnfrba.git/
 gem install rhc
 rhc apps --token 932b2746d50b40dec2704669d07e488f315e2df9373212b8a32e0883b389baaa
 git remote add openshift -f ssh://5737931a7628e17321000043@tptacsutnfrba-pablogallazzi.rhcloud.com/~/git/tptacsutnfrba.git/
