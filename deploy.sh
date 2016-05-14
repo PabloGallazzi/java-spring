@@ -5,7 +5,7 @@ if [[ $TRAVIS_PULL_REQUEST != "false" ]]; then
   exit 1
 fi
 
-if [[ ! $TRAVIS_BRANCH =~ ^release.*$ ]]; then
+if [[ ! $TRAVIS_BRANCH =~ ^master.*$ ]]; then
   echo "Skip deployment - Deployment runs only on release branch"
   exit 1
 fi
