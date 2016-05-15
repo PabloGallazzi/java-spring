@@ -22,7 +22,7 @@ commons-codec: v1.10
 
 ## Can i see this amazing app deployed ?
 
-Yes you [can]! (http://tptacsutnfrba-pablogallazzi.rhcloud.com/)
+Yes you [can](http://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
 
 ## How do I run the tests with coverage ?
 
