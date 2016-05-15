@@ -18,7 +18,6 @@ app.factory('loginService', ['$http', '$q', 'userService', function($http, $q, u
         var config = { headers: {'Content-Type': 'application/json;charset=utf-8;'} };
 
         return $http.post('/users/authenticate', data, config); // Returning promise of authentication
-
     }
 
 }]);

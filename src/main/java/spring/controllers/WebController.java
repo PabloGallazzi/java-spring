@@ -1,13 +1,14 @@
 package spring.controllers;
 
 import domain.Token;
+import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import repositories.AuthRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -21,16 +22,15 @@ public class WebController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String login(HttpServletResponse httpServletResponse,
-                        @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+                        @CookieValue(value = "access_token", required = true, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
-        if (aToken.isAdmin()) {
-            //Es admin
-        } else {
-            //No es admin
-        }
         httpServletResponse.setStatus(200);
-        return "index_user";
-    }
 
+        if (aToken.isAdmin()) {
+            return "home_admin";
+        } else {
+            return "home_user";
+        }
+    }
 }

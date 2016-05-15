@@ -2,12 +2,12 @@
  * Created by ivan on 11/05/16.
  */
 'use strict';
-app.controller('favoritesController', ['$scope', '$location', '$cookieStore', 'favoritesService', function($scope, $location, $cookieStore, favoritesService) {
+app.controller('favoritesController', ['$scope', '$location', 'favoritesService', function($scope, $location, favoritesService) {
 
     obtainFavorites();
 
     function obtainFavorites() {
-        var token = $cookieStore.get('access_token');
+        var token = getCookie('access_token');
         var userId = getUserIdBy(token);
         favoritesService.getFavoritesByToken(userId, token).success(function(favorites) {
             $scope.favorites = favorites.map(function(character) {

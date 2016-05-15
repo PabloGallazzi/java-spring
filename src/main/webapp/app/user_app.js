@@ -27,6 +27,11 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/user/character.html"
     });
 
+    $routeProvider.when("/favorites", {
+        controller: "favoritesController",
+        templateUrl: "app/views/user/favorites.html"
+    });
+
     //$routeProvider.otherwise({ redirectTo: "/home" });
 
 });

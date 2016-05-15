@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+		<meta name="description" content=""></meta>
+		<meta name="author" content=""></meta>
 		<title>TACS ApiMarvel</title>
-		<link rel="icon" type="content/images/png" href="content/images/favicon.png">
+		<link rel="icon" type="content/images/png" href="content/images/favicon.png"></link>
 		<!-- Bootstrap Core CSS -->
-		<link href="content/css/bootstrap.min.css" rel="stylesheet">
+		<link href="content/css/bootstrap.min.css" type="text/css" rel="stylesheet"></link>
 		<!-- Custom CSS -->
-		<link href="content/css/home_user.css" rel="stylesheet">
+		<link href="content/css/home_user.css" type="text/css" rel="stylesheet"></link>
 		<!-- jQuery -->
 		<script src="scripts/jquery.js"></script>
 		<!-- Bootstrap Core JavaScript -->
@@ -24,6 +24,9 @@
 		<script src="app/user_app.js"></script>
 		<script src="app/controllers/character_controller.js"></script>
 		<script src="app/services/character_service.js"></script>
+		<script src="app/controllers/favorites_controller.js"></script>
+		<script src="app/services/favorites_service.js"></script>
+
 	</head>
 	<body ng-app="appUser">
 		<!-- Navigation -->
@@ -57,8 +60,9 @@
 			</div>
 			<!-- /.container -->
 		</nav>
-		
-		<div ng-view>
+
+
+		<div ng-view="">
 		</div>
 
 		<!-- Footer -->
