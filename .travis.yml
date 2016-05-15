@@ -6,6 +6,8 @@ jdk: oraclejdk7
 language: java
 install: true
 script: mvn clean cobertura:check | egrep -v "(^\[INFO\]|^\[DEBUG\])"
+after_success:
+  - bash "travis/deploy.sh"
 notifications:
   email:
     recipients:
