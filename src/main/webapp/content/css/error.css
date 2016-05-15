@@ -1,0 +1,13 @@
+.header_home
+{
+	background: url('/content/images/error_page.jpg') no-repeat center center;
+	height: 100%;
+	margin:0px !important;
+}
+html{
+	height:100%;
+}
+
+body {
+	height:100%;
+}
