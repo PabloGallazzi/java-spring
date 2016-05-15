@@ -1,4 +1,19 @@
 <div class="container">
+	<div class="row" style="margin-top: 10px;">
+		<div class="panel panel-info" >
+			<div class="panel-heading">
+				Character Filter
+			</div>
+			<div>
+				<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search"></span>
+				</span>
+					<input id="txtCharacterName" type="text" class="form-control" placeholder="Character name" ng-change="nameChange()" ng-model="name">
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="col-sm-4" ng-repeat="x in characters">
 		<div class="col-sm-12">
 			<a data-id="{{x.id}}" ng-href="#/characters/{{x.id}}" ng-click="setSelectedCharacter($event);">

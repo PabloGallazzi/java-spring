@@ -1,6 +1,15 @@
 'use strict';
-app.controller('charactersController', ['$scope', '$location', 'characterService', function($scope, $location, characterService) {
+app.controller('charactersController', ['$scope', '$location','$timeout', 'characterService', function($scope, $location,$timeout, characterService,cfpLoadingBar) {
     var self = this;
+    $scope.name = "";
+
+    var nameChangedPromise;
+    $scope.nameChange = function(){
+        if(nameChangedPromise){
+            $timeout.cancel(nameChangedPromise);
+        }
+        nameChangedPromise = $timeout(self.getCharactersByName($scope.name),3000);
+    }
 
     // Evento para manejar el páginado de los personajes.
     $('li[type=number]').click(function(evt){
@@ -11,6 +20,10 @@ app.controller('charactersController', ['$scope', '$location', 'characterService
             offset= page * 9 - limit;
         self.fetchAllCharacters(offset,limit);
     });
+
+    //$('#txtCharacterName').change(function () {
+      //  self.getCharactersByName($('#txtCharacterName').val());
+    //})
 
     $('.nextpage').click(function(evt){
         $('li[type=number]').children().each(function(){
@@ -47,6 +60,21 @@ app.controller('charactersController', ['$scope', '$location', 'characterService
                             console.error('Error while fetching characters');
                         }
                );
+    };
+
+    self.getCharactersByName = function(name){
+
+        characterService.getCharactersByName(name)
+            .then(
+                function(d) {
+        //            cfpLoadingBar.complete();
+                    $scope.characters = d.data.results;
+                },
+                function(errResponse){
+          //          cfpLoadingBar.complete();
+                    console.error('Error while fetching characters');
+                }
+            );
     };
 
     // Carga la primer página.
