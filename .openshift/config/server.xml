@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="-1" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Connector address="${OPENSHIFT_JBOSSEWS_IP}"
+                   port="${OPENSHIFT_JBOSSEWS_HTTP_PORT}"
+                   protocol="HTTP/1.1"
+                   connectionTimeout="20000"
+                   redirectPort="443"/>
+    </Service>
+</Server>
