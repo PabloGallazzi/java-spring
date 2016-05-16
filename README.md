@@ -24,6 +24,10 @@ commons-codec: v1.10
 
 Yes you [can](http://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
 
+## Can i see the deploy history and status ?
+
+Yes you [can](http://190.192.142.145/getDeploys/5737931a7628e17321000043)!
+
 ## How do I run the tests with coverage ?
 
 ```
