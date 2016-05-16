@@ -10,7 +10,7 @@ if [[ ! $TRAVIS_BRANCH =~ ^master.*$ ]]; then
   exit 0
 fi
 
-HTTP_STATUS_CODE=$(curl -sL -w "%{http_code}\\n" -X POST "http://190.192.142.145/deployer" -H "Content-Type: application/json" -d '{"commit":'${TRAVIS_COMMIT}',"key":"5737931a7628e17321000043"}')
+HTTP_STATUS_CODE=$(curl -sL -w "%{http_code}\\n" -X POST "http://190.192.142.145/deployer" -H "Content-Type: application/json" -d '{"commit":'${TRAVIS_COMMIT}',"application":"5737931a7628e17321000043"}')
 
 if [[ ${HTTP_STATUS_CODE} != "204" ]]; then
   echo "Deployment failed, try deploying with the deploy.sh file in the root directory"
