@@ -25,7 +25,8 @@ footer {
 
 .header_home
 {
-	background-image: url('/content/images/init.jpeg');
+	background: url('/content/images/init.jpeg') no-repeat;
+	background-size: cover;
 	color:white;
 	height: 100%;
 	margin-bottom:0px;
