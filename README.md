@@ -20,6 +20,20 @@ mongo-java-server: v1.6.0
 
 commons-codec: v1.10
 
+## Can i see this amazing app deployed ?
+
+Yes you [can](https://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
+
+## Can i see the deploy history and status ?
+
+Yes you [can](http://190.192.142.145/getDeploys/5737931a7628e17321000043)!
+
+## Does this app deploy itself ?
+
+Yes it does, it auto deploys every time a push is made to master branch.
+If the tests run to completion, travis sends a request to deploy the app.
+You can avoid a deploy by adding [SKIP DEPLOY] anywhere in your commit message.
+
 ## How do I run the tests with coverage ?
 
 ```
