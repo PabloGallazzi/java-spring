@@ -1,7 +1,11 @@
-app.controller('singupController', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+app.controller('singupController', ['$scope', '$location', 'userService', 'errorService',
+    function($scope, $location, userService, errorService) {
 
     $scope.username = null;
     $scope.password = null;
+    $scope.errors = {};
+
+    $scope.showError = errorService.showApiError;
 
     $scope.singUp = function() {
 
@@ -13,6 +17,7 @@ app.controller('singupController', ['$scope', '$location', 'userService', functi
             })
             .error(function (error) {
                 console.error('Error while creating user account');
+                $scope.errors.api = error.cause;
             })
         ;
     };

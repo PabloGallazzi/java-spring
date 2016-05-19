@@ -15,7 +15,13 @@
 						<button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="login()">Sign in</button>
 					</form>
 				If you don't have an account yet, you can register for free <a href="#/register" style="color:white;" >here</a>
+				<div class="alert alert-danger" ng-show="errors.api" style="text-shadow: none;">
+					<li>
+						{{ showError(errors.api) }}
+					</li>
+				</div>
 			</div>
+
 		</div>
 	</div>
 </div>

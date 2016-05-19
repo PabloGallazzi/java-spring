@@ -1,4 +1,4 @@
-var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate']);
+var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate','ui.bootstrap.pagination']);
 
 app.config(function ($routeProvider, cfpLoadingBarProvider) {
 
@@ -31,7 +31,6 @@ app.config(function ($routeProvider, cfpLoadingBarProvider) {
         controller: "favoritesController",
         templateUrl: "app/views/user/favorites.html"
     });
-
     cfpLoadingBarProvider.includeSpinner = true;
     //$routeProvider.otherwise({ redirectTo: "/home" });
 

@@ -1,7 +1,10 @@
-app.controller('loginController', ['$scope', '$location', 'userService', function($scope, $location, userService) {
+app.controller('loginController', ['$scope', '$location', 'userService', 'errorService',
+    function($scope, $location, userService, errorService) {
 
     $scope.userName = null;
     $scope.userPassword = null;
+    $scope.errors = {};
+    $scope.showError = errorService.showApiError;
 
     $scope.login = function() {
 
@@ -14,6 +17,7 @@ app.controller('loginController', ['$scope', '$location', 'userService', functio
             })
             .error(function (error) {
                 console.error('Error while authenticating user');
+                $scope.errors.api = error.error;
             })
         ;
     };
