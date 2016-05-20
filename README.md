@@ -26,7 +26,7 @@ Yes you [can](https://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
 
 ## Can i see the deploy history and status ?
 
-Yes you [can](http://190.192.142.145/getDeploys/5737931a7628e17321000043)!
+Yes you [can](http://190.192.142.145/deploy/5737931a7628e17321000043)!
 
 ## Does this app deploy itself ?
 
