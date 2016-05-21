@@ -1,4 +1,12 @@
-var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate','ui.bootstrap.pagination']);
+var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate']);
+app.filter('range', function() {
+    return function(input, total) {
+        total = parseInt(total);
+        for (var i=0; i<total; i++)
+            input.push(i);
+        return input;
+    };
+});
 
 app.config(function ($routeProvider, cfpLoadingBarProvider) {
 

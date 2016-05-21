@@ -2,60 +2,34 @@
 app.controller('charactersController', ['$scope', '$location','$timeout', 'characterService', function($scope, $location,$timeout, characterService,cfpLoadingBar) {
     var self = this;
     $scope.name = "";
+    $scope.offset = 0;
     $scope.characters = [];
+    $scope.totalCharacters = $scope.characters.length;
     $scope.filteredCharacters = [];
     $scope.nameChangedPromise = null;
-    $scope.totalCharacters = null;
+
+    // Pagination variables.
     $scope.charsPerPage = 9;
-    $scope.cantPages = Math.floor($scope.totalCharacters/$scope.charsPerPage) + $scope.totalCharacters%$scope.charsPerPage;
-
-    $scope.currentPage = 1;
-    $scope.numPerPage = 9;
-    $scope.maxSize = 5;
-    $scope.totalItems = 64;
-
-    $scope.numPages = function () {
-        return Math.ceil($scope.characters.length / $scope.numPerPage);
-    };
-
-    $scope.$watch("currentPage + numPerPage", function() {
-        var begin = (($scope.currentPage - 1) * $scope.numPerPage)
-            , end = begin + $scope.numPerPage;
-
-        $scope.filteredCharacters = $scope.characters.slice(begin, end);
-    });
+    $scope.maxPages = 10;
+    $scope.cantPages = Math.ceil($scope.totalCharacters/$scope.charsPerPage);
+    $scope.rangePages = $scope.cantPages > $scope.maxPages ? $scope.maxPages : $scope.cantPages;
 
     $scope.nameChange = function(){
         if($scope.nameChangedPromise){
             $timeout.cancel($scope.nameChangedPromise);
         }
-        $scope.nameChangedPromise = $timeout(self.getCharactersByName($scope.name),3000);
-    }
-
-    // Evento para manejar el páginado de los personajes.
-    $('li[type=number]').click(function(evt){
+        $scope.offset = 0;
         $('.pagination').children('li[type=number]').removeClass('active');
-        $(evt.currentTarget).addClass("active");
-        var page = evt.currentTarget.textContent;
-        var limit= 9,
-            offset= page * 9 - limit;
-        self.fetchAllCharacters(offset,limit);
+        $($('li[type=number]')[0]).addClass('active');
+        $scope.nameChangedPromise = $timeout(self.fetchCharacters(),3000);
+    };
+
+    $('.nextpage').click(function(){
+        self.fetchCharacters();
     });
 
-    $('.nextpage').click(function(evt){
-        $('li[type=number]').children().each(function(){
-            var pageNumber = parseInt(this.textContent);
-            this.textContent = pageNumber + 5;
-        });
-        $('li[type=number]').first().click();
-    });
-
-    $('.previouspage').click(function(evt){
-        $('li[type=number]').children().each(function(){
-            var pageNumber = parseInt(this.textContent);
-            this.textContent = pageNumber + 5;
-        });
-        $('li[type=number]').first().click();
+    $('.previouspage').click(function(){
+        self.fetchCharacters();
     });
 
     $scope.setSelectedCharacter = function(evt){
@@ -65,12 +39,13 @@ app.controller('charactersController', ['$scope', '$location','$timeout', 'chara
         characterService.setSelectedCharacter(character);
     };
 
-    self.fetchAllCharacters = function(offset,limit){
-      characterService.fetchAllCharacters(offset,limit)
+    self.fetchCharacters = function(){
+      characterService.fetchCharacters($scope.offset,$scope.charsPerPage,$scope.name)
           .then(
                        function(d) {
                            $scope.totalCharacters = d.data.total;
                            $scope.characters = d.data.results;
+                           self.calcPagination();
                        },
                         function(errResponse){
                             console.error('Error while fetching characters');
@@ -78,20 +53,20 @@ app.controller('charactersController', ['$scope', '$location','$timeout', 'chara
                );
     };
 
-    self.getCharactersByName = function(name){
+    self.calcPagination = function(){
+        $scope.cantPages = Math.ceil($scope.totalCharacters/$scope.charsPerPage);
+        $scope.rangePages = $scope.cantPages > $scope.maxPages ? $scope.maxPages : $scope.cantPages;
+    };
 
-        characterService.getCharactersByName(name)
-            .then(
-                function(d) {
-                    $scope.totalCharacters = d.data.total;
-                    $scope.characters = d.data.results;
-                },
-                function(errResponse){
-                    console.error('Error while fetching characters');
-                }
-            );
+    $scope.changePage = function ($event) {
+        $('.pagination').children('li[type=number]').removeClass('active');
+        $($event.currentTarget).addClass("active");
+        var page = $event.currentTarget.textContent;
+        $scope.offset= page * 9 - $scope.charsPerPage;
+        self.fetchCharacters();
     };
 
     // Carga la primer página.
-    $('.active').click();
+    self.fetchCharacters();
+
 }]);
