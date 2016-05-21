@@ -2,8 +2,11 @@ package spring.controllers;
 
 import org.junit.Test;
 import spring.BaseRestTester;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -15,7 +18,8 @@ public class ApiStatusControllerTest extends BaseRestTester {
     public void testGetCharactersIntersectionBadIds() throws Exception {
         mockMvc.perform(get("/ping"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("text/plain;charset=UTF-8"));
+                .andExpect(jsonPath("$.message", is("pong")))
+                .andExpect(content().contentType(contentType));
     }
 
 }
