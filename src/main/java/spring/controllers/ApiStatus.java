@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by pgallazzi on 26/4/16.
  */
@@ -11,8 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class ApiStatus {
 
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
-    ResponseEntity<?> getUserInfo() {
-        return new ResponseEntity<>("pong", null, HttpStatus.OK);
+    ResponseEntity<?> ping() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "pong");
+        return new ResponseEntity<>(response, null, HttpStatus.OK);
     }
 
 }
