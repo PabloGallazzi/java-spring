@@ -8,6 +8,7 @@ import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import repositories.TeamsRepository;
 import repositories.UsersRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,6 +37,8 @@ public class UsersRestController {
     private AuthRepository auth;
     @Autowired
     private CharactersRepository charactersRepository;
+    @Autowired
+    Environment environment;
 
 
     /* URLs a Mapear en el controller.
@@ -74,8 +78,7 @@ public class UsersRestController {
         }
         User.validateUser(userBody);
         try {
-            //TODO: Remove this if for production.
-            if (userBody.getUserName().equals("Admin")) {
+            if (!Arrays.asList(environment.getActiveProfiles()).contains("production") && userBody.getUserName().equals("Admin")) {
                 userBody.setIsAdmin(true);
             }
             users.save(userBody);
@@ -96,7 +99,6 @@ public class UsersRestController {
         Token aToken = auth.findById(accessToken);
         logger.info("Users get with parameter: " + attributes + " requested by user: " + aToken.getUserId().toString());
         aToken.validateAdminCredentials();
-        //TODO: Filter by attributes
         return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
     }
 

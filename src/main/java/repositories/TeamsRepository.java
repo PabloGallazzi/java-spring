@@ -44,7 +44,6 @@ public class TeamsRepository {
     }
 
     public void update(Team team) {
-        //TODO: This is ugly...
         ds.getDatastore().delete(team);
         ds.getDatastore().save(team).getId();
     }

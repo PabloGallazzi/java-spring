@@ -2,7 +2,6 @@ package spring.controllers;
 
 import domain.*;
 import domain.Character;
-import org.bson.types.ObjectId;
 import org.junit.Test;
 import spring.BaseRestTester;
 
