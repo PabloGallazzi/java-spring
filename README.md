@@ -2,9 +2,9 @@
 
 ## This is the repository for the TACS assignment.
 
-For detailed information abuot the API see the [wiki] (https://github.com/niko118/tp-tacs/wiki)
+For detailed information abuot the API see the [wiki](https://github.com/niko118/tp-tacs/wiki)
 
-For usage information see the [API-usage-examples] (https://github.com/niko118/tp-tacs/wiki/API-usage-examples-(CURLs))
+For usage information see the [API-usage-examples](https://github.com/niko118/tp-tacs/wiki/API-usage-examples)
 
 ## Frameworks:
 
