@@ -44,7 +44,6 @@ public class UsersRepository {
     }
 
     public void update(User user){
-        //TODO: This is ugly...
         ds.getDatastore().delete(user);
         ds.getDatastore().save(user);
     }
