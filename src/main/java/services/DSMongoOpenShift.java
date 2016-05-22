@@ -20,14 +20,14 @@ import java.util.List;
  */
 @Service
 @Scope("singleton")
-@Profile({"production"})
-public class DSMongoReal implements DSMongoInterface {
+@Profile({"openshift"})
+public class DSMongoOpenShift implements DSMongoInterface {
 
     Datastore ds;
     private MongoServer server;
 
 
-    public DSMongoReal(){}
+    public DSMongoOpenShift(){}
 
     @PostConstruct
     public void initialize() throws UnknownHostException {

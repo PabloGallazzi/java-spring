@@ -31,7 +31,7 @@ Yes you [can](http://190.192.142.145/deploy/5737931a7628e17321000043)!
 ## Does this app deploy itself ?
 
 Yes it does, it auto deploys every time a push is made to master branch.
-If the tests run to completion, travis sends a request to deploy the app.
+If the tests run to completion and the push was not issued by a pull request, travis sends a request to deploy the app.
 You can avoid a deploy by adding [SKIP DEPLOY] anywhere in your commit message.
 
 ## How do I run the tests with coverage ?
@@ -55,6 +55,24 @@ mvn test
 ```
 mvn clean
 mvn spring-boot:run
+```
+
+This runs the application in develop environment (the default) which uses an in-memory db and has real connectivity with Marvel's API.
+
+## Which are the available environments ?
+
+* develop : This is the default environment it provides an in-memory db and has real connectivity with Marvel's API.
+* test : This is the environment in which tests run, it provides an in-memory db and a mock for Marvel's API. This environment should not be used for any other purpose than running the tests.
+* mongo : This environment provides the settings to connect to a real mongo db and has real connectivity with Marvel's API, if you are to run the application in this environment, make sure you are running a real mongo db in port 27017, the dbname is bdtptacs_dev.
+* openshift : This environment has all the needed settings to connect to openshift's real mongo db and has real connectivity with Marvel's API. This environment should only be used for deployment purposes.
+
+## How do I run the app in a specific environment ?
+
+```
+mvn clean
+mvn spring-boot:run -Dspring.profiles.active=<environment>
+Example:
+mvn spring-boot:run -Dspring.profiles.active=mongo
 ```
 
 ## How do I populate the database ?
