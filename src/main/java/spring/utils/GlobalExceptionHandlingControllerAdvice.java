@@ -2,14 +2,12 @@ package spring.utils;
 
 import exceptions.rest.*;
 import exceptions.web.WebBaseException;
-import org.springframework.core.annotation.AnnotationUtils;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,8 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalExceptionHandlingControllerAdvice {
 
+    private static final Logger logger = Logger.getLogger(GlobalExceptionHandlingControllerAdvice.class);
+
     @ExceptionHandler(RestBaseException.class)
     public ResponseEntity<?> handleError(HttpServletRequest req, Exception exception)
             throws Exception {
@@ -31,7 +31,7 @@ public class GlobalExceptionHandlingControllerAdvice {
         /*if (AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class) != null) {
             throw exception;
         }*/
-
+        logger.error("New rest base error logging", exception);
         ExceptionMapper exceptionMapper = new ExceptionMapper((RestBaseException) exception);
         return new ResponseEntity<>(exceptionMapper, null, ((RestBaseException) exception).getStatus());
 
@@ -50,6 +50,7 @@ public class GlobalExceptionHandlingControllerAdvice {
         // Rethrow custom exceptions or they will be processed here instead.
 
         if (exception instanceof ServiceUnavailableException) {
+            logger.error("New service unavailable error logging", exception);
             return new ResponseEntity<>(null, null, HttpStatus.SERVICE_UNAVAILABLE);
         }
 
@@ -59,6 +60,7 @@ public class GlobalExceptionHandlingControllerAdvice {
 
         if (exception instanceof HttpMessageNotReadableException) {
             ExceptionMapper exceptionMapper = new ExceptionMapper(new BadRequestException("Invalid body, check the structure."));
+            logger.error("New invalid body error logging", exception);
             return new ResponseEntity<>(exceptionMapper, null, HttpStatus.BAD_REQUEST);
         }
 
@@ -83,6 +85,7 @@ public class GlobalExceptionHandlingControllerAdvice {
         mav.addObject("status", ((WebBaseException) exception).getStatus().value());
 
         mav.setViewName("error");
+        logger.error("New web error logging", exception);
         httpServletResponse.setStatus(((WebBaseException) exception).getStatus().value());
         return mav;
     }

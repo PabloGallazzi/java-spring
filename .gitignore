@@ -63,3 +63,4 @@ fabric.properties
 *.iml
 
 output.txt
+tp_tacs_application.log

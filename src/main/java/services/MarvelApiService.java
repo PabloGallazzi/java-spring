@@ -6,6 +6,7 @@ import com.pgallazzi.http.utils.response.RestClientResponse;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.ServiceUnavailableException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import java.util.Map;
 @Scope("singleton")
 @Profile({"production","develop"})
 public class MarvelApiService implements MarvelApiServiceInterface{
+
+    private static final Logger logger = Logger.getLogger(MarvelApiService.class);
 
     private static TacsRestClient restClient = new TacsRestClient();
 
@@ -56,6 +59,7 @@ public class MarvelApiService implements MarvelApiServiceInterface{
 
             @Override
             public void handleFailure(RestClientResponse it) {
+                logger.error("Get to marvel's api failed:", it.getException());
                 throw new ServiceUnavailableException();
             }
         });

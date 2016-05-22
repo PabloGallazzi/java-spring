@@ -3,6 +3,7 @@ package spring.controllers;
 import domain.Token;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.BadRequestException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import services.MarvelApiServiceInterface;
  */
 @RestController
 public class CharactersRestController {
+
+    private static final Logger logger = Logger.getLogger(CharactersRestController.class);
 
     /* URLs a Mapear en el controller.
     * /characters GET
@@ -39,6 +42,7 @@ public class CharactersRestController {
                                     @RequestParam(value = "offset", required = false, defaultValue = "0") String offset,
                                     @RequestParam(value = "limit", required = false, defaultValue = "100") String limit,
                                     @RequestParam(value = "name_starts_with", required = false, defaultValue = "") String nameStartsWith) throws Exception {
+        logger.info("Characters get with parameters: sort " + sort + " criteria " + criteria + " offset " + offset + " limit " + limit + " nameStartsWith " + nameStartsWith);
         if ((!sort.equals("modified") && !sort.equals("name"))) {
             throw new BadRequestException("Invalid value for parameter sort, the valid ones are modified and name");
         }
@@ -72,6 +76,7 @@ public class CharactersRestController {
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Characters ranking get with limit parameter: " + limit + " requested by user: " + aToken.getUserId().toString());
         aToken.validateAdminCredentials();
         Integer limitFromRequest;
         try {

@@ -1,5 +1,6 @@
 package services;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,6 +16,9 @@ import java.io.IOException;
 @Component
 @Profile({"production"})
 public class SecureFilter implements Filter  {
+
+    private static final Logger logger = Logger.getLogger(SecureFilter.class);
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -33,6 +37,7 @@ public class SecureFilter implements Filter  {
         }
         else
         {
+            logger.info("Redirecting to https!");
             String redirectTarget = UriComponentsBuilder
                     .fromHttpUrl(servletRequest.getRequestURL().toString()).scheme("https").build()
                     .toUriString();
