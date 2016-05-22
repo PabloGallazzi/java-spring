@@ -6,6 +6,7 @@ import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ import java.util.List;
  */
 @RestController
 public class    UsersRestController {
+
+    private static final Logger logger = Logger.getLogger(UsersRestController.class);
 
     @Autowired
     private UsersRepository users;
@@ -54,6 +57,7 @@ public class    UsersRestController {
                                    @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Teams intersection get with parameters: " + id + " " + id2 + " requested by user: " + aToken.getUserId().toString());
         aToken.validateAdminCredentials();
         Team team1 = teams.findByTeamId(id);
         Team team2 = teams.findByTeamId(id2);
@@ -71,7 +75,7 @@ public class    UsersRestController {
         User.validateUser(userBody);
         try {
             //TODO: Remove this if for production.
-            if (userBody.getUserName().equals("Admin")){
+            if (userBody.getUserName().equals("Admin")) {
                 userBody.setIsAdmin(true);
             }
             users.save(userBody);
@@ -80,6 +84,7 @@ public class    UsersRestController {
             cause[0] = "user_name_already_used";
             throw new BadRequestException("Unable to create user", "Validation error", cause);
         }
+        logger.info("New user created: " + userBody.getUserName());
         return new ResponseEntity<>(userBody, null, HttpStatus.CREATED);
     }
 
@@ -89,6 +94,7 @@ public class    UsersRestController {
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users get with parameter: " + attributes + " requested by user: " + aToken.getUserId().toString());
         aToken.validateAdminCredentials();
         //TODO: Filter by attributes
         return new ResponseEntity<>(users.findByUserId(id), null, HttpStatus.OK);
@@ -100,6 +106,7 @@ public class    UsersRestController {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         aToken.validateUserCredentials(user);
+        logger.info("Users favorites requested by user: " + aToken.getUserId().toString());
         User thisUser = users.findByUserId(user);
         return new ResponseEntity<>(thisUser.getFavorites(), null, HttpStatus.OK);
     }
@@ -110,6 +117,7 @@ public class    UsersRestController {
                                   @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users favorites post requested by user: " + aToken.getUserId().toString() + " " + character.getId().toString());
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
         Character character1 = charactersRepository.findById(character.getId());
@@ -132,6 +140,7 @@ public class    UsersRestController {
                                      @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users favorites delete requested by user: " + aToken.getUserId().toString() + " " + id);
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
         Integer integerId = validateCharacterId(id);
@@ -147,6 +156,7 @@ public class    UsersRestController {
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users team post requested by user: " + aToken.getUserId().toString() + " " + team.getTeamName());
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
         team.setTeamId(null);
@@ -162,6 +172,7 @@ public class    UsersRestController {
                               @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users team get requested by user: " + aToken.getUserId().toString() + " " + teamId);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
         User thisUser = users.findByUserId(userId);
@@ -176,6 +187,7 @@ public class    UsersRestController {
                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users character post requested by user: " + aToken.getUserId().toString() + teamId + " " + character.getId());
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
         User thisUser = users.findByUserId(userId);
@@ -197,6 +209,7 @@ public class    UsersRestController {
                                      @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
+        logger.info("Users character delete requested by user: " + aToken.getUserId().toString() + teamId + " " + characterId);
         aToken.validateUserCredentials(userId);
         Team team = teams.findByTeamId(teamId);
         User thisUser = users.findByUserId(userId);
@@ -233,10 +246,10 @@ public class    UsersRestController {
         return charId;
     }
 
-    private void validateTeamBelongsToUser(User user, Team team){
+    private void validateTeamBelongsToUser(User user, Team team) {
         List<Team> userTeams = user.getTeams();
-        for (Team team1 : userTeams){
-            if (team.getTeamId().toString().equals(team1.getTeamId().toString())){
+        for (Team team1 : userTeams) {
+            if (team.getTeamId().toString().equals(team1.getTeamId().toString())) {
                 return;
             }
         }

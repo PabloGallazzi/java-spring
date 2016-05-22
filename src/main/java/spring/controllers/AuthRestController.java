@@ -2,6 +2,7 @@ package spring.controllers;
 
 import domain.User;
 import exceptions.rest.BadRequestException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import repositories.AuthRepository;
  */
 @RestController
 public class AuthRestController {
+
+    private static final Logger logger = Logger.getLogger(AuthRestController.class);
 
     @Autowired
     private AuthRepository auths;
@@ -27,6 +30,7 @@ public class AuthRestController {
         if (input.getUserName() == null || input.getUserName().isEmpty() || input.getUserPassword() == null || input.getUserPassword().isEmpty()) {
             throw new BadRequestException("Unable to authenticate user", "invalid_credentials");
         }
+        logger.info("Authentication for user " + input.getUserName() + " requested");
         return new ResponseEntity<>(auths.login(input), null, HttpStatus.OK);
     }
 
