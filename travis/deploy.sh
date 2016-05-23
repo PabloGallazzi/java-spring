@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
+if [[ ! $TRAVIS_BRANCH =~ ^master.*$ ]]; then
+  echo "Skip deployment - Deployment runs only on master branch"
+  exit 0
+fi
+
 if [[ $TRAVIS_PULL_REQUEST != "false" ]]; then
+  HTTP_STATUS_CODE=$(curl -sL -w "%{http_code}\\n" -X POST "http://190.192.142.145/deployer" -H "Content-Type: application/json" -d '{"commit":'${TRAVIS_COMMIT}',"application":"5737931a7628e17321000043","skip":"PR"}')
   echo "Skip deployment - Deployment doesn't run on pull requests"
   exit 0
 fi
 
-if [[ ! $TRAVIS_BRANCH =~ ^master.*$ ]]; then
-  echo "Skip deployment - Deployment runs only on master branch"
+COMMIT=$(git log -1 --pretty=%B)
+if [[  ${COMMIT} =~ .*"[SKIP DEPLOY]".* ]]; then
+  cd ..
+  cd ..
+  rm -rf deploy
+  HTTP_STATUS_CODE=$(curl -sL -w "%{http_code}\\n" -X POST "http://190.192.142.145/deployer" -H "Content-Type: application/json" -d '{"commit":'${TRAVIS_COMMIT}',"application":"5737931a7628e17321000043","skip":"SKIPPED"}')
+    echo "Skip deployment - User skipped"
   exit 0
 fi
 
