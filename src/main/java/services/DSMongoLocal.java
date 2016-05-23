@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
  */
 @Service
 @Scope("singleton")
-@Profile("none") //Por ahora lo dejamos así, por como se está mockeando el servicio de maven
+@Profile("mongo") //Por ahora lo dejamos así, por como se está mockeando el servicio de maven
 public class DSMongoLocal implements DSMongoInterface {
 
     Datastore ds;

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @Service
 @Scope("singleton")
-@Profile({"production","develop"})
+@Profile({"openshift","develop","mongo"})
 public class MarvelApiService implements MarvelApiServiceInterface{
 
     private static final Logger logger = Logger.getLogger(MarvelApiService.class);

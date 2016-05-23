@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by pgallazzi on 16/5/16.
  */
 @Component
-@Profile({"production"})
+@Profile({"openshift"})
 public class SecureFilter implements Filter  {
 
     private static final Logger logger = Logger.getLogger(SecureFilter.class);
