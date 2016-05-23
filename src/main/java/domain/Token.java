@@ -37,7 +37,7 @@ public class Token {
 
     public Token(List<String> scopes, ObjectId userId) {
         Date date = new Date();
-        date.setTime(date.getTime() + 5184000); //1 month
+        date.setTime(date.getTime() + 15770000000L);
         this.expirationDate = date;
         this.scopes = scopes;
         this.userId = userId;
