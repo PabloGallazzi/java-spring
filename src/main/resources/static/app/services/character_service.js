@@ -8,7 +8,7 @@ app.factory('characterService', ['$http', '$q', function($http, $q){
             fetchCharacters: function(offset, limit, name) {
                 var params = { offset: offset, limit:limit, name_starts_with: name };
                 var config = { params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'} };
-                    return $http.get('/characters',config)
+                    return $http.get('/characters', config)
                             .then(
                                     function(response){
                                         return response.data;
