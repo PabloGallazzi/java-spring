@@ -14,66 +14,63 @@ app.controller('favoritesController',
                   favoritesService,
                   characterService) {
 
-            var self = this;
+            var favoritesController = this;
+
+            favoritesController.getImagePathFor = getImagePathFor;
+            favoritesController.getUserIdBy = getUserIdBy;
+            favoritesController.getFavorites = getFavorites;
+            favoritesController.reloadPage = reloadPage;
+            favoritesController.selectFavorite = selectFavorite;
+            favoritesController.addFavorite = addFavorite;
+            favoritesController.removeFavorite = removeFavorite;
+            favoritesController.isFavorite = isFavorite;
+
             $scope.favorites = [];
+            $scope.token = getCookie('access_token');
+            $scope.user_id = getUserIdBy($scope.token);
 
-            // Helpers
+            favoritesController.getFavorites();
 
-            self.getImagePathFor = function (character) {
-                return character.thumbnail.path + "." + character.thumbnail.extension;
-            };
+            // Functions
 
-            self.getUserIdBy = function (token) {
-                return token.slice(0, token.indexOf("-"));
-            };
+            function getImagePathFor(character) {
+                return character.thumbnail.path + '.' + character.thumbnail.extension;
+            }
 
-            // Actual functions
+            function getUserIdBy(token) {
+                return token.slice(0, token.indexOf('-'));
+            }
 
-            self.reloadPage = function () {
+            function reloadPage() {
                 $route.reload();
-            };
+            }
 
-            self.selectFavorite = function (character) {
+            function selectFavorite(character) {
                 characterService.setSelectedCharacter(character);
-            };
+            }
 
-            self.addFavorite = function (character) {
-                var token = getCookie('access_token');
-                var userId = self.getUserIdBy(token);
-                favoritesService.addFavorite(userId, token, character).success(function (response) {
-                    self.reloadPage();
-                });
-            };
+            function addFavorite(character) {
+                favoritesService.addFavorite($scope.user_id, $scope.token, character).success(reloadPage);
+            }
 
-            self.removeFavorite = function (character) {
-                var token = getCookie('access_token');
-                var userId = self.getUserIdBy(token);
-                favoritesService.removeFavorite(userId, token, character).success(function (response) {
-                    self.reloadPage();
-                });
-            };
+            function removeFavorite(character) {
+                favoritesService.removeFavorite($scope.user_id, $scope.token, character).success(reloadPage);
+            }
 
-            self.isFavorite = function (character) {
-                var condition = function (a_character) {
-                    return a_character.id == character.id;
+            function isFavorite(character) {
+                var condition = function (char) {
+                    return char.id == character.id
                 };
-                if ($scope.favorites.length == 0) {
-                    self.fetchAllFavorites();
-                }
                 return $scope.favorites.some(condition);
-            };
+            }
 
-            self.fetchAllFavorites = function () {
-                var token = getCookie('access_token');
-                var userId = self.getUserIdBy(token);
-                favoritesService.getFavoritesByToken(userId, token).success(function (favorites) {
-                    $scope.favorites = favorites.map(function (character) {
-                        character.image_path = self.getImagePathFor(character);
-                        return character;
-                    })
-                });
-            };
-
-            self.fetchAllFavorites();
+            function getFavorites() {
+                favoritesService.getFavoritesByToken($scope.user_id, $scope.token).success(function (favorites) {
+                    $scope.favorites = favorites.map(function (char) {
+                        char.image_path = getImagePathFor(char);
+                        return char;
+                    });
+                })
+            }
 
         }]);
