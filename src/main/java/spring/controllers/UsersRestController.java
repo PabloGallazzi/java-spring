@@ -6,6 +6,7 @@ import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
+import org.apache.http.impl.client.NullBackoffStrategy;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -134,6 +135,31 @@ public class UsersRestController {
         thisUser.addAsFavorite(character);
         users.update(thisUser);
         return new ResponseEntity<>(character, null, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/users/{userId}/characters/favorites/{id}", method = RequestMethod.GET)
+    ResponseEntity<?> isFavorite(@PathVariable String userId,
+                                 @PathVariable String id,
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("Users favorites get single requested by user: " + aToken.getUserId().toString() + " " + id);
+        aToken.validateUserCredentials(userId);
+        User thisUser = users.findByUserId(userId);
+        Integer charId;
+        try {
+            charId = Integer.valueOf(id);
+        } catch (NumberFormatException exception) {
+            throw new BadRequestException("Character id must be a positive number");
+        }
+        if (charId < 0){
+            throw new BadRequestException("Character id must be a positive number");
+        }
+        Character character = thisUser.getFavoriteCharacter(charId);
+        if (character == null){
+            throw new NotFoundException("That character is not a favorite of this user", "character_not_found", new String[0]);
+        }
+        return new ResponseEntity<>(character, null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{userId}/characters/favorites/{id}", method = RequestMethod.DELETE)

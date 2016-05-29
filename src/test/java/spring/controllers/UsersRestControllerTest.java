@@ -364,6 +364,114 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testGetSingleFavoriteTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/users/123/characters/favorites/1"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetSingleFavoriteMismatchToken() throws Exception {
+        String id2 = "012345678901234567890000";
+        User user2 = new User("TACS2", "testPass123;");
+        User.validateUser(user2);
+        ds.getDatastore().save(user2);
+        mockMvc.perform(get("/users/" + id2 + "/characters/favorites/1?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
+    }
+
+    @Test
+    public void testGetSingleFavoriteNotFoundToken() throws Exception {
+        mockMvc.perform(get("/users/123456789012345678901234/characters/favorites/1?access_token=1234"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetSingleFavoriteNotFreshToken() throws Exception {
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        token = setNotFreshExpirationDateToToken(token);
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites/1?access_token=" + token.getAccessToken()))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestCharacter();
+        deleteTACSTestUserWithToken();
+    }
+
+    @Test
+    public void testGetSingleFavoriteIdNotANumber() throws Exception {
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites/notANumber?access_token=" + token.getAccessToken()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Character id must be a positive number")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+        deleteTACSTestCharacter();
+    }
+
+    @Test
+    public void testGetSingleFavoriteIdNotAPositiveNumber() throws Exception {
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites/-1?access_token=" + token.getAccessToken()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Character id must be a positive number")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+        deleteTACSTestCharacter();
+    }
+
+    @Test
+    public void testGetSingleFavoriteIdNotFoundAsFavorite() throws Exception {
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites/1011335?access_token=" + token.getAccessToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("That character is not a favorite of this user")))
+                .andExpect(jsonPath("$.status", is(404)))
+                .andExpect(jsonPath("$.error", is("character_not_found")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+        deleteTACSTestCharacter();
+    }
+
+    @Test
+    public void testGetSingleFavoriteOk() throws Exception {
+        Token token = createAndLogInTACSTestUserWithFavorite(createTACSTestCharacter());
+        mockMvc.perform(get("/users/" + getTACDId() + "/characters/favorites/1011334?access_token=" + token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is(1011334)))
+                .andExpect(jsonPath("$.name", is("3-D Man")));
+        deleteTACSTestUserWithToken();
+        deleteTACSTestCharacter();
+    }
+
+    @Test
     public void testGetFavoritesTokenMustBeProvided() throws Exception {
         mockMvc.perform(get("/users/123/characters/favorites"))
                 .andExpect(status().isUnauthorized())

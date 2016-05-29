@@ -149,6 +149,15 @@ public class User {
         userToValidate.encryptPassword();
     }
 
+    public Character getFavoriteCharacter(Integer characterId) {
+        for (Character character : favorites) {
+            if (character.getId().equals(characterId)){
+                return character;
+            }
+        }
+        return null;
+    }
+
     private static void validatePassword(String userPassword) {
         List<String> causes = new ArrayList<>();
         if (userPassword == null) {
