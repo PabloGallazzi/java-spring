@@ -21,16 +21,16 @@ app.factory('favoritesService', ['$http', '$q', function ($http, $q) {
     }
 
     function addFavorite(user_id, token, character) {
-        var params = {character: character};
         var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
         var url = '/users/' + user_id + '/characters/favorites?access_token=' + token;
-        return $http.post(url, params, config);
+        return $http.post(url, character, config);
     }
 
     function removeFavorite(user_id, token, character) {
-        var config = {access_token: token, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        var params = {access_token: token};
+        var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
         var url = 'users/' + user_id + '/characters/favorites/' + character.id;
-        return $http.post(url, config);
+        return $http.delete(url, config);
     }
 
 
