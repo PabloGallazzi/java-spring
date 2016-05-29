@@ -6,7 +6,6 @@ import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
-import org.apache.http.impl.client.NullBackoffStrategy;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
