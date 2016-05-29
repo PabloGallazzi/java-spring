@@ -1,15 +1,13 @@
-<div class="Container">
-	<h3 class="imgTitle" >Hi! Here are your favorites characters!</h3>
+<div class="container" ng-controller="favoritesController as favCtrl">
 
-	<div ng-controller="favoritesController">
-		<ul>
-			<li ng-repeat="character in favorites">
-				<a ng-href="#/character/{{character.id}}">
-                    <h4 class="imgTitle">{{character.name}}</h4>
-					<img class="img-circle img-center" height="60px" width="75" ng-src="{{character.image_path}}" alt="">
-				</a>
-			</li>
-		</ul>
-	</div>
+    <div class="col-sm-4" ng-repeat="favorite in favorites">
+        <div class="col-sm-12">
+            <a ng-href="#/characters/{{favorite.id}}" ng-click="favCtrl.selectFavorite(favorite)">
+                <img class="img-circle img-center" style="border:5px black solid; margin: 10px;"
+                     ng-src="{{favorite.image_path}}" width="300px" height="300">
+            </a>
+            <h3 style="text-align: center;">{{favorite.name}}</h3>
+        </div>
+    </div>
 
-</div>			
+</div>
