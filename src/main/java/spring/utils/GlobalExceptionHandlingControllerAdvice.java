@@ -64,6 +64,7 @@ public class GlobalExceptionHandlingControllerAdvice {
             return new ResponseEntity<>(exceptionMapper, null, HttpStatus.BAD_REQUEST);
         }
 
+        logger.error("Error log: ", exception);
         return new ResponseEntity<>(new ExceptionMapper(new InternalServerError()), null, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
