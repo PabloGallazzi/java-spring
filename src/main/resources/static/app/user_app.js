@@ -25,11 +25,6 @@ app.config(function ($routeProvider, cfpLoadingBarProvider) {
         templateUrl: "app/views/user/teams.html"
     });
 
-    $routeProvider.when("/favorites", {
-        controller: "favoriteController",
-        templateUrl: "app/views/user/favorites.html"
-    });
-
     $routeProvider.when("/characters/:id", {
         controller: "characterController",
         templateUrl: "app/views/user/character.html"
