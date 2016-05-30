@@ -2,7 +2,7 @@
 
 ## This is the repository for the TACS assignment.
 
-For detailed information abuot the API see the [wiki](https://github.com/niko118/tp-tacs/wiki)
+For detailed information about the API see the [wiki](https://github.com/niko118/tp-tacs/wiki)
 
 For usage information see the [API-usage-examples](https://github.com/niko118/tp-tacs/wiki/API-usage-examples)
 
@@ -19,6 +19,8 @@ MORPHIA: v1.1.1
 mongo-java-server: v1.6.0
 
 commons-codec: v1.10
+
+log4j (Spring boot embedded)
 
 ## Can i see this amazing app deployed ?
 
@@ -83,8 +85,18 @@ With the server running, run the following command from your console.
 ./populate_data.sh
 ```
 
-You can see the results at: ${project}/output.txt, the report includes:
+You can see the results at: ${basedir}/output.txt, the report includes:
 All users created by the script (with access_tokens), it also includes the admin user with its 
 access_token to test all the services that need admin privileges.
 All teams, and characters created by the script are in this file with some pointers to
 identify which team belongs to each user and which characters belong to each team.
+
+## Where can I see the logs of this application ?
+
+This app uses log4j as a logging framework, you can see the logs at ${basedir}/tp_tacs_application.log
+
+```
+tail -200f tp_tacs_application.log
+```
+
+The above command will show you the last 200 lines of that log file, and will keep on updating to show you the latest logs!
