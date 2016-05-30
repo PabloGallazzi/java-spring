@@ -57,10 +57,10 @@ app.controller('favoritesController',
             }
 
             function isFavorite(character) {
-                if ($scope.favorites.length == 0) {
-                    getFavorites();
-                }
-                return $scope.favorites.some(function(char) { return char.id == character.id });
+                var condition = function (char) {
+                    return char.id == character.id
+                };
+                return $scope.favorites.some(condition);
             }
 
             function getFavorites() {
