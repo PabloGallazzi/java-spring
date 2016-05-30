@@ -10,6 +10,7 @@ app.factory('favoritesService', ['$http', '$q', function ($http, $q) {
     favoritesService.getFavoritesByToken = getFavoritesByToken;
     favoritesService.addFavorite = addFavorite;
     favoritesService.removeFavorite = removeFavorite;
+    favoritesService.isFavorite = isFavorite;
 
     return favoritesService;
 
@@ -31,6 +32,13 @@ app.factory('favoritesService', ['$http', '$q', function ($http, $q) {
         var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
         var url = 'users/' + user_id + '/characters/favorites/' + character.id;
         return $http.delete(url, config);
+    }
+    
+    function isFavorite(user_id, token, character) {
+        var params = {access_token: token);
+        var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        var url = 'users/' + user_id + '/characters/favorites/' + character.id;
+        return $http.get(url, config);
     }
 
 
