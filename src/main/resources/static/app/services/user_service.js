@@ -6,6 +6,7 @@ app.service('userService', ['$http', function($http){
     userService.login = login;
     userService.singUp = singUp;
     userService.redirectHome = redirectHome;
+    userService.createTeam = createTeam;
 
     return userService;
 
@@ -38,6 +39,13 @@ app.service('userService', ['$http', function($http){
 
     function redirectHome(accessToken){
         window.location ="home";
+    }
+
+    function createTeam(teamName, userId, accessToken) {
+        var data = {team_name: teamName};
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        console.log(teamName + userId + accessToken);
+        return $http.post('/users/' + userId + '/teams?access_token=' + accessToken, data, config);
     }
 
 }]);
