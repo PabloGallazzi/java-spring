@@ -193,6 +193,17 @@ public class UsersRestController {
         return new ResponseEntity<>(team, null, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.GET)
+    ResponseEntity<?> createTeam(@PathVariable String userId,
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("Users team get all requested by user: " + aToken.getUserId().toString());
+        aToken.validateUserCredentials(userId);
+        User thisUser = users.findByUserId(userId);
+        return new ResponseEntity<>(thisUser.getTeams(), null, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.GET)
     ResponseEntity<?> getTeam(@PathVariable String userId,
                               @PathVariable String teamId,

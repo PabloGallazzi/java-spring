@@ -899,6 +899,71 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testGetTeamsTokenMustBeProvided() throws Exception {
+        mockMvc.perform(get("/users/123/teams"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Access token must be provided")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetTeamsMismatchToken() throws Exception {
+        String id2 = "012345678901234567890000";
+        User user2 = new User("TACS2", "testPass123;");
+        User.validateUser(user2);
+        ds.getDatastore().save(user2);
+        mockMvc.perform(get("/users/" + id2 + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Forbidden")))
+                .andExpect(jsonPath("$.status", is(403)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
+    }
+
+    @Test
+    public void testGetTeamsNotFoundToken() throws Exception {
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams?access_token=1234"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetTeamsNotFreshToken() throws Exception {
+        Token token = createAndLogInTACSTestUserWithNotFreshToken();
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams?access_token=" + token.getAccessToken()))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("invalid_token")))
+                .andExpect(jsonPath("$.status", is(401)))
+                .andExpect(jsonPath("$.error", is("unauthorized")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+        deleteTACSTestUserWithToken();
+    }
+
+    @Test
+    public void testGetTeamsOk() throws Exception {
+        Team team1 = createTACSTestTeamWithMember();
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams?access_token=" + token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].team_name", is("uno")))
+                .andExpect(jsonPath("$[0].members", hasSize(1)));
+        deleteTACSTestTeamWithMember();
+        deleteTACSTestUserWithToken();
+    }
+
+    @Test
     public void testPostTeamTokenMustBeProvided() throws Exception {
         String body = json(getTACSTestCharacterVO());
         mockMvc.perform(post("/users/123/teams/1/characters")
