@@ -18,7 +18,7 @@ app.controller('teamController', ['$scope', 'userService',
             ;
         };
 
-        function getAuthenticatedUserId() {
+        function getAuthenticatedUserId(token) {
             return token.slice(0, token.indexOf('-'));
         }
     }
