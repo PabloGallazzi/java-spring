@@ -1,23 +1,39 @@
 app.controller('teamController', ['$scope', 'userService', 
     function($scope, userService) {
 
-        $scope.token = null;
+        $scope.teams = [];
+        var accessToken = getCookie('access_token');
+        var userId = getAuthenticatedUserId(accessToken);
+        var teamController = this;
+        teamController.getUsersTeams = getUsersTeams;
+        teamController.getAuthenticatedUserId = getAuthenticatedUserId;
+        teamController.getUsersTeams();
 
-        $scope.createTeam = function () {
+        $scope.createTeam = function(){
             var teamName = $scope.teamName;
-            var token = getCookie('access_token');
-            var userId = getAuthenticatedUserId(token);
             
-            userService.createTeam(teamName, userId, token)
+            userService.createTeam(teamName, userId, accessToken)
                 .success(function() {
-                    console.log('team created');    
+                    getUsersTeams();
                 })
                 .error(function() {
                     console.error('Error creating a team');
                 })
             ;
         };
-
+        
+        function getUsersTeams(){
+            userService.getUserTeams(userId, accessToken)
+                .success(function(teams){
+                    $scope.teams = teams.map(function(t){return t;})    
+                })
+                .error(function(errResponse){
+                    console.error('Error while fetching user teams');
+                    return $q.reject(errResponse);
+                })
+            ;
+        }
+        
         function getAuthenticatedUserId(token) {
             return token.slice(0, token.indexOf('-'));
         }
