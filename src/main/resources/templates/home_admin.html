@@ -1,79 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
-		<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-		<meta name="description" content=""></meta>
-		<meta name="author" content=""></meta>
-		<title>TACS ApiMarvel</title>
-		<link rel="icon" type="content/images/png" href="content/images/favicon.png"></link>
-		<!-- Bootstrap Core CSS -->
-		<link href="content/css/bootstrap.min.css" type="text/css" rel="stylesheet"></link>
-		<!-- Custom CSS -->
-		<link href="content/css/home_user.css" type="text/css" rel="stylesheet"></link>
-		<!-- jQuery -->
-		<script src="scripts/jquery.js"></script>
-		<!-- Bootstrap Core JavaScript -->
-		<script src="scripts/bootstrap.min.js"></script>
-		<!-- Angular -->
-		<script src="scripts/angular_1.5.5.js"></script>
-		<script src="scripts/angular-route.min.js"></script>
-		<script src="scripts/angular-resource.js"></script>
-		<script src="scripts/angular-cookies.js"></script>
-		<script src="app/user_app.js"></script>
-		<script src="app/controllers/character_controller.js"></script>
-		<script src="app/services/character_service.js"></script>
-        <script src="app/controllers/team_controller.js"></script>
-        <script src="app/services/team_service.js"></script>
-	</head>
-	<body ng-app="appUser">
-		<!-- Navigation -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#/">TACS MarvelApi</a>
-				</div>
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="#/characters">Characters</a>
-						</li>
-						<li>
-							<a href="#/teams">Teams</a>
-						</li>
-						<li>
-							<a href="#/favorites">Favorites</a>
-						</li>
-						<li>
-							<a href="" onclick="deleteCookieAndRedirect('access_token'); return false;">Logout</a>
-						</li>
-					</ul>
-				</div>
-				<!-- /.navbar-collapse -->
-			</div>
-			<!-- /.container -->
-		</nav>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="description" content=""></meta>
+    <meta name="author" content=""></meta>
+    <title>TACS ApiMarvel</title>
+    <link rel="icon" type="content/images/png" href="content/images/favicon.png"></link>
+    <!-- Bootstrap Core CSS -->
+    <link href="content/css/bootstrap.min.css" type="text/css" rel="stylesheet"></link>
+    <!-- Custom CSS -->
+    <link href="content/css/home_user.css" type="text/css" rel="stylesheet"></link>
+    <link href="content/css/loading-bar.css" type="text/css" rel="stylesheet"></link>
+    <!-- jQuery -->
+    <script src="scripts/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="scripts/bootstrap.min.js"></script>
 
+    <!-- Angular -->
+    <script src="scripts/angular_1.5.5.js"></script>
+    <script src="scripts/angular-route.min.js"></script>
+    <script src="scripts/angular-resource.js"></script>
+    <script src="scripts/cookies.js"></script>
+    <script src="scripts/angular-animate.js"></script>
+    <script src="scripts/loading-bar.js"></script>
+    <script src="scripts/angular-pagination.js"></script>
+    <script src="app/user_app.js"></script>
+    <script src="app/controllers/character_controller.js"></script>
+    <script src="app/services/character_service.js"></script>
+    <script src="app/controllers/favorites_controller.js"></script>
+    <script src="app/services/favorites_service.js"></script>
+    <script src="app/controllers/team_controller.js"></script>
+    <script src="app/services/team_service.js"></script>
+    <script src="app/services/user_service.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
-		<div ng-view="">
-		</div>
+        p {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            color: white;
+        }
 
-		<!-- Footer -->
-		<footer>
-			 <div class="row">
-				<div class="col-lg-12"> 
-					<p>Copyright &copy; TACS Marvel 2016</p>
-				</div>
-			</div>				 
-		</footer>
-	</body>
+        #container {
+            min-height: 100%;
+            position: relative;
+        }
+
+        #body {
+            padding-top: 50px;
+            padding-bottom: 60px; /* Height of the footer */
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px; /* Height of the footer */
+            background-color: black;
+            text-align: center;
+        }
+    </style>
+</head>
+<body ng-app="appUser">
+<!-- Navigation -->
+<div id="container">
+    <div id="body">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#/">TACS MarvelApi</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#/characters">Characters</a>
+                        </li>
+                        <li>
+                            <a href="#/teams">Teams</a>
+                        </li>
+                        <li>
+                            <a href="#/favorites">Favorites</a>
+                        </li>
+                        <li>
+                            <a href="" onclick="deleteCookieAndRedirect('access_token'); return false;">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+        <div ng-view="">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+        <p>Copyright &copy; TACS Marvel 2016</p>
+    </div>
+
+</div>
+</body>
 </html>
