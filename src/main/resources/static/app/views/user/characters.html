@@ -1,0 +1,42 @@
+<div class="container">
+	<div class="row" style="margin-top: 10px;">
+		<div class="panel panel-info" >
+			<div class="panel-heading">
+				Character Filter
+			</div>
+			<div>
+				<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search"></span>
+				</span>
+					<input id="txtCharacterName" type="text" class="form-control" placeholder="Character name" ng-change="nameChange()" ng-model="name">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4" ng-repeat="x in characters">
+		<div class="col-sm-12">
+			<a data-id="{{x.id}}" ng-href="#/characters/{{x.id}}" ng-click="setSelectedCharacter(x);">
+				<img class="img-circle img-center" style="border:5px black solid; margin: 10px;" ng-src="{{x.thumbnail.path+'.'+x.thumbnail.extension}}" width="300px" height="300">
+			</a>
+			<h3 style="text-align: center;">{{x.name}}</h3>
+		</div>
+	</div>
+
+	<nav class="text-center">
+		<ul class="pagination">
+			<li>
+				<a href="#/characters" class="previouspage" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li ng-repeat="n in [] | range:rangePages" type="number" ng-click="changePage($event)"><a href="#/characters">{{$index + 1}}</a></li>
+			<li>
+				<a href="#/characters" class="nextpage" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+</div>

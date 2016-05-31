@@ -1,27 +1,12 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-</head>
-<body>
-<h1>Support Friendly Error Page</h1>
-
-<p th:if="${url}">
-    <b>Page:</b> <span th:text="${url}">Page URL</span>
-</p>
-
-<p th:if="${timestamp}" id='created'>
-    <b>Occurred:</b> <span th:text="${timestamp}">Timestamp</span>
-</p>
-
-<p th:if="${status}">
-    <b>Response Status:</b> <span th:text="${status}">status-code</span>
-</p>
-
-<p th:if="${error}" id='error'>
-    <b>Error:</b> <span th:text="${error}">Error</span>
-</p>
-
-</body>
+<html>
+    <head>
+        <title>Error</title>
+        <link rel="icon" type="content/images/png" href="content/images/favicon.png" />
+        <link href="content/css/error.css" rel="stylesheet" />
+        <script src="scripts/cookies.js"></script>
+        <script src="scripts/error.js"></script>
+    </head>
+    <body class="header_home">
+    </body>
 </html>

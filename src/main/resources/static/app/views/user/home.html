@@ -1,0 +1,65 @@
+<link href="content/css/carousel.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript">
+	$('.carousel').carousel({
+		interval: 3000
+	})
+</script>
+<header>
+	<div id="carousel" class="carousel slide" data-ride="carousel" >
+		<ol class="carousel-indicators">
+			<li data-target="#" data-slide-to="0" class="active"></li>
+			<li data-target="#" data-slide-to="1"></li>
+			<li data-target="#" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner" role="listbox">
+			<div class="item active">
+				<img class="first-slide" src="content/images/home_1.jpg" alt="First slide">
+			</div>
+			<div class="item">
+				<img class="second-slide" src="content/images/home_2.jpg" alt="Second slide">
+			</div>
+			<div class="item">
+				<img class="third-slide" src="content/images/home_3.jpg" alt="Third slide">
+			</div>
+		</div>
+	</div>
+</header> 
+
+<!-- Page Content -->
+<div class="container">
+	<hr>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="col-sm-12 imgDescription">
+				<a href="#/characters" >
+					<img class="img-circle img-center" height="236" width="300" src="content/images/marvel_characters.png" alt="">
+				</a>
+			</div>
+			<h2 class="imgTitle">Characters</h2>
+			<p class="imgDescription">
+				Find all characters of the Marvel's universe.</p>
+		</div>
+		<div class="col-sm-4">
+			<div class="col-sm-12 imgDescription" ng-controller="favoritesController">
+				<a href="#/favorites" >
+					<img class="img-circle img-center" height="236px" width="300" src="content/images/favoritos_icon.jpg" alt="">
+				</a>
+			</div>
+			<h2 class="imgTitle">Favorites</h2>
+			<p class="imgDescription">Find your favorites characters.</p>
+		</div>
+		<div class="col-sm-4">
+			<div class="col-sm-12 imgDescription">
+				<a href="#/teams">
+					<img class="img-circle img-center" height="236px" width="300" src="content/images/team.jpg" alt="">
+				</a>
+			</div>
+			<h2 class="imgTitle">Teams</h2>
+			<p class="imgDescription">Create your own teams</p>
+		</div>
+	</div>
+	<!-- /.row -->
+
+	<hr>			
+
+</div>

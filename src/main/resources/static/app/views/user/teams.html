@@ -1,0 +1,22 @@
+<div class="container" ng-controller="teamController">
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-lg-6 col-lg-offset-3">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="teamName" placeholder="insert a name for your team..." required>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" ng-click="createTeam()">Create Team</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">My teams</h3>
+        </div>
+        <div class="panel-body">
+            <div class="list-group" ng-class="" ng-repeat="team in teams" style="margin-bottom: 0;">
+                <button type="button" class="list-group-item">{{team.team_name}}</button>
+            </div>
+        </div>
+    </div>
+</div>

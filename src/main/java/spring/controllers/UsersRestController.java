@@ -25,7 +25,7 @@ import java.util.List;
  * Created by niko118 on 11/4/16.
  */
 @RestController
-public class UsersRestController {
+public class    UsersRestController {
 
     private static final Logger logger = Logger.getLogger(UsersRestController.class);
 

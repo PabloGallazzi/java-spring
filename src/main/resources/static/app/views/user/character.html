@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <img class="img-circle img-center" style="border:5px black solid; margin: 10px;"
+                 ng-src="{{selectedCharacter.thumbnail.path+'.'+selectedCharacter.thumbnail.extension}}"
+                 width="500px" height="500">
+            <h3 class="text-center">{{selectedCharacter.name}}</h3>
+        </div>
+        <div class="col-sm-6" ng-controller="favoritesController as favCtrl" ng-init="getFavorites()">
+            <p class="lead text-center" style="padding-top:50px ;">
+                {{selectedCharacter.description}}
+            </p>
+            <button type="button"
+                    class="btn btn-primary btn-md"
+                    ng-click="favCtrl.addFavorite(selectedCharacter)"
+                    ng-hide="favCtrl.isFavorite(selectedCharacter)">
+                Add as favorite!
+            </button>
+            <button type="button"
+                    class="btn btn-primary btn-md"
+                    ng-click="favCtrl.removeFavorite(selectedCharacter)"
+                    ng-hide="!favCtrl.isFavorite(selectedCharacter)">
+                Remove favorite!
+            </button>
+        </div>
+    </div>
+</div>

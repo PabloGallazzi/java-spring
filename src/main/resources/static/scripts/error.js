@@ -1,0 +1,1 @@
+deleteCookieAndRedirect("access_token");

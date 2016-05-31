@@ -1,0 +1,13 @@
+<div class="container" ng-init="getFavorites()">
+
+    <div class="col-sm-4" ng-repeat="favorite in favorites">
+        <div class="col-sm-12">
+            <a ng-href="#/characters/{{favorite.id}}" ng-click="selectFavorite(favorite)">
+                <img class="img-circle img-center" style="border:5px black solid; margin: 10px;"
+                     ng-src="{{favorite.image_path}}" width="300px" height="300">
+            </a>
+            <h3 style="text-align: center;">{{favorite.name}}</h3>
+        </div>
+    </div>
+
+</div>
