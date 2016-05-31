@@ -18,18 +18,17 @@ app.controller('favoritesController',
 
             favoritesController.getImagePathFor = getImagePathFor;
             favoritesController.getUserIdBy = getUserIdBy;
-            favoritesController.getFavorites = getFavorites;
             favoritesController.reloadPage = reloadPage;
-            favoritesController.selectFavorite = selectFavorite;
             favoritesController.addFavorite = addFavorite;
             favoritesController.removeFavorite = removeFavorite;
             favoritesController.isFavorite = isFavorite;
 
+            $scope.selectFavorite = selectFavorite;
+            $scope.getFavorites = getFavorites;
+
             $scope.favorites = [];
             $scope.token = getCookie('access_token');
             $scope.user_id = getUserIdBy($scope.token);
-
-            favoritesController.getFavorites();
 
             // Functions
 
@@ -65,7 +64,7 @@ app.controller('favoritesController',
             }
 
             function getFavorites() {
-                favoritesService.getFavoritesByToken($scope.user_id, $scope.token).success(function (favorites) {
+                favoritesService.getFavoritesByToken($scope.user_id, $scope.token).then(function (favorites) {
                     $scope.favorites = favorites.map(function (char) {
                         char.image_path = getImagePathFor(char);
                         return char;
