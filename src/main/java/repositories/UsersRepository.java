@@ -1,7 +1,5 @@
 package repositories;
 
-import domain.Character;
-import domain.Team;
 import domain.User;
 import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
@@ -9,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import services.DSMongoInterface;
+
+import java.util.List;
 
 /**
  * Created by niko118 on 4/19/16.
@@ -18,6 +18,10 @@ import services.DSMongoInterface;
 public class UsersRepository {
     @Autowired
     private DSMongoInterface ds;
+
+    public List<User> getUsers() {
+        return ds.getDatastore().find(User.class).asList();
+    }
 
     public User findByUserNameAndPassword(String userName, String password) {
         User aUser = ds.getDatastore().find(User.class, "userName", userName).get();
@@ -43,7 +47,7 @@ public class UsersRepository {
         return newUser;
     }
 
-    public void update(User user){
+    public void update(User user) {
         ds.getDatastore().delete(user);
         ds.getDatastore().save(user);
     }

@@ -1200,6 +1200,25 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
 
+    @Test
+    public void testGetAllUsersOk() throws Exception {
+        Token adminToken = createAndLogInTACSAdminTestUser();
+        mockMvc.perform(get("/users?access_token=" + adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].user_name", is("TACS")))
+                .andExpect(jsonPath("$[0].user_id", is("123456789012345678901234")));
+        deleteTACSTestUserWithToken();
+    }
+
+    @Test
+    public void testGetAllUsersInvalidCredentialsShouldFail() throws Exception {
+        Token notAdminToken = createAndLogInTACSTestUser();
+        mockMvc.perform(get("/users?access_token=" + notAdminToken.getAccessToken()))
+                .andExpect(status().isForbidden());
+        deleteTACSTestUserWithToken();
+    }
+
     private List<Character> getCharactersPool() {
         List<Character> characters = new ArrayList<>();
         Character character1 = new Character();
