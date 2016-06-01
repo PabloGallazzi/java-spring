@@ -1177,6 +1177,26 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testDeleteTeamOk() throws Exception {
+        Team team1 = createTACSTestTeamWithMember();
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
+
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams/?access_token=" + token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(delete("/users/" + getTACDId() + "/teams/"+ team1.getTeamId() +"/?access_token=" + token.getAccessToken()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams/?access_token=" + token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+
+        deleteTACSTestTeamWithMember();
+        deleteTACSTestUserWithToken();
+    }
+
+    @Test
     public void testBasicExceptionHandler() throws Exception {
         mockMvc.perform(delete("/users"))
                 .andExpect(status().isInternalServerError())
