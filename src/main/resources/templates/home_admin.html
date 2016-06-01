@@ -26,13 +26,8 @@
     <script src="scripts/angular-animate.js"></script>
     <script src="scripts/loading-bar.js"></script>
     <script src="scripts/angular-pagination.js"></script>
-    <script src="app/user_app.js"></script>
-    <script src="app/controllers/character_controller.js"></script>
-    <script src="app/services/character_service.js"></script>
-    <script src="app/controllers/favorites_controller.js"></script>
-    <script src="app/services/favorites_service.js"></script>
-    <script src="app/controllers/team_controller.js"></script>
-    <script src="app/services/team_service.js"></script>
+    <script src="app/admin_app.js"></script>
+    <script src="app/controllers/userData_controller.js"></script>
     <script src="app/services/user_service.js"></script>
     <style>
         html,
@@ -68,7 +63,7 @@
         }
     </style>
 </head>
-<body ng-app="appUser">
+<body ng-app="appAdmin">
 <!-- Navigation -->
 <div id="container">
     <div id="body">
@@ -89,13 +84,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="#/characters">Characters</a>
+                            <a href="#/users">All Users</a>
                         </li>
                         <li>
-                            <a href="#/teams">Teams</a>
+                            <a href="#/ranking">Characters Ranking</a>
                         </li>
                         <li>
-                            <a href="#/favorites">Favorites</a>
+                            <a href="#/commons">Admin Panel</a>
                         </li>
                         <li>
                             <a href="" onclick="deleteCookieAndRedirect('access_token'); return false;">Logout</a>
