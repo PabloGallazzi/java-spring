@@ -128,6 +128,20 @@ public class User {
         teams.add(team);
     }
 
+    public void deleteTeam(ObjectId id){
+        Team teamToRemove = null;
+        for(Team team: teams){
+            if(team.getTeamId().equals(id)){
+                teamToRemove = team;
+            }
+        }
+        if(teamToRemove != null){
+            teams.remove(teamToRemove);
+        }else{
+            throw new NotFoundException("Unable to remove team", "team_not_found", new String[0]);
+        }
+    }
+
     public Character deleteFavorite(Integer id) {
         Character characterToRemove = null;
         for (Character character : favorites) {
