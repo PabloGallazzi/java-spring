@@ -3,11 +3,16 @@
  */
 var app = angular.module('appAdmin', ['ngRoute', 'ngResource']);
 
-app.config(function ($routeProvider, cfpLoadingBarProvider) {
+app.config(function ($routeProvider) {
 
     $routeProvider.when("/", {
         controller: "",
-        templateUrl: "app/views/user/home.html"
+        templateUrl: "app/views/admin/home.html"
+    });
+
+    $routeProvider.when("/users", {
+        controller: "userDataController",
+        templateUrl: "app/views/admin/users.html"
     });
 
     $routeProvider.when("/users/:id", {

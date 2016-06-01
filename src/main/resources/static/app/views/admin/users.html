@@ -1,0 +1,9 @@
+<div class="container" ng-init="getUsers()">
+    <div class="col-sm-4" ng-repeat="user in users">
+        <div class="col-sm-12">
+            <a ng-href="#/users/{{user.id}}" ng-click="selectUser(user);">
+                <h3 style="text-align: center;">{{user.user_name}}</h3>
+            </a>
+        </div>
+    </div>
+</div>
