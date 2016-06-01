@@ -8,6 +8,7 @@ app.service('userService', ['$http', function($http){
     userService.redirectHome = redirectHome;
     userService.createTeam = createTeam;
     userService.getUserTeams = getUserTeams;
+    userService.deleteTeam = deleteTeam;
 
     return userService;
 
@@ -51,6 +52,11 @@ app.service('userService', ['$http', function($http){
     function getUserTeams(userId, accessToken){
         var data = { params :{ access_token: accessToken } };
         return $http.get('/users/'+userId+'/teams', data);
+    }
+
+    function deleteTeam(teamId, userId, accessToken){
+        var data = { params: { access_token: accessToken } };
+        return $http.delete('/users/' + userId + '/teams/' + teamId, data);
     }
 
 }]);

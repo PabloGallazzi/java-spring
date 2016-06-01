@@ -15,7 +15,10 @@
         </div>
         <div class="panel-body">
             <div class="list-group" ng-class="" ng-repeat="team in teams" style="margin-bottom: 0;">
-                <button type="button" class="list-group-item">{{team.team_name}}</button>
+                <div class="list-group-item">
+                    <span>{{team.team_name}}</span>
+                    <button type="button" class="close" aria-label="Close" ng-click="deleteTeam(team.team_id)"><span aria-hidden="true">&times;</span></button>
+                </div>
             </div>
         </div>
     </div>

@@ -22,6 +22,17 @@ app.controller('teamController', ['$scope', 'userService',
             ;
         };
         
+        $scope.deleteTeam = function(teamId){
+            userService.deleteTeam(teamId, userId, accessToken)
+                .success(function() {
+                    getUsersTeams();
+                })
+                .error(function(){
+                    console.error('Error deleting a team');    
+                })
+            ;
+        };
+        
         function getUsersTeams(){
             userService.getUserTeams(userId, accessToken)
                 .success(function(teams){
