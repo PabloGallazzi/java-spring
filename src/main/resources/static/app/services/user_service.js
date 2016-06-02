@@ -1,6 +1,7 @@
 app.service('userService', ['$http', function ($http) {
 
     var userService = this;
+    var selectedUser = {};
 
     userService.getUserByIdAndToken = getUserByIdAndToken;
     userService.login = login;
@@ -9,7 +10,8 @@ app.service('userService', ['$http', function ($http) {
     userService.createTeam = createTeam;
     userService.getUserTeams = getUserTeams;
     userService.getUsers = getUsers;
-    userService.getUserInfo = getUserInfo;
+    userService.getSelectedUser = getSelectedUser;
+    userService.selectUser = selectUser;
 
     return userService;
 
@@ -62,13 +64,12 @@ app.service('userService', ['$http', function ($http) {
         });
     }
 
-    function getUserInfo(token, userId) {
-        var data = {access_token: token};
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+    function getSelectedUser() {
+        return selectedUser;
+    }
 
-        return $http.get('/users/' + userId, data, config).then(function (response) {
-            return response.data;
-        });
+    function selectUser(user) {
+        selectedUser = user;
     }
 
 }]);
