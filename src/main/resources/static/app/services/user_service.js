@@ -56,9 +56,8 @@ app.service('userService', ['$http', function ($http) {
     }
 
     function getUsers(token) {
-        var data = {access_token: token};
         var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/users', data, config).then(function (response) {
+        return $http.get('/users?access_token=' + token, config).then(function (response) {
             return response.data;
         });
     }

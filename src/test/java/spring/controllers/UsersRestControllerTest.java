@@ -172,7 +172,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "12345678;");
-        request.put("is_admin", true);
+        request.put("is_admin", false);
         String body = json(request);
         mockMvc.perform(post("/users")
                 .content(body)

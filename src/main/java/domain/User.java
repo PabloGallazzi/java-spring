@@ -3,6 +3,7 @@ package domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import exceptions.rest.BadRequestException;
@@ -39,17 +40,15 @@ public class User {
     private List<Character> favorites;
     @Reference(lazy = true)
     private List<Team> teams;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private Date lastAccess;
 
-    @JsonIgnore
     private boolean isAdmin = false;
 
-    @JsonIgnore
     public boolean isAdmin() {
         return isAdmin;
     }
 
-    @JsonIgnore
     public void setIsAdmin(boolean admin) {
         isAdmin = admin;
     }
