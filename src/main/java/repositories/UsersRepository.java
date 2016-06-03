@@ -20,7 +20,7 @@ public class UsersRepository {
     private DSMongoInterface ds;
 
     public List<User> getUsers() {
-        return ds.getDatastore().find(User.class).asList();
+        return ds.getDatastore().find(User.class).retrievedFields(false, "teams", "favorites").asList();
     }
 
     public User findByUserNameAndPassword(String userName, String password) {

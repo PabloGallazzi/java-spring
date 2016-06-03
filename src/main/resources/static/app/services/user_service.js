@@ -64,8 +64,11 @@ app.service('userService', ['$http', function ($http) {
         });
     }
 
-    function getSelectedUser() {
-        return selectedUser;
+    function getSelectedUser(accessToken) {
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.get('/users/' + selectedUser.user_id + '?access_token=' + accessToken, config).then(function (response) {
+            return response.data;
+        });
     }
 
     function selectUser(user) {

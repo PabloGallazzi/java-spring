@@ -6,7 +6,8 @@
         <div class="col-sm-10"><h1>{{user.user_name}}</h1></div>
         <div class="col-sm-2"><a ng-href="/users" class="pull-right"><img title="profile image"
                                                                           class="img-circle img-responsive"
-                                                                          src="content/images/icon-user.jpeg"></a>
+                                                                          style='width:50%;' border="0" alt="Null"
+                                                                          src="http://simpleicon.com/wp-content/uploads/users.png"></a>
         </div>
     </div>
     <div class="row">
@@ -14,9 +15,6 @@
 
             <ul class="list-group">
                 <li class="list-group-item text-muted">Profile</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span>
-                    {{user.last_access}}
-                </li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span>
                     {{user.last_access}}
                 </li>
@@ -26,15 +24,15 @@
             <ul class="list-group">
                 <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Favorites</strong></span>
-                    {{user.favorites_qty}}
+                    {{user.favorites.length}}
                 </li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Teams</strong></span>
-                    {{user.teams_qty}}
+                    {{user.teams.length}}
                 </li>
             </ul>
 
         </div><!--/col-3-->
-        <div class="col-sm-9" ng-init="getRandomTeam()">
+        <div class="col-sm-9">
 
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active"><a href="#home">{{team.team_name || 'No Teams'}}</a></li>
@@ -42,7 +40,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
-                    <div class="table-responsive" >
+                    <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                             <tr>
