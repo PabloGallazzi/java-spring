@@ -50,7 +50,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.data.results[8].name", is("Abyss (Age of Apocalypse)")))
                 .andExpect(jsonPath("$.data.results[9].id", is(1011266)))
                 .andExpect(jsonPath("$.data.results[9].name", is("Adam Destine")));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -189,7 +188,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -202,7 +200,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -215,7 +212,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -228,7 +224,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -244,8 +239,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)))
                 .andExpect(jsonPath("$[4].id", is(5)));
-        deleteCharacters(10);
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -260,8 +253,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)));
-        deleteCharacters(5);
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -275,8 +266,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[3].id", is(4)));
-        deleteCharacters(4);
-        deleteTACSTestUserWithToken();
     }
 
     private void createCharacters(int qty) {
@@ -288,15 +277,6 @@ public class CharactersRestControllerTest extends BaseRestTester {
             character = new Character(i, "name" + i, "description" + i);
             character.setElectedTimes(qty - i);
             ds.getDatastore().save(character);
-        }
-    }
-
-    private void deleteCharacters(int qty) {
-        if (qty > 10) {
-            throw new IllegalArgumentException("The quantity must be up to 10.");
-        }
-        for (int i = 1; i <= qty; i++) {
-            ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", i));
         }
     }
 

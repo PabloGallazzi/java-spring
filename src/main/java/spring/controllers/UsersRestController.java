@@ -43,17 +43,29 @@ public class    UsersRestController {
 
     /* URLs a Mapear en el controller.
     * /teams/commons/{id}/{id2} GET
+    * /users GET
     * /users POST
     * /users/{user} GET
     * /users/{user}/characters/favorites GET
     * /users/{user}/characters/favorites/  POST
     * /users/{user}/characters/favorites/{id} DELETE
     * /users/{user}/teams POST
+    * /users/{user}/teams GET
     * /users/{user}/teams/{team} GET
+    * /users/{user}/teams/{team} DELETE
     * /users/{user}/teams/{team}/characters/ POST
     * /users/{user}/teams/{team}/characters/{id} DELETE
     *
     * */
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    ResponseEntity<?> getUsers(@RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("Users get performed by user: " + aToken.getUserId().toString());
+        aToken.validateAdminCredentials();
+        return new ResponseEntity<>(users.getUsers(), null, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
     ResponseEntity<?> compareTeams(@PathVariable String id,
@@ -216,6 +228,22 @@ public class    UsersRestController {
         User thisUser = users.findByUserId(userId);
         validateTeamBelongsToUser(thisUser, team);
         return new ResponseEntity<>(team, null, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.DELETE)
+    ResponseEntity<?> deleteTeam(@PathVariable String userId,
+                                 @PathVariable String teamId,
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken){
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("User team delete requested by user: " + aToken.getUserId().toString() + " " + teamId);
+        aToken.validateUserCredentials(userId);
+        Team team = teams.findByTeamId(teamId);
+        User thisUser = users.findByUserId(userId);
+        validateTeamBelongsToUser(thisUser, team);
+        thisUser.deleteTeam(team.getTeamId());
+        users.update(thisUser);
+        return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/users/{userId}/teams/{teamId}/characters", method = RequestMethod.POST)

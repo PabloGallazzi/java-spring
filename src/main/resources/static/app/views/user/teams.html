@@ -14,9 +14,16 @@
             <h3 class="panel-title">My teams</h3>
         </div>
         <div class="panel-body">
-            <div class="list-group" ng-class="" ng-repeat="team in teams" style="margin-bottom: 0;">
-                <button type="button" class="list-group-item">{{team.team_name}}</button>
-            </div>
+
+            <table class="table table-hover">
+                <tbody>
+                    <tr ng-repeat="team in teams" style="margin-bottom: 0;">
+                        <td class="col-md-2"><a href="#">{{team.team_name}}</a></td>
+                        <td><button type="submit" class="btn btn-default" ng-click="addCharToTeam(team.team_id)">Add char</button></td>
+                        <td><button type="button" class="close" aria-label="Close" ng-click="deleteTeam(team.team_id)" style="margin-top: 5px;"><span aria-hidden="true">&times;</span></button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

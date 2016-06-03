@@ -3,6 +3,7 @@ package domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import exceptions.rest.BadRequestException;
@@ -39,12 +40,12 @@ public class User {
     private List<Character> favorites;
     @Reference(lazy = true)
     private List<Team> teams;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private Date lastAccess;
 
     @JsonIgnore
     private boolean isAdmin = false;
 
-    @JsonIgnore
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -126,6 +127,20 @@ public class User {
 
     public void addNewTeam(Team team){
         teams.add(team);
+    }
+
+    public void deleteTeam(ObjectId id){
+        Team teamToRemove = null;
+        for(Team team: teams){
+            if(team.getTeamId().equals(id)){
+                teamToRemove = team;
+            }
+        }
+        if(teamToRemove != null){
+            teams.remove(teamToRemove);
+        }else{
+            throw new NotFoundException("Unable to remove team", "team_not_found", new String[0]);
+        }
     }
 
     public Character deleteFavorite(Integer id) {

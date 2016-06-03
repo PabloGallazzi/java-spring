@@ -8,8 +8,8 @@ app.config(function ($routeProvider) {
     });
 
     $routeProvider.when("/register", {
-        controller: "singupController",
-        templateUrl: "app/views/singup.html"
+        controller: "registerController",
+        templateUrl: "app/views/register.html"
     });
 
 });
