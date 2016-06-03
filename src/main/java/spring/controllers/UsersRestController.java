@@ -64,8 +64,7 @@ public class    UsersRestController {
         Token aToken = auth.findById(accessToken);
         logger.info("Users get performed by user: " + aToken.getUserId().toString());
         aToken.validateAdminCredentials();
-        List<User> allUsers = users.getUsers();
-        return new ResponseEntity<>(allUsers, null, HttpStatus.OK);
+        return new ResponseEntity<>(users.getUsers(), null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)

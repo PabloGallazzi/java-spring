@@ -1122,9 +1122,8 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].user_name", is("TACS")))
-                .andExpect(jsonPath("$[0].user_id", is("123456789012345678901234")))
-                .andExpect(jsonPath("$[0].teams", hasSize(0)))
-                .andExpect(jsonPath("$[0].favorites", hasSize(0)));
+                .andExpect(jsonPath("$[0].admin", is(true)))
+                .andExpect(jsonPath("$[0].user_id", is("123456789012345678901234")));
     }
 
     @Test
