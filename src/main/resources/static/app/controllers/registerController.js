@@ -1,4 +1,4 @@
-app.controller('singupController', ['$scope', '$location', 'userService', 'errorService',
+app.controller('registerController', ['$scope', '$location', 'userService', 'errorService',
     function($scope, $location, userService, errorService) {
 
     $scope.username = null;
@@ -7,11 +7,11 @@ app.controller('singupController', ['$scope', '$location', 'userService', 'error
 
     $scope.showError = errorService.showApiError;
 
-    $scope.singUp = function() {
+    $scope.register = function() {
 
         var username = $scope.username;
         var password = $scope.password;
-        userService.singUp(username, password)
+        userService.register(username, password)
             .success(function(user) {
                 $location.path("/");
             })

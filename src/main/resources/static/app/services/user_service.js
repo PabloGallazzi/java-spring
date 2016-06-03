@@ -5,7 +5,7 @@ app.service('userService', ['$http', function ($http) {
 
     userService.getUserByIdAndToken = getUserByIdAndToken;
     userService.login = login;
-    userService.singUp = singUp;
+    userService.register = register;
     userService.redirectHome = redirectHome;
     userService.createTeam = createTeam;
     userService.getUserTeams = getUserTeams;
@@ -35,7 +35,7 @@ app.service('userService', ['$http', function ($http) {
         return $http.post('/users/authenticate', json, config);
     }
 
-    function singUp(username, password) {
+    function register(username, password) {
 
         var data = {user_name: username, user_password: password};
         var json = angular.toJson(data);
