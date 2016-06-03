@@ -172,7 +172,7 @@ public class UsersRestControllerTest extends BaseRestTester {
         Map<String, Object> request = new LinkedHashMap<String, Object>();
         request.put("user_name", "TACS");
         request.put("user_password", "12345678;");
-        request.put("is_admin", false);
+        request.put("is_admin", true);
         String body = json(request);
         mockMvc.perform(post("/users")
                 .content(body)
@@ -347,7 +347,8 @@ public class UsersRestControllerTest extends BaseRestTester {
         mockMvc.perform(get("/users/123456789012345678901234?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.user_name", is("TACS")));
+                .andExpect(jsonPath("$.user_name", is("TACS")))
+                .andExpect(jsonPath("$.admin", is(true)));
         deleteTACSTestUserWithToken();
     }
 

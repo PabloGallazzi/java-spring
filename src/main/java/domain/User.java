@@ -43,12 +43,14 @@ public class User {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
     private Date lastAccess;
 
+    @JsonIgnore
     private boolean isAdmin = false;
 
     public boolean isAdmin() {
         return isAdmin;
     }
 
+    @JsonIgnore
     public void setIsAdmin(boolean admin) {
         isAdmin = admin;
     }
