@@ -20,6 +20,8 @@ import repositories.TeamsRepository;
 import services.DSMongoInterface;
 
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -58,11 +60,12 @@ public class BaseTester {
 
     @After
     public void tearDown() throws Exception {
-        assertTrue(ds.getDatastore().find(Thumbnail.class).asList().isEmpty());
-        assertTrue(ds.getDatastore().find(Character.class).asList().isEmpty());
-        assertTrue(ds.getDatastore().find(Team.class).asList().isEmpty());
-        assertTrue(ds.getDatastore().find(User.class).asList().isEmpty());
-        assertTrue(ds.getDatastore().find(Token.class).asList().isEmpty());
+        ArrayList<Class> classes = new ArrayList<Class>(
+                Arrays.asList(Thumbnail.class, Character.class, Team.class, User.class, Token.class));
+        for (Class aClass : classes) {
+            ds.getDatastore().delete(ds.getDatastore().find(aClass));
+            assertTrue(ds.getDatastore().find(aClass).asList().isEmpty());
+        }
     }
 
     protected String getTACDId() {
@@ -172,47 +175,12 @@ public class BaseTester {
         return charactersRepository.save(getTACSTestCharacterVO());
     }
 
-    protected void deleteTACSTestUser() {
-        ds.getDatastore().delete(getTACSTestUser());
-    }
-
-    protected void deleteTACSTestUserToken() {
-        Token token = getTACSTestUserToken();
-        ds.getDatastore().delete(token);
-    }
-
-    protected void deleteTACSTestUserWithToken() {
-        deleteTACSTestUserToken();
-        ds.getDatastore().delete(getTACSTestUser());
-    }
-
-    protected void deleteTACSTestCharacter() {
-        Character character = getTACSTestCharacter();
-        Thumbnail thumbnail = getTACSTestThumbnail();
-        ds.getDatastore().delete(thumbnail);
-        ds.getDatastore().delete(character);
-    }
-
-    protected void deleteTACSTestTeamWithMember() {
-        deleteTACSTestCharacter();
-        Team team = ds.getDatastore().find(Team.class, "teamName", "uno").get();
-        ds.getDatastore().delete(team);
-    }
-
     protected Token getTACSTestUserToken() {
         return ds.getDatastore().find(Token.class, "userId", getTACSTestUser().getUserId()).get();
     }
 
     protected User getTACSTestUser() {
         return ds.getDatastore().find(User.class, "userName", "TACS").get();
-    }
-
-    protected Character getTACSTestCharacter() {
-        return ds.getDatastore().find(Character.class, "id", 1011334).get();
-    }
-
-    protected Thumbnail getTACSTestThumbnail() {
-        return ds.getDatastore().find(Thumbnail.class, "path", "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784").get();
     }
 
 }

@@ -43,6 +43,7 @@ public class    UsersRestController {
 
     /* URLs a Mapear en el controller.
     * /teams/commons/{id}/{id2} GET
+    * /users GET
     * /users POST
     * /users/{user} GET
     * /users/{user}/characters/favorites GET
@@ -56,6 +57,16 @@ public class    UsersRestController {
     * /users/{user}/teams/{team}/characters/{id} DELETE
     *
     * */
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    ResponseEntity<?> getUsers(@RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("Users get performed by user: " + aToken.getUserId().toString());
+        aToken.validateAdminCredentials();
+        List<User> allUsers = users.getUsers();
+        return new ResponseEntity<>(allUsers, null, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/teams/commons/{id}/{id2}", method = RequestMethod.GET)
     ResponseEntity<?> compareTeams(@PathVariable String id,

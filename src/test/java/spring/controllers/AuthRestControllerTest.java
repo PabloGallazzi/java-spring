@@ -34,7 +34,6 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
                 .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE))));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -51,7 +50,6 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")))
                 .andExpect(jsonPath("$.scopes", is(Arrays.asList(ScopesHelper.READ, ScopesHelper.WRITE, ScopesHelper.ADMIN))));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -77,7 +75,6 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.access_token", not(token.getAccessToken())))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -101,7 +98,6 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.access_token", is(token.getAccessToken())))
                 .andExpect(jsonPath("$.user_id", is("123456789012345678901234")));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -203,7 +199,6 @@ public class AuthRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("invalid_credentials")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUser();
     }
 
 }

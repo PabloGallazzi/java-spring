@@ -12,6 +12,7 @@ import spring.utils.ScopesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by niko118 on 4/19/16.
@@ -26,7 +27,7 @@ public class AuthRepository {
 
     public Token findById(String accessToken) {
         Token aToken = ds.getDatastore().find(Token.class, "accessToken", accessToken).get();
-        if (aToken == null || !aToken.isFresh()){
+        if (aToken == null || !aToken.isFresh()) {
             throw new InvalidTokenException("invalid_token");
         }
         return aToken;
@@ -38,8 +39,11 @@ public class AuthRepository {
             throw new BadRequestException("Unable to authenticate user", "invalid_credentials");
         }
         Token token = ds.getDatastore().find(Token.class, "userId", user.getUserId()).get();
+
         if (token != null) {
             if (token.isFresh()) {
+                user.setLastAccess(new Date());
+                users.update(user);
                 return token;
             } else {
                 ds.getDatastore().delete(token);
@@ -48,11 +52,13 @@ public class AuthRepository {
         List<String> scopes = new ArrayList<>();
         scopes.add(ScopesHelper.READ);
         scopes.add(ScopesHelper.WRITE);
-        if(user.isAdmin()){
+        if (user.isAdmin()) {
             scopes.add(ScopesHelper.ADMIN);
         }
-        token = new Token(scopes,user.getUserId());
+        token = new Token(scopes, user.getUserId());
         ds.getDatastore().save(token);
+        user.setLastAccess(new Date());
+        users.update(user);
         return token;
     }
 

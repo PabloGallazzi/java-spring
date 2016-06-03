@@ -2,6 +2,14 @@
  * Created by ivan on 31/05/16.
  */
 var app = angular.module('appAdmin', ['ngRoute', 'ngResource']);
+app.filter('range', function () {
+    return function (input, total) {
+        total = parseInt(total);
+        for (var i = 0; i < total; i++)
+            input.push(i);
+        return input;
+    };
+});
 
 app.config(function ($routeProvider) {
 
@@ -11,12 +19,12 @@ app.config(function ($routeProvider) {
     });
 
     $routeProvider.when("/users", {
-        controller: "userDataController",
+        controller: "userController",
         templateUrl: "app/views/admin/users.html"
     });
 
     $routeProvider.when("/users/:id", {
-        controller: "userDataController",
+        controller: "userController",
         templateUrl: "app/views/admin/user.html"
     });
 

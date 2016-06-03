@@ -1,6 +1,7 @@
 app.service('userService', ['$http', function ($http) {
 
     var userService = this;
+    var selectedUser = {};
 
     userService.getUserByIdAndToken = getUserByIdAndToken;
     userService.login = login;
@@ -10,7 +11,8 @@ app.service('userService', ['$http', function ($http) {
     userService.getUserTeams = getUserTeams;
     userService.deleteTeam = deleteTeam;
     userService.getUsers = getUsers;
-    userService.getUserInfo = getUserInfo;
+    userService.getSelectedUser = getSelectedUser;
+    userService.selectUser = selectUser;
 
 
     return userService;
@@ -58,25 +60,26 @@ app.service('userService', ['$http', function ($http) {
     }
 
     function getUsers(token) {
-        var data = {access_token: token};
         var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/users', data, config).then(function (response) {
+        return $http.get('/users?access_token=' + token, config).then(function (response) {
             return response.data;
         });
     }
 
-    function getUserInfo(token, userId) {
-        var data = {access_token: token};
+    function getSelectedUser(accessToken) {
         var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-
-        return $http.get('/users/' + userId, data, config).then(function (response) {
+        return $http.get('/users/' + selectedUser.user_id + '?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function deleteTeam(teamId, userId, accessToken){
-        var data = { params: { access_token: accessToken } };
+    function deleteTeam(teamId, userId, accessToken) {
+        var data = {params: {access_token: accessToken}};
         return $http.delete('/users/' + userId + '/teams/' + teamId, data);
+    }
+
+    function selectUser(user) {
+        selectedUser = user;
     }
 
 }]);
