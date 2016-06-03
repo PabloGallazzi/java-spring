@@ -44,7 +44,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -56,7 +55,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -69,8 +67,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -94,7 +90,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -106,7 +101,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -126,17 +120,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(0)));
-        for (int i = 0; i < 3; i++) {
-            ds.getDatastore().delete(team1.getMembers().get(i).getThumbnail());
-            ds.getDatastore().delete(team1.getMembers().get(i));
-        }
-        for (int i = 0; i < 2; i++) {
-            ds.getDatastore().delete(team2.getMembers().get(i).getThumbnail());
-            ds.getDatastore().delete(team2.getMembers().get(i));
-        }
-        ds.getDatastore().delete(team1);
-        ds.getDatastore().delete(team2);
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -158,13 +141,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1011335)))
                 .andExpect(jsonPath("$[1].id", is(1011336)));
-        for (int i = 0; i < 3; i++) {
-            ds.getDatastore().delete(team1.getMembers().get(i).getThumbnail());
-            ds.getDatastore().delete(team1.getMembers().get(i));
-        }
-        ds.getDatastore().delete(team1);
-        ds.getDatastore().delete(team2);
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -182,7 +158,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.user_name", is("TACS")));
         User userCreated = ds.getDatastore().find(User.class, "userName", "TACS").get();
         assertFalse(userCreated.isAdmin());
-        deleteTACSTestUser();
     }
 
     @Test
@@ -197,7 +172,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_name", is("TACS")));
-        deleteTACSTestUser();
     }
 
     @Test
@@ -304,7 +278,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("Validation error")))
                 .andExpect(jsonPath("$.cause", is(Collections.singletonList("user_name_already_used"))));
-        deleteTACSTestUser();
     }
 
     @Test
@@ -327,7 +300,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -339,7 +311,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -349,7 +320,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.user_name", is("TACS")))
                 .andExpect(jsonPath("$.admin", is(true)));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -361,7 +331,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -388,8 +357,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -414,8 +381,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -428,8 +393,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        deleteTACSTestCharacter();
     }
 
     @Test
@@ -442,8 +405,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        deleteTACSTestCharacter();
     }
 
     @Test
@@ -456,8 +417,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("character_not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        deleteTACSTestCharacter();
     }
 
     @Test
@@ -468,8 +427,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(1011334)))
                 .andExpect(jsonPath("$.name", is("3-D Man")));
-        deleteTACSTestUserWithToken();
-        deleteTACSTestCharacter();
     }
 
     @Test
@@ -496,8 +453,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -522,8 +477,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -534,8 +487,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1011334)));
-        deleteTACSTestUserWithToken();
-        deleteTACSTestCharacter();
     }
 
     @Test
@@ -569,8 +520,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -601,8 +550,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -615,8 +562,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(1011334)))
                 .andExpect(jsonPath("$.name", is("3-D Man")));
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -630,8 +575,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(1011334)))
                 .andExpect(jsonPath("$.name", is("3-D Man")));
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -658,8 +601,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -683,7 +624,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -692,8 +632,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         Token token = createAndLogInTACSTestUserWithFavorite(character1);
         mockMvc.perform(delete("/users/123456789012345678901234/characters/favorites/1011334?access_token=" + token.getAccessToken()))
                 .andExpect(status().isNoContent());
-        deleteTACSTestCharacter();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -705,7 +643,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("character_not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -717,7 +654,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_id")))
                 .andExpect(jsonPath("$.cause", is(Collections.singletonList("character_id_must_be_a_natural_number"))));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -751,8 +687,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -782,7 +716,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -792,9 +725,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.team_name", is("uno")))
                 .andExpect(jsonPath("$.members", hasSize(1)));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(Team.class, "teamName", "uno"));
     }
 
     @Test
@@ -821,8 +751,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -845,7 +773,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -857,7 +784,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -870,7 +796,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -881,8 +806,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.team_name", is("uno")))
                 .andExpect(jsonPath("$.members", hasSize(1)));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -895,8 +818,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -923,8 +844,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -948,7 +867,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -960,8 +878,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].team_name", is("uno")))
                 .andExpect(jsonPath("$[0].members", hasSize(1)));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -992,8 +908,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -1018,7 +932,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1031,7 +944,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1045,7 +957,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1059,9 +970,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1011335)))
                 .andExpect(jsonPath("$.name", is("3-D Man")));
-        ds.getDatastore().delete(ds.getDatastore().find(Character.class, "id", 1011335));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1074,8 +982,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1102,8 +1008,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(403)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
-        ds.getDatastore().delete(ds.getDatastore().find(User.class, "userName", "TACS2"));
     }
 
     @Test
@@ -1126,7 +1030,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1138,7 +1041,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1151,7 +1053,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(401)))
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1160,8 +1061,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         Token token = createAndLogInTACSTestUserWithTeam(team1);
         mockMvc.perform(delete("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters/1011334?access_token=" + token.getAccessToken()))
                 .andExpect(status().isNoContent());
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1173,8 +1072,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.error", is("not_found")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1209,7 +1106,6 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].user_name", is("TACS")))
                 .andExpect(jsonPath("$[0].user_id", is("123456789012345678901234")));
-        deleteTACSTestUserWithToken();
     }
 
     @Test
@@ -1217,7 +1113,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         Token notAdminToken = createAndLogInTACSTestUser();
         mockMvc.perform(get("/users?access_token=" + notAdminToken.getAccessToken()))
                 .andExpect(status().isForbidden());
-        deleteTACSTestUserWithToken();
     }
 
     private List<Character> getCharactersPool() {
