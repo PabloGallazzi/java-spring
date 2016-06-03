@@ -1,5 +1,5 @@
-app.controller('teamController', ['$scope', 'userService', 
-    function($scope, userService) {
+app.controller('teamController', ['$scope', '$location', 'userService', 
+    function($scope, $location, userService) {
 
         $scope.teams = [];
         var accessToken = getCookie('access_token');
@@ -31,6 +31,10 @@ app.controller('teamController', ['$scope', 'userService',
                     console.error('Error deleting a team');    
                 })
             ;
+        };
+        
+        $scope.addCharToTeam = function (teamId) {
+            $location.path('/characters').search({addToTeam:true, teamId:teamId});
         };
         
         function getUsersTeams(){
