@@ -1089,9 +1089,6 @@ public class UsersRestControllerTest extends BaseRestTester {
         mockMvc.perform(get("/users/" + getTACDId() + "/teams/?access_token=" + token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
-
-        deleteTACSTestTeamWithMember();
-        deleteTACSTestUserWithToken();
     }
 
     @Test
