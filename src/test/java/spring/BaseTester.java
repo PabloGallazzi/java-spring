@@ -81,6 +81,18 @@ public class BaseTester {
         return user;
     }
 
+    protected Token createTACSAdminUserWithDifferentId() {
+        String id = "123456789012345678909999";
+        User user = new User("TACSAdmin", "testPass123;");
+        User.validateUser(user);
+        ObjectId objectId = new ObjectId(id);
+        user.setUserId(objectId);
+        user.setIsAdmin(true);
+        ds.getDatastore().save(user);
+        user.setUserPassword("testPass123;");
+        return authRepository.login(user);
+    }
+
     protected User getTACSAdminTestUserVO() {
         User user = getTACSTestUserVO();
         user.setIsAdmin(true);

@@ -206,7 +206,7 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.GET)
-    ResponseEntity<?> createTeam(@PathVariable String userId,
+    ResponseEntity<?> getTeams(@PathVariable String userId,
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
