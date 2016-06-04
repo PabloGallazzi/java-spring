@@ -56,8 +56,8 @@ app.service('userService', ['$http', function ($http) {
     }
 
     function getUserTeams(userId, accessToken) {
-        var data = {params: {access_token: accessToken}};
-        return $http.get('/users/' + userId + '/teams', data);
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.get('/users/' + userId + '/teams?access_token=' + accessToken, config);
     }
 
     function getUsers(token) {

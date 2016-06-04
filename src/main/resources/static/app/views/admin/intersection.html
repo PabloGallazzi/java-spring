@@ -1,10 +1,14 @@
-<div class="container" ng-init="getTeams()">
+<div class="container" ng-init="getUsers()">
     <div class="col-lg-10"><!--left col-->
         <div class="form-group">
             <label class="col-md-8 control-label"><strong>Select teams to intersect!</strong></label>
             <div class="col-md-8">
-                <select data-ng-options="team.team_name for team in teams" data-ng-model="team_1"></select>
-                <select data-ng-options="team.team_name for team in teams" data-ng-model="team_2"></select>
+                <select data-ng-options="user.user_name for user in users" data-ng-model="user_1" ng-change="getTeams(user_1)">User</select>
+                <select data-ng-options="team.team_name for team in teams[user_1.user_name]" data-ng-model="team_1">Team</select>
+            </div>
+            <div class="col-md-8">
+                <select data-ng-options="user.user_name for user in users" data-ng-model="user_2" ng-change="getTeams(user_2)">User</select>
+                <select data-ng-options="team.team_name for team in teams[user_2.user_name]" data-ng-model="team_2">Team</select>
             </div>
         </div>
         <div class="col-md-3">
