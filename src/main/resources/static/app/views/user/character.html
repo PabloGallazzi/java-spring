@@ -25,7 +25,7 @@
                         Remove favorite!
                     </button>
                 </div>
-                <div ng-controller="teamController">
+                <div ng-controller="teamController" ng-init="showTeamDropdown()">
                     <div ng-show="isTeamDropdownVisible">
                         <div class="dropdown col-sm-3">
                             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

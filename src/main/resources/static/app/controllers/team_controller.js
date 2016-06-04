@@ -8,7 +8,7 @@ app.controller('teamController', ['$scope', '$location', 'userService',
         teamController.getUsersTeams = getUsersTeams;
         teamController.getAuthenticatedUserId = getAuthenticatedUserId;
         teamController.getUsersTeams();
-        $scope.isTeamDropdownVisible = isTeamDropdownVisible();
+        $scope.isTeamDropdownVisible = false;
         
         $scope.createTeam = function(){
             var teamName = $scope.teamName;
@@ -54,11 +54,12 @@ app.controller('teamController', ['$scope', '$location', 'userService',
             return token.slice(0, token.indexOf('-'));
         }
         
-        function isTeamDropdownVisible(){
+        $scope.showTeamDropdown = function(){
             return userService.getUserTeams(userId, accessToken)
                 .success(function(teams){
                     var teamSize = teams.map(function(t){return t;}).length;
-                    return(teamSize > 0)
+                    $scope.isTeamDropdownVisible = (teamSize > 0 );
+                    return (teamSize > 0 );
                 })
                 .error(function(){
                     console.error('Error while fetching user teams');
