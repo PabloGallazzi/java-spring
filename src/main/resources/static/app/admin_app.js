@@ -33,7 +33,7 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/admin/ranking.html"
     });
 
-    $routeProvider.when("/teams/commons/:id_1/:id_2", {
+    $routeProvider.when("/commons", {
         controller: "commonsController",
         templateUrl: "app/views/admin/intersection.html"
     });
