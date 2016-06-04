@@ -14,7 +14,6 @@ app.controller('userController', ['$scope', 'userService', function ($scope, use
         userService.getUsers($scope.token).then(function (users) {
             $scope.users = users.map(function (user) {
                 user.type = user.admin ? 'Administrator' : 'User';
-                user.last_access
                 return user;
             });
         })
