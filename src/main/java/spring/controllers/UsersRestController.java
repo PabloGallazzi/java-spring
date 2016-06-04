@@ -25,7 +25,7 @@ import java.util.List;
  * Created by niko118 on 11/4/16.
  */
 @RestController
-public class    UsersRestController {
+public class UsersRestController {
 
     private static final Logger logger = Logger.getLogger(UsersRestController.class);
 
@@ -163,11 +163,11 @@ public class    UsersRestController {
         } catch (NumberFormatException exception) {
             throw new BadRequestException("Character id must be a positive number");
         }
-        if (charId < 0){
+        if (charId < 0) {
             throw new BadRequestException("Character id must be a positive number");
         }
         Character character = thisUser.getFavoriteCharacter(charId);
-        if (character == null){
+        if (character == null) {
             throw new NotFoundException("That character is not a favorite of this user", "character_not_found", new String[0]);
         }
         return new ResponseEntity<>(character, null, HttpStatus.OK);
@@ -206,7 +206,7 @@ public class    UsersRestController {
     }
 
     @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.GET)
-    ResponseEntity<?> createTeam(@PathVariable String userId,
+    ResponseEntity<?> getTeams(@PathVariable String userId,
                                  @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
@@ -233,7 +233,7 @@ public class    UsersRestController {
     @RequestMapping(value = "/users/{userId}/teams/{teamId}", method = RequestMethod.DELETE)
     ResponseEntity<?> deleteTeam(@PathVariable String userId,
                                  @PathVariable String teamId,
-                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken){
+                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         logger.info("User team delete requested by user: " + aToken.getUserId().toString() + " " + teamId);
@@ -284,6 +284,15 @@ public class    UsersRestController {
         team.removeMember(charId);
         teams.update(team);
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/teams", method = RequestMethod.GET)
+    ResponseEntity<?> getAllTeams(@RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+        Token.validateNonEmptyToken(accessToken);
+        Token aToken = auth.findById(accessToken);
+        logger.info("All teams get requested by user: " + aToken.getUserId().toString());
+        aToken.validateAdminCredentials();
+        return new ResponseEntity<>(teams.getTeams(), null, HttpStatus.OK);
     }
 
 

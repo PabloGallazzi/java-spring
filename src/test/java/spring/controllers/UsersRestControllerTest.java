@@ -881,6 +881,17 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testGetTeamsBeingAdmin() throws Exception {
+        Team team1 = createTACSTestTeamWithMember();
+        Token token = createAndLogInTACSTestUserWithTeam(team1);
+        mockMvc.perform(get("/users/" + getTACDId() + "/teams?access_token=" + createTACSAdminUserWithDifferentId().getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].team_name", is("uno")))
+                .andExpect(jsonPath("$[0].members", hasSize(1)));
+    }
+
+    @Test
     public void testPostTeamTokenMustBeProvided() throws Exception {
         String body = json(getTACSTestCharacterVO());
         mockMvc.perform(post("/users/123/teams/1/characters")
@@ -997,11 +1008,10 @@ public class UsersRestControllerTest extends BaseRestTester {
 
     @Test
     public void testDeleteFromTeamMismatchToken() throws Exception {
-        String id2 = "012345678901234567890000";
         User user2 = new User("TACS2", "testPass123;");
         User.validateUser(user2);
         ds.getDatastore().save(user2);
-        mockMvc.perform(delete("/users/" + id2 + "/teams/1/characters/1?access_token=" + createAndLogInTACSAdminTestUser().getAccessToken()))
+        mockMvc.perform(delete("/users/" + user2.getUserId() + "/teams/1/characters/1?access_token=" + createAndLogInTACSTestUser().getAccessToken()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.message", is("Forbidden")))
@@ -1009,6 +1019,7 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.error", is("unauthorized")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
     }
+
 
     @Test
     public void testDeleteFromTeamNotFoundToken() throws Exception {
@@ -1113,6 +1124,23 @@ public class UsersRestControllerTest extends BaseRestTester {
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.error", is("bad_request")))
                 .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testGetAllTeamsOk() throws Exception {
+        Character character = getTACSTestCharacterVO();
+        character.setId(1011335);
+        String body = json(character);
+        Team team1 = createTACSTestTeamWithMember();
+        Token adminToken = createAndLogInTACSAdminTestUser();
+
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters?access_token=" + adminToken.getAccessToken()).content(body).contentType(contentType));
+        mockMvc.perform(get("/teams?access_token=" + adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].team_id", is(team1.getTeamId().toString())))
+                .andExpect(jsonPath("$[0].team_name" , is("uno")))
+                .andExpect(jsonPath("$[0].members").doesNotExist());
     }
 
     @Test

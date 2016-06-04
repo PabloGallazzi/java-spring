@@ -4,7 +4,7 @@
 <div class="container bootstrap snippet" ng-init="getSelectedUser()" href="content/css/user.css">
     <div class="row">
         <div class="col-sm-10"><h1>{{user.user_name}}</h1></div>
-        <div class="col-sm-2"><a ng-href="/users" class="pull-right"><img title="profile image"
+        <div class="col-sm-2"><a ng-href="#/users" class="pull-right"><img title="profile image"
                                                                           class="img-circle img-responsive"
                                                                           style='width:50%;' border="0" alt="Null"
                                                                           src="http://simpleicon.com/wp-content/uploads/users.png"></a>
@@ -15,7 +15,7 @@
 
             <ul class="list-group">
                 <li class="list-group-item text-muted">Profile</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span>
+                <li class="list-group-item text-right" type="date"><span class="pull-left"><strong>Last seen</strong></span>
                     {{user.last_access}}
                 </li>
 

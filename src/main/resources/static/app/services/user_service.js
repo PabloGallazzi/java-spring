@@ -13,7 +13,8 @@ app.service('userService', ['$http', function ($http) {
     userService.getUsers = getUsers;
     userService.getSelectedUser = getSelectedUser;
     userService.selectUser = selectUser;
-
+    userService.getIntersectionOf = getIntersectionOf;
+    userService.getTeams = getTeams;
 
     return userService;
 
@@ -55,8 +56,8 @@ app.service('userService', ['$http', function ($http) {
     }
 
     function getUserTeams(userId, accessToken) {
-        var data = {params: {access_token: accessToken}};
-        return $http.get('/users/' + userId + '/teams', data);
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.get('/users/' + userId + '/teams?access_token=' + accessToken, config);
     }
 
     function getUsers(token) {
@@ -80,6 +81,20 @@ app.service('userService', ['$http', function ($http) {
 
     function selectUser(user) {
         selectedUser = user;
+    }
+
+    function getIntersectionOf(token, id_1, id_2) {
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.get('/teams/commons/' + id_1 + '/' + id_2 + '?access_token=' + token, config).then(function (response) {
+            return response.data;
+        });
+    }
+
+    function getTeams(token) {
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.get('/teams?access_token=' + token, config).then(function (response) {
+            return response.data;
+        })
     }
 
 }]);

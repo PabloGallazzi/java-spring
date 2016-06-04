@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import services.DSMongoInterface;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,6 +24,18 @@ public class TeamsRepository {
     private DSMongoInterface ds;
     @Autowired
     private CharactersRepository charactersRepository;
+
+    public List<HashMap<String, Object>> getTeams() {
+        List<Team> teams = ds.getDatastore().find(Team.class).asList();
+        List<HashMap<String, Object>> actualTeams = new LinkedList<>();
+        for (Team team : teams) {
+            HashMap<String, Object> lightTeam = new HashMap<String, Object>();
+            lightTeam.put("team_id", team.getTeamId().toString());
+            lightTeam.put("team_name", team.getTeamName());
+            actualTeams.add(lightTeam);
+        }
+        return actualTeams;
+    }
 
     public Team findByTeamId(String id) {
         Team team;
@@ -48,8 +62,8 @@ public class TeamsRepository {
         ds.getDatastore().save(team).getId();
     }
 
-    private void iterateCharacters(List<Character> characters){
-        for (Character character : characters){
+    private void iterateCharacters(List<Character> characters) {
+        for (Character character : characters) {
             charactersRepository.save(character);
         }
     }
