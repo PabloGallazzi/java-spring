@@ -28,7 +28,7 @@ app.config(function ($routeProvider) {
         templateUrl: "app/views/admin/user.html"
     });
 
-    $routeProvider.when("/characters/ranking", {
+    $routeProvider.when("/ranking", {
         controller: "rankingController",
         templateUrl: "app/views/admin/ranking.html"
     });
