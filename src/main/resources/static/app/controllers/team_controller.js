@@ -8,7 +8,8 @@ app.controller('teamController', ['$scope', '$location', 'userService',
         teamController.getUsersTeams = getUsersTeams;
         teamController.getAuthenticatedUserId = getAuthenticatedUserId;
         teamController.getUsersTeams();
-
+        $scope.isTeamDropdownVisible = isTeamDropdownVisible();
+        
         $scope.createTeam = function(){
             var teamName = $scope.teamName;
             
@@ -51,6 +52,19 @@ app.controller('teamController', ['$scope', '$location', 'userService',
         
         function getAuthenticatedUserId(token) {
             return token.slice(0, token.indexOf('-'));
+        }
+        
+        function isTeamDropdownVisible(){
+            return userService.getUserTeams(userId, accessToken)
+                .success(function(teams){
+                    var teamSize = teams.map(function(t){return t;}).length;
+                    return(teamSize > 0)
+                })
+                .error(function(){
+                    console.error('Error while fetching user teams');
+                    return false;
+                })
+            ;
         }
     }
 ]);

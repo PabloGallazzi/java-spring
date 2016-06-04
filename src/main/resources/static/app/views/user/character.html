@@ -7,21 +7,40 @@
             <h3 class="text-center">{{selectedCharacter.name}}</h3>
         </div>
         <div class="col-sm-6" ng-controller="favoritesController as favCtrl" ng-init="getFavorites()">
-            <p class="lead text-center" style="padding-top:50px ;">
-                {{selectedCharacter.description}}
-            </p>
-            <button type="button"
-                    class="btn btn-primary btn-md"
-                    ng-click="favCtrl.addFavorite(selectedCharacter)"
-                    ng-hide="favCtrl.isFavorite(selectedCharacter)">
-                Add as favorite!
-            </button>
-            <button type="button"
-                    class="btn btn-primary btn-md"
-                    ng-click="favCtrl.removeFavorite(selectedCharacter)"
-                    ng-hide="!favCtrl.isFavorite(selectedCharacter)">
-                Remove favorite!
-            </button>
+            <div class="row">
+                <p class="lead text-center" style="padding-top:50px ;">
+                    {{selectedCharacter.description}}
+                </p>
+                <div class="col-sm-3">
+                    <button type="button"
+                            class="btn btn-primary btn-md"
+                            ng-click="favCtrl.addFavorite(selectedCharacter)"
+                            ng-hide="favCtrl.isFavorite(selectedCharacter)">
+                        Add as favorite!
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary btn-md"
+                            ng-click="favCtrl.removeFavorite(selectedCharacter)"
+                            ng-hide="!favCtrl.isFavorite(selectedCharacter)">
+                        Remove favorite!
+                    </button>
+                </div>
+                <div ng-controller="teamController">
+                    <div ng-show="isTeamDropdownVisible">
+                        <div class="dropdown col-sm-3">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Add to Team
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="team in teams">
+                                    <a href="">{{team.team_name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
