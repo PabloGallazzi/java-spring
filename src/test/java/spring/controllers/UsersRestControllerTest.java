@@ -1116,6 +1116,23 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testGetAllTeamsOk() throws Exception {
+        Character character = getTACSTestCharacterVO();
+        character.setId(1011335);
+        String body = json(character);
+        Team team1 = createTACSTestTeamWithMember();
+        Token adminToken = createAndLogInTACSAdminTestUser();
+
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams/" + team1.getTeamId() + "/characters?access_token=" + adminToken.getAccessToken()).content(body).contentType(contentType));
+        mockMvc.perform(get("/teams?access_token=" + adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].team_id", is(team1.getTeamId().toString())))
+                .andExpect(jsonPath("$[0].team_name" , is("uno")))
+                .andExpect(jsonPath("$[0].members").doesNotExist());
+    }
+
+    @Test
     public void testGetAllUsersOk() throws Exception {
         Token adminToken = createAndLogInTACSAdminTestUser();
         mockMvc.perform(get("/users?access_token=" + adminToken.getAccessToken()))
