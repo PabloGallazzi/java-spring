@@ -94,7 +94,8 @@ public class Token {
     }
 
     public void validateUserCredentials(String userId) {
-        if (!this.getUserId().toString().equals(userId)) {
+        if (!this.getUserId().toString().equals(userId) &&
+                !this.getScopes().contains(ScopesHelper.ADMIN)) {
             throw new ForbiddenException("Forbidden");
         }
     }
