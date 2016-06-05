@@ -34,7 +34,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 <li ng-repeat="team in teams">
-                                    <a href="">{{team.team_name}}</a>
+                                    <a href="" ng-click="addCharToTeam(team.team_id, selectedCharacter)">{{team.team_name}}</a>
                                 </li>
                             </ul>
                         </div>

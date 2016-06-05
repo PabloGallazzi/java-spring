@@ -2,6 +2,7 @@ app.service('userService', ['$http', function ($http) {
 
     var userService = this;
     var selectedUser = {};
+    var accessToken = getCookie('access_token');
 
     userService.getUserByIdAndToken = getUserByIdAndToken;
     userService.login = login;
@@ -15,6 +16,7 @@ app.service('userService', ['$http', function ($http) {
     userService.selectUser = selectUser;
     userService.getIntersectionOf = getIntersectionOf;
     userService.getTeams = getTeams;
+    userService.addCharToTeam = addCharToTeam;
 
     return userService;
 
@@ -25,6 +27,10 @@ app.service('userService', ['$http', function ($http) {
         return $http.get('/users/' + username, data).success(function (user) {
             return user;
         });
+    }
+
+    function getAuthenticatedUserId() {
+        return accessToken.slice(0, accessToken.indexOf('-'));
     }
 
     function login(username, password) {
@@ -95,6 +101,20 @@ app.service('userService', ['$http', function ($http) {
         return $http.get('/teams?access_token=' + token, config).then(function (response) {
             return response.data;
         })
+    }
+
+    function addCharToTeam(teamId, character){
+        var userId = getAuthenticatedUserId();
+        var data = {
+            id: character.id,
+            name: character.name,
+            description: character.description,
+            elected_times: character.elected_times,
+            thumbnail: character.thumbnail
+        };
+        
+        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+        return $http.post('/users/' + userId + '/teams/' + teamId + '/characters?access_token=' + accessToken, data, config);
     }
 
 }]);

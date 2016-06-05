@@ -9,6 +9,11 @@ app.controller('teamController', ['$scope', '$location', 'userService',
         teamController.getAuthenticatedUserId = getAuthenticatedUserId;
         teamController.getUsersTeams();
         $scope.isTeamDropdownVisible = false;
+        $scope.isCharAddedSuccessful = false;
+
+        $scope.init = function(){
+            checkIfACharWasAddedToTeam();
+        };
         
         $scope.createTeam = function(){
             var teamName = $scope.teamName;
@@ -34,8 +39,8 @@ app.controller('teamController', ['$scope', '$location', 'userService',
             ;
         };
         
-        $scope.addCharToTeam = function (teamId) {
-            $location.path('/characters').search({addToTeam:true, teamId:teamId});
+        $scope.addChars = function() {
+            $location.path('/characters');
         };
         
         function getUsersTeams(){
@@ -66,6 +71,33 @@ app.controller('teamController', ['$scope', '$location', 'userService',
                     return false;
                 })
             ;
+        };
+
+        $scope.addCharToTeam = function(teamId, character){
+            userService.addCharToTeam(teamId, character)
+                .success(function(){
+                    $scope.charNameAdded = character.name;
+                    goUserTeamsHome();
+                })
+                .error(function(){
+                    console.error("error posting character to user team");
+                })
+            ;
+        };
+
+        function goUserTeamsHome(){
+            $location.path('/teams').search({charAdded:"OK", charNameAdded:$scope.charNameAdded});
         }
+        
+        function checkIfACharWasAddedToTeam(){
+            if($location.search().charAdded == "OK"){
+                $scope.isCharAddedSuccessful = true;
+                $scope.charNameAdded = $location.search().charNameAdded
+            }
+        }
+        
+        $scope.closeSuccessAlert = function(){
+            $location.search({});
+        };
     }
 ]);
