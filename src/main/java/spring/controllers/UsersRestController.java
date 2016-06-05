@@ -199,7 +199,16 @@ public class UsersRestController {
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
         team.setTeamId(null);
-        team = teams.save(team);
+        if (team.getTeamName() == null || team.getTeamName().trim().isEmpty()) {
+            throw new BadRequestException("Team name must not be empty");
+        }
+        try {
+            team = teams.save(team);
+        } catch (com.mongodb.DuplicateKeyException e) {
+            String[] cause = new String[1];
+            cause[0] = "team_name_already_used";
+            throw new BadRequestException("Unable to create team", "Validation error", cause);
+        }
         thisUser.addNewTeam(team);
         users.update(thisUser);
         return new ResponseEntity<>(team, null, HttpStatus.CREATED);
@@ -207,7 +216,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.GET)
     ResponseEntity<?> getTeams(@PathVariable String userId,
-                                 @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
+                               @RequestParam(value = "access_token", required = false, defaultValue = "") String accessToken) {
         Token.validateNonEmptyToken(accessToken);
         Token aToken = auth.findById(accessToken);
         logger.info("Users team get all requested by user: " + aToken.getUserId().toString());
