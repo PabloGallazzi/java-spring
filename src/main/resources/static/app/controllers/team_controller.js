@@ -1,5 +1,5 @@
-app.controller('teamController', ['$scope', '$location', 'userService', 
-    function($scope, $location, userService) {
+app.controller('teamController', ['$scope', '$location', 'userService', 'errorService',
+    function($scope, $location, userService, errorService) {
 
         $scope.teams = [];
         var accessToken = getCookie('access_token');
@@ -10,6 +10,8 @@ app.controller('teamController', ['$scope', '$location', 'userService',
         teamController.getUsersTeams();
         $scope.isTeamDropdownVisible = false;
         $scope.isCharAddedSuccessful = false;
+        $scope.errors = {};
+        $scope.showError = errorService.showApiError;
 
         $scope.init = function(){
             checkIfACharWasAddedToTeam();
@@ -21,9 +23,11 @@ app.controller('teamController', ['$scope', '$location', 'userService',
             userService.createTeam(teamName, userId, accessToken)
                 .success(function() {
                     getUsersTeams();
+                    $scope.teamName = null;
                 })
-                .error(function() {
+                .error(function(error) {
                     console.error('Error creating a team');
+                    $scope.errors.api = error.cause;
                 })
             ;
         };

@@ -2,21 +2,31 @@
     <div class="row" style="margin-top: 10px;">
         <div class="col-lg-6 col-lg-offset-3">
             <div class="input-group">
-                <input type="text" class="form-control" ng-model="teamName" placeholder="insert a name for your team..." required>
+                <input type="text" class="form-control" ng-model="teamName" placeholder="insert a name for your team...">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit" ng-click="createTeam()">Create Team</button>
+                    <button id="createTeamButton" class="btn btn-default" type="submit" ng-click="createTeam()">Create Team</button>
                 </span>
             </div>
         </div>
     </div>
     <div class="panel">
         <div class="row">
+
+            <!--Success alert when team was created-->
             <div ng-show="isCharAddedSuccessful">
                 <div class="col-lg-6 col-lg-offset-3 alert alert-success fade in" style="text-align: center; margin-top: 15px;">
                     <a href="" ng-click="closeSuccessAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Success!</strong> char {{charNameAdded}} has been added to team
                 </div>
             </div>
+
+            <!--Error api-->
+            <div class="row text-danger text-center" ng-show="errors.api">
+                <li ng-repeat="error in errors.api">
+                    {{showError(error)}}
+                </li>
+            </div>
+
         </div>
         <div class="panel-heading">
             <h3 class="panel-title">My teams</h3>
@@ -34,3 +44,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    $("#createTeamButton").mouseup(function(){$(this).blur();})
+</script>

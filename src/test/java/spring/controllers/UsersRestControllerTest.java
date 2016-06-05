@@ -726,10 +726,10 @@ public class UsersRestControllerTest extends BaseRestTester {
         mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.message", is("Team name must not be empty")))
+                .andExpect(jsonPath("$.message", is("Unable to create team")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.error", is("bad_request")))
-                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+                .andExpect(jsonPath("$.error", is("Validation error")))
+                .andExpect(jsonPath("$.cause.[0]", is("team_name_must_not_be_empty")));
     }
 
     @Test
@@ -739,10 +739,10 @@ public class UsersRestControllerTest extends BaseRestTester {
         mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.message", is("Team name must not be empty")))
+                .andExpect(jsonPath("$.message", is("Unable to create team")))
                 .andExpect(jsonPath("$.status", is(400)))
-                .andExpect(jsonPath("$.error", is("bad_request")))
-                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+                .andExpect(jsonPath("$.error", is("Validation error")))
+                .andExpect(jsonPath("$.cause.[0]", is("team_name_must_not_be_empty")));
     }
 
     @Test

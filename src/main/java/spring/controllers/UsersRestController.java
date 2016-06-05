@@ -199,13 +199,14 @@ public class UsersRestController {
         aToken.validateUserCredentials(userId);
         User thisUser = users.findByUserId(userId);
         team.setTeamId(null);
+        String[] cause = new String[1];
         if (team.getTeamName() == null || team.getTeamName().trim().isEmpty()) {
-            throw new BadRequestException("Team name must not be empty");
+            cause[0] = "team_name_must_not_be_empty";
+            throw new BadRequestException("Unable to create team", "Validation error", cause);
         }
         try {
             team = teams.save(team);
         } catch (com.mongodb.DuplicateKeyException e) {
-            String[] cause = new String[1];
             cause[0] = "team_name_already_used";
             throw new BadRequestException("Unable to create team", "Validation error", cause);
         }
