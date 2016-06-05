@@ -719,6 +719,45 @@ public class UsersRestControllerTest extends BaseRestTester {
     }
 
     @Test
+    public void testPostNewTeamNullNameNotAllowed() throws Exception {
+        String body = json(getTACSTestTeamWithMemberVO());
+        body = body.replaceAll("\"team_name\":\"uno\",","");
+        body = body.replaceAll(",\"team_name\":\"uno\"","");
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Team name must not be empty")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testPostNewTeamEmptyNameNotAllowed() throws Exception {
+        String body = json(getTACSTestTeamWithMemberVO());
+        body = body.replaceAll("\"team_name\":\"uno\"","\"team_name\":\" \"");
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Team name must not be empty")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("bad_request")))
+                .andExpect(jsonPath("$.cause", is(Collections.emptyList())));
+    }
+
+    @Test
+    public void testPostNewTeamNameAlreadyExists() throws Exception {
+        String body = json(getTACSTestTeamWithMemberVO());
+        mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUserWithTeam(createTACSTestTeamWithMember()).getAccessToken()).content(body).contentType(contentType))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.message", is("Unable to create team")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("Validation error")))
+                .andExpect(jsonPath("$.cause", is(Collections.singletonList("team_name_already_used"))));
+    }
+
+    @Test
     public void testPostNewTeamOk() throws Exception {
         String body = json(getTACSTestTeamWithMemberVO());
         mockMvc.perform(post("/users/" + getTACDId() + "/teams?access_token=" + createAndLogInTACSTestUser().getAccessToken()).content(body).contentType(contentType))
