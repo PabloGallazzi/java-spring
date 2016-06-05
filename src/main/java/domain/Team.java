@@ -7,6 +7,7 @@ import exceptions.rest.NotFoundException;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import spring.utils.ObjectIdToStringSerializer;
 import spring.utils.StringToObjectIdDeserializer;
@@ -25,6 +26,7 @@ public class Team {
     @JsonDeserialize(using = StringToObjectIdDeserializer.class)
     @Id
     private ObjectId teamId;
+    @Indexed(name = "team", unique = true)
     private String teamName;
     @Reference(lazy = true)
     private List<Character> members = new ArrayList<>();
