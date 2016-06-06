@@ -3,6 +3,7 @@ app.service('userService', ['$http', function ($http) {
     var userService = this;
     var selectedUser = {};
     var accessToken = getCookie('access_token');
+    var userId = getAuthenticatedUserId();
     var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
 
     userService.login = login;
@@ -16,6 +17,8 @@ app.service('userService', ['$http', function ($http) {
     userService.addCharToTeam = addCharToTeam;
 
     // Getters
+    userService.getAccessToken = getAccessToken;
+    userService.getAuthenticatedUserId = getAuthenticatedUserId;
     userService.getSelectedUser = getSelectedUser;
     userService.getTeams = getTeams;
     userService.getTeamsIntersection = getTeamsIntersection;
@@ -36,6 +39,10 @@ app.service('userService', ['$http', function ($http) {
         return accessToken.slice(0, accessToken.indexOf('-'));
     }
 
+    function getAccessToken() {
+        return accessToken;
+    }
+
     function login(username, password) {
         var data = {"user_name": username, "user_password": password};
         var json = angular.toJson(data);
@@ -48,32 +55,32 @@ app.service('userService', ['$http', function ($http) {
         return $http.post('/users', json, config);
     }
 
-    function redirectHome(accessToken) {
+    function redirectHome() {
         window.location = "home";
     }
 
-    function createTeam(teamName, userId, accessToken) {
+    function createTeam(teamName) {
         var data = {team_name: teamName};
         return $http.post('/users/' + userId + '/teams?access_token=' + accessToken, data, config);
     }
 
-    function getUserTeams(userId, accessToken) {
+    function getUserTeams() {
         return $http.get('/users/' + userId + '/teams?access_token=' + accessToken, config);
     }
 
-    function getUsers(token) {
-        return $http.get('/users?access_token=' + token, config).then(function (response) {
+    function getUsers() {
+        return $http.get('/users?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function getSelectedUser(accessToken) {
+    function getSelectedUser() {
         return $http.get('/users/' + selectedUser.user_id + '?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function deleteTeam(teamId, userId, accessToken) {
+    function deleteTeam(teamId) {
         var data = {params: {access_token: accessToken}};
         return $http.delete('/users/' + userId + '/teams/' + teamId, data);
     }
@@ -82,14 +89,14 @@ app.service('userService', ['$http', function ($http) {
         selectedUser = user;
     }
 
-    function getTeamsIntersection(token, id_1, id_2) {
-        return $http.get('/teams/commons/' + id_1 + '/' + id_2 + '?access_token=' + token, config).then(function (response) {
+    function getTeamsIntersection(id_1, id_2) {
+        return $http.get('/teams/commons/' + id_1 + '/' + id_2 + '?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function getTeams(token) {
-        return $http.get('/teams?access_token=' + token, config).then(function (response) {
+    function getTeams() {
+        return $http.get('/teams?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         })
     }

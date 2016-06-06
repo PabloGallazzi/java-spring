@@ -12,9 +12,7 @@ app.controller('registerController', ['$scope', '$location', 'userService', 'err
         var username = $scope.username;
         var password = $scope.password;
         userService.register(username, password)
-            .success(function(user) {
-                $location.path("/");
-            })
+            .success(userService.redirectHome)
             .error(function (error) {
                 console.error('Error while creating user account');
                 $scope.errors.api = error.cause;

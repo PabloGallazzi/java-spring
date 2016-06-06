@@ -4,12 +4,11 @@
 app.controller('rankingController', ['$scope', 'characterService', function ($scope, characterService) {
     
     $scope.charactersLimit = 5;
-    $scope.token = getCookie('access_token');
 
-    $scope.getCharactersLimitedBy = getCharactersLimitedBy;
+    $scope.getRanking = getRanking;
 
-    function getCharactersLimitedBy(limit) {
-        characterService.getCharactersLimitedBy(limit, $scope.token).then(function (characters) {
+    function getRanking(limit) {
+        characterService.getRanking(limit).then(function (characters) {
             $scope.characters = characters;
         });
     }
