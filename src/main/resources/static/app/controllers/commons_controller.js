@@ -21,7 +21,7 @@ app.controller('commonsController', ['$scope', 'userService', function ($scope, 
     function getIntersection() {
         var id1 = $scope.team_1.team_id;
         var id2 = $scope.team_2.team_id;
-        userService.getIntersectionOf($scope.token, id1, id2).then(function (characters) {
+        userService.getTeamsIntersection($scope.token, id1, id2).then(function (characters) {
             $scope.characters = characters;
         }, function (err) {
             console.error(err);
