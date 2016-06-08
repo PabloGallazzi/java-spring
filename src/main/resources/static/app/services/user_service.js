@@ -3,29 +3,35 @@ app.service('userService', ['$http', function ($http) {
     var userService = this;
     var selectedUser = {};
     var accessToken = getCookie('access_token');
+    var userId = getAuthenticatedUserId();
+    var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
 
-    userService.getUserByIdAndToken = getUserByIdAndToken;
     userService.login = login;
     userService.register = register;
     userService.redirectHome = redirectHome;
+
+    // Setters
     userService.createTeam = createTeam;
-    userService.getUserTeams = getUserTeams;
     userService.deleteTeam = deleteTeam;
-    userService.getUsers = getUsers;
-    userService.getSelectedUser = getSelectedUser;
     userService.selectUser = selectUser;
-    userService.getIntersectionOf = getIntersectionOf;
-    userService.getTeams = getTeams;
     userService.addCharToTeam = addCharToTeam;
+
+    // Getters
+    userService.getAccessToken = getAccessToken;
+    userService.getAuthenticatedUserId = getAuthenticatedUserId;
+    userService.getSelectedUser = getSelectedUser;
+    userService.getTeams = getTeams;
+    userService.getTeamsIntersection = getTeamsIntersection;
+    userService.getUser = getUser;
+    userService.getUserTeams = getUserTeams;
+    userService.getUsers = getUsers;
 
     return userService;
 
-    function getUserByIdAndToken(username, accessToken) {
-
+    function getUser(username, accessToken) {
         var data = {params: {access_token: accessToken}};
-
-        return $http.get('/users/' + username, data).success(function (user) {
-            return user;
+        return $http.get('/users/' + username, data).then(function (response) {
+            return response.data;
         });
     }
 
@@ -33,54 +39,49 @@ app.service('userService', ['$http', function ($http) {
         return accessToken.slice(0, accessToken.indexOf('-'));
     }
 
-    function login(username, password) {
+    function getAccessToken() {
+        return accessToken;
+    }
 
+    function login(username, password) {
         var data = {"user_name": username, "user_password": password};
         var json = angular.toJson(data);
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-
         return $http.post('/users/authenticate', json, config);
     }
 
     function register(username, password) {
-
         var data = {user_name: username, user_password: password};
         var json = angular.toJson(data);
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-
         return $http.post('/users', json, config);
     }
 
-    function redirectHome(accessToken) {
+    function redirectHome() {
         window.location = "home";
     }
 
-    function createTeam(teamName, userId, accessToken) {
+    function createTeam(teamName) {
         var data = {team_name: teamName};
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
         return $http.post('/users/' + userId + '/teams?access_token=' + accessToken, data, config);
     }
 
-    function getUserTeams(userId, accessToken) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/users/' + userId + '/teams?access_token=' + accessToken, config);
+    function getUserTeams(user_id) {
+        // i need to receive user id in order to support User & Admin requests.
+        return $http.get('/users/' + user_id + '/teams?access_token=' + accessToken, config);
     }
 
-    function getUsers(token) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/users?access_token=' + token, config).then(function (response) {
+    function getUsers() {
+        return $http.get('/users?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function getSelectedUser(accessToken) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+    function getSelectedUser() {
         return $http.get('/users/' + selectedUser.user_id + '?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function deleteTeam(teamId, userId, accessToken) {
+    function deleteTeam(teamId) {
         var data = {params: {access_token: accessToken}};
         return $http.delete('/users/' + userId + '/teams/' + teamId, data);
     }
@@ -89,16 +90,14 @@ app.service('userService', ['$http', function ($http) {
         selectedUser = user;
     }
 
-    function getIntersectionOf(token, id_1, id_2) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/teams/commons/' + id_1 + '/' + id_2 + '?access_token=' + token, config).then(function (response) {
+    function getTeamsIntersection(id_1, id_2) {
+        return $http.get('/teams/commons/' + id_1 + '/' + id_2 + '?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         });
     }
 
-    function getTeams(token) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        return $http.get('/teams?access_token=' + token, config).then(function (response) {
+    function getTeams() {
+        return $http.get('/teams?access_token=' + accessToken, config).then(function (response) {
             return response.data;
         })
     }
@@ -112,8 +111,7 @@ app.service('userService', ['$http', function ($http) {
             elected_times: character.elected_times,
             thumbnail: character.thumbnail
         };
-        
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
+
         return $http.post('/users/' + userId + '/teams/' + teamId + '/characters?access_token=' + accessToken, data, config);
     }
 

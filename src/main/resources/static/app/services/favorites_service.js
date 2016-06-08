@@ -3,21 +3,23 @@
  */
 'use strict';
 
-app.factory('favoritesService', ['$http', '$q', function ($http, $q) {
+app.factory('favoritesService', ['$http', '$q', 'userService', function ($http, $q, userService) {
 
     var favoritesService = this;
+    var accessToken = userService.getAccessToken();
+    var userId = userService.getAuthenticatedUserId();
+    var params = {access_token: accessToken};
+    var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
 
-    favoritesService.getFavoritesByToken = getFavoritesByToken;
+    favoritesService.getFavorites = getFavorites;
     favoritesService.addFavorite = addFavorite;
     favoritesService.removeFavorite = removeFavorite;
     favoritesService.isFavorite = isFavorite;
 
     return favoritesService;
 
-    function getFavoritesByToken(user_id, token) {
-        var params = {access_token: token};
-        var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        var url = '/users/' + user_id + '/characters/favorites';
+    function getFavorites() {
+        var url = '/users/' + userId + '/characters/favorites';
         return $http.get(url, config).then(function (response) {
             return response.data;
         }, function (err) {
@@ -26,23 +28,18 @@ app.factory('favoritesService', ['$http', '$q', function ($http, $q) {
         });
     }
 
-    function addFavorite(user_id, token, character) {
-        var config = {headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        var url = '/users/' + user_id + '/characters/favorites?access_token=' + token;
+    function addFavorite(character) {
+        var url = '/users/' + userId + '/characters/favorites';
         return $http.post(url, character, config);
     }
 
-    function removeFavorite(user_id, token, character) {
-        var params = {access_token: token};
-        var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        var url = 'users/' + user_id + '/characters/favorites/' + character.id;
+    function removeFavorite(character) {
+        var url = 'users/' + userId + '/characters/favorites/' + character.id;
         return $http.delete(url, config);
     }
 
-    function isFavorite(user_id, token, character) {
-        var params = {access_token: token};
-        var config = {params: params, headers: {'Content-Type': 'application/json;charset=utf-8;'}};
-        var url = 'users/' + user_id + '/characters/favorites/' + character.id;
+    function isFavorite(character) {
+        var url = 'users/' + userId + '/characters/favorites/' + character.id;
         return $http.get(url, config);
     }
 

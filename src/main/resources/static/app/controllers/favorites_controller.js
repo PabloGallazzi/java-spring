@@ -16,8 +16,6 @@ app.controller('favoritesController',
 
             var favoritesController = this;
 
-            favoritesController.getImagePathFor = getImagePathFor;
-            favoritesController.getUserIdBy = getUserIdBy;
             favoritesController.reloadPage = reloadPage;
             favoritesController.addFavorite = addFavorite;
             favoritesController.removeFavorite = removeFavorite;
@@ -27,18 +25,8 @@ app.controller('favoritesController',
             $scope.getFavorites = getFavorites;
 
             $scope.favorites = [];
-            $scope.token = getCookie('access_token');
-            $scope.user_id = getUserIdBy($scope.token);
 
             // Functions
-
-            function getImagePathFor(character) {
-                return character.thumbnail.path + '.' + character.thumbnail.extension;
-            }
-
-            function getUserIdBy(token) {
-                return token.slice(0, token.indexOf('-'));
-            }
 
             function reloadPage() {
                 $route.reload();
@@ -49,11 +37,11 @@ app.controller('favoritesController',
             }
 
             function addFavorite(character) {
-                favoritesService.addFavorite($scope.user_id, $scope.token, character).success(reloadPage);
+                favoritesService.addFavorite(character).then(reloadPage);
             }
 
             function removeFavorite(character) {
-                favoritesService.removeFavorite($scope.user_id, $scope.token, character).success(reloadPage);
+                favoritesService.removeFavorite(character).then(reloadPage);
             }
 
             function isFavorite(character) {
@@ -64,10 +52,10 @@ app.controller('favoritesController',
             }
 
             function getFavorites() {
-                favoritesService.getFavoritesByToken($scope.user_id, $scope.token).then(function (favorites) {
-                    $scope.favorites = favorites.map(function (char) {
-                        char.image_path = getImagePathFor(char);
-                        return char;
+                favoritesService.getFavorites().then(function (favorites) {
+                    $scope.favorites = favorites.map(function (fav) {
+                        fav.image = fav.thumbnail.path + "." + fav.thumbnail.extension;
+                        return fav;
                     });
                 })
             }
