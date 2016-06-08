@@ -1,28 +1,43 @@
 <div class="container" ng-init="getUsers()">
-    <div class="col-lg-10"><!--left col-->
+    <div class="col-lg-8"><!--left col-->
         <div class="form-group">
             <label class="col-md-8 control-label"><strong>Select teams to intersect!</strong></label>
             <div class="col-md-8">
                 <label>User: <select data-ng-options="user.user_name for user in users" data-ng-model="user_1"
-                               ng-change="getTeams(user_1)"></select></label>
+                                     ng-change="getTeams(user_1)"></select></label>
                 <label>Team: <select data-ng-options="team.team_name for team in teams[user_1.user_name]"
-                               data-ng-model="team_1"></select></label>
+                                     data-ng-model="team_1"></select></label>
             </div>
             <div class="col-md-8">
                 <label>User: <select data-ng-options="user.user_name for user in users" data-ng-model="user_2"
-                               ng-change="getTeams(user_2)"></select></label>
+                                     ng-change="getTeams(user_2)"></select></label>
                 <label>Team: <select data-ng-options="team.team_name for team in teams[user_2.user_name]"
-                               data-ng-model="team_2"></select></label>
+                                     data-ng-model="team_2"></select></label>
             </div>
         </div>
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary btn-block" ng-show="team_1 && team_2"
+        <div class="col-md-4">
+
+            <button type="submit" class="btn btn-primary btn-block" ng-show="canDoIntersection()"
                     ng-click="getIntersection()">
                 Get intersection!
             </button>
+
         </div>
     </div>
+
+    <div ng-if="intersected">
+        <div ng-show="characters.length" class="col-lg-5 alert alert-success fade in"
+             style="text-align: left; margin-top: 15px;">
+            <strong>Intersected!</strong> {{ showResult() }}
+        </div>
+        <div ng-show="!characters.length" class="col-lg-5 alert alert-warning fade in"
+             style="text-align: left; margin-top: 15px;">
+            <strong>Empty!</strong> {{ showResult() }}
+        </div>
+    </div>
+
     <div class="col-sm-9">
+
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
