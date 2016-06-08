@@ -1,0 +1,11 @@
+<div class="container" ng-controller="teamController" ng-init="getChars()">
+    <div class="col-sm-4" ng-repeat="char in selectedTeamCharacters">
+        <div class="col-sm-12">
+            <a ng-href="#/characters/{{char.id}}" ng-click="selectCharacter(char)">
+                <img class="img-circle img-center" style="border:5px black solid; margin: 10px;"
+                     ng-src="{{char.image_path}}" width="300px" height="300">
+            </a>
+            <h3 style="text-align: center;">{{char.name}}</h3>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,5 @@
-app.controller('teamController', ['$scope', '$location', 'userService', 'errorService',
-    function($scope, $location, userService, errorService) {
+app.controller('teamController', ['$scope', '$location', 'userService', 'errorService', 'teamsShareService', 'characterService',
+    function($scope, $location, userService, errorService, teamsShareService, characterService) {
 
         $scope.teams = [];
         var accessToken = getCookie('access_token');
@@ -12,6 +12,7 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         $scope.isCharAddedSuccessful = false;
         $scope.errors = {};
         $scope.showError = errorService.showApiError;
+        $scope.selectCharacter = selectCharacter;
 
         $scope.init = function(){
             checkIfACharWasAddedToTeam();
@@ -47,22 +48,6 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             $location.path('/characters');
         };
         
-        function getUsersTeams(){
-            userService.getUserTeams(userId)
-                .success(function(teams){
-                    $scope.teams = teams.map(function(t){return t;})    
-                })
-                .error(function(errResponse){
-                    console.error('Error while fetching user teams');
-                    return $q.reject(errResponse);
-                })
-            ;
-        }
-        
-        function getAuthenticatedUserId(token) {
-            return token.slice(0, token.indexOf('-'));
-        }
-        
         $scope.showTeamDropdown = function(){
             return userService.getUserTeams(userId, accessToken)
                 .success(function(teams){
@@ -89,6 +74,40 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             ;
         };
 
+        $scope.closeSuccessAlert = function(){
+            $location.search({});
+        };
+        
+        $scope.viewTeam = function(team){
+            teamsShareService.setTeamCharacters(team.members);
+            $location.path('/teams/characters', false);
+        };
+
+        $scope.getChars = function(){
+            var characters = teamsShareService.getTeamCharacters();
+            $scope.selectedTeamCharacters = characters.map(function(char){
+                char.image_path = getImagePathFor(char);
+                return char;
+            });
+        };
+
+        
+        function getUsersTeams(){
+            userService.getUserTeams(userId, accessToken)
+                .success(function(teams){
+                    $scope.teams = teams.map(function(t){return t;})
+                })
+                .error(function(errResponse){
+                    console.error('Error while fetching user teams');
+                    return $q.reject(errResponse);
+                })
+            ;
+        }
+
+        function getAuthenticatedUserId(token) {
+            return token.slice(0, token.indexOf('-'));
+        }
+        
         function goUserTeamsHome(){
             $location.path('/teams').search({charAdded:"OK", charNameAdded:$scope.charNameAdded});
         }
@@ -100,8 +119,25 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             }
         }
         
-        $scope.closeSuccessAlert = function(){
-            $location.search({});
-        };
+        function getImagePathFor(character) {
+            return character.thumbnail.path + '.' + character.thumbnail.extension;
+        }
+
+        function selectCharacter(character) {
+            characterService.setSelectedCharacter(character);
+        }
     }
 ]);
+
+app.factory('teamsShareService', [function(){
+    var selectedTeamCharacters = [];
+
+    return{
+        setTeamCharacters: function(teamCharacters){
+            selectedTeamCharacters = teamCharacters;
+        },
+        getTeamCharacters: function(){
+            return selectedTeamCharacters;
+        }
+    };
+}]);
