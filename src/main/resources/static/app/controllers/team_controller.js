@@ -1,5 +1,5 @@
-app.controller('teamController', ['$scope', '$location', 'userService', 'errorService',
-    function($scope, $location, userService, errorService) {
+app.controller('teamController', ['$scope', '$location', 'userService', 'errorService', 'teamsShareService', 'characterService',
+    function($scope, $location, userService, errorService, teamsShareService, characterService) {
 
         $scope.teams = [];
         var accessToken = getCookie('access_token');
@@ -12,6 +12,7 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         $scope.isCharAddedSuccessful = false;
         $scope.errors = {};
         $scope.showError = errorService.showApiError;
+        $scope.selectCharacter = selectCharacter;
 
         $scope.init = function(){
             checkIfACharWasAddedToTeam();
@@ -103,5 +104,39 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         $scope.closeSuccessAlert = function(){
             $location.search({});
         };
+        
+        $scope.viewTeam = function(team){
+            teamsShareService.setTeamCharacters(team.members);
+            $location.path('/teams/characters', false);
+        };
+
+        $scope.getChars = function(){
+            var characters = teamsShareService.getTeamCharacters();
+            $scope.selectedTeamCharacters = characters.map(function(char){
+                char.image_path = getImagePathFor(char);
+                return char;
+            });
+        };
+
+        function getImagePathFor(character) {
+            return character.thumbnail.path + '.' + character.thumbnail.extension;
+        }
+
+        function selectCharacter(character) {
+            characterService.setSelectedCharacter(character);
+        }
     }
 ]);
+
+app.factory('teamsShareService', [function(){
+    var selectedTeamCharacters = [];
+
+    return{
+        setTeamCharacters: function(teamCharacters){
+            selectedTeamCharacters = teamCharacters;
+        },
+        getTeamCharacters: function(){
+            return selectedTeamCharacters;
+        }
+    };
+}]);
