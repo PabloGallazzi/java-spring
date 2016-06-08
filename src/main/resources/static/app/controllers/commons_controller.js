@@ -15,6 +15,7 @@ app.controller('commonsController', ['$scope', 'userService', function ($scope, 
     $scope.getIntersection = getIntersection;
     $scope.getTeams = getTeams;
     $scope.getUsers = getUsers;
+    $scope.clearSelection = clearSelection;
     $scope.showResult = showResult;
     $scope.canDoIntersection = function () {
         return $scope.team_1 && $scope.team_2 && !$scope.intersected
@@ -40,18 +41,31 @@ app.controller('commonsController', ['$scope', 'userService', function ($scope, 
     }
 
     function getTeams(user) {
-        $scope.intersected = false;
-        userService.getUserTeams(user.user_id).then(function (response) {
+        newSelection();
+        var a = userService.getUserTeams(user.user_id).then(function (response) {
             $scope.teams[user.user_name] = response.data;
+            return response.data;
         }, function (err) {
             console.error(err);
-        })
+        });
+        console.log(a);
     }
-    
+
     function showResult() {
         var onTrue = "Check the characters in common!";
         var onFalse = "The teams: " + $scope.team_1.team_name + " and " + $scope.team_2.team_name + " have no characters in common. Try again changing teams!";
         return $scope.characters.length ? onTrue : onFalse;
+    }
+
+    function clearSelection() {
+        newSelection();
+        $scope.characters = [];
+        $scope.team_1 = '';
+        $scope.team_2 = '';
+    }
+
+    function newSelection() {
+        $scope.intersected = false;
     }
 
 }]);
