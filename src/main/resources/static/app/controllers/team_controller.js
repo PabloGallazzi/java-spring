@@ -48,22 +48,6 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             $location.path('/characters');
         };
         
-        function getUsersTeams(){
-            userService.getUserTeams(userId, accessToken)
-                .success(function(teams){
-                    $scope.teams = teams.map(function(t){return t;})    
-                })
-                .error(function(errResponse){
-                    console.error('Error while fetching user teams');
-                    return $q.reject(errResponse);
-                })
-            ;
-        }
-        
-        function getAuthenticatedUserId(token) {
-            return token.slice(0, token.indexOf('-'));
-        }
-        
         $scope.showTeamDropdown = function(){
             return userService.getUserTeams(userId, accessToken)
                 .success(function(teams){
@@ -90,17 +74,6 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             ;
         };
 
-        function goUserTeamsHome(){
-            $location.path('/teams').search({charAdded:"OK", charNameAdded:$scope.charNameAdded});
-        }
-        
-        function checkIfACharWasAddedToTeam(){
-            if($location.search().charAdded == "OK"){
-                $scope.isCharAddedSuccessful = true;
-                $scope.charNameAdded = $location.search().charNameAdded
-            }
-        }
-        
         $scope.closeSuccessAlert = function(){
             $location.search({});
         };
@@ -118,6 +91,34 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
             });
         };
 
+        
+        function getUsersTeams(){
+            userService.getUserTeams(userId, accessToken)
+                .success(function(teams){
+                    $scope.teams = teams.map(function(t){return t;})
+                })
+                .error(function(errResponse){
+                    console.error('Error while fetching user teams');
+                    return $q.reject(errResponse);
+                })
+            ;
+        }
+
+        function getAuthenticatedUserId(token) {
+            return token.slice(0, token.indexOf('-'));
+        }
+        
+        function goUserTeamsHome(){
+            $location.path('/teams').search({charAdded:"OK", charNameAdded:$scope.charNameAdded});
+        }
+        
+        function checkIfACharWasAddedToTeam(){
+            if($location.search().charAdded == "OK"){
+                $scope.isCharAddedSuccessful = true;
+                $scope.charNameAdded = $location.search().charNameAdded
+            }
+        }
+        
         function getImagePathFor(character) {
             return character.thumbnail.path + '.' + character.thumbnail.extension;
         }
