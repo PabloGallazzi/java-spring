@@ -28,11 +28,11 @@
     <div ng-if="intersected">
         <div ng-show="characters.length" class="col-lg-5 alert alert-success fade in"
              style="text-align: left; margin-top: 15px;">
-            <strong>Intersected!</strong> {{ showResult() }}
+            <strong>Intersected!</strong> {{ showResult() }} <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
         </div>
         <div ng-show="!characters.length" class="col-lg-5 alert alert-warning fade in"
              style="text-align: left; margin-top: 15px;">
-            <strong>Empty!</strong> {{ showResult() }}
+            <strong>Empty!</strong> {{ showResult() }} <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
         </div>
     </div>
 
