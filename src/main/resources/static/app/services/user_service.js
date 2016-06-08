@@ -64,8 +64,9 @@ app.service('userService', ['$http', function ($http) {
         return $http.post('/users/' + userId + '/teams?access_token=' + accessToken, data, config);
     }
 
-    function getUserTeams() {
-        return $http.get('/users/' + userId + '/teams?access_token=' + accessToken, config);
+    function getUserTeams(user_id) {
+        // i need to receive user id in order to support User & Admin requests.
+        return $http.get('/users/' + user_id + '/teams?access_token=' + accessToken, config);
     }
 
     function getUsers() {

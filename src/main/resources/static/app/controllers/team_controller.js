@@ -48,7 +48,7 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         };
         
         function getUsersTeams(){
-            userService.getUserTeams(userId, accessToken)
+            userService.getUserTeams(userId)
                 .success(function(teams){
                     $scope.teams = teams.map(function(t){return t;})    
                 })
