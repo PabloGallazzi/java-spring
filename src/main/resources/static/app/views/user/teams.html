@@ -37,6 +37,9 @@
                     <tr ng-repeat="team in teams" style="margin-bottom: 0;">
                         <td class="col-md-2"><a href="" ng-click="viewTeam(team)">{{team.team_name}}</a></td>
                         <td><button type="submit" class="btn btn-default" ng-click="addChars()">Add char</button></td>
+                        <td><span ng-repeat="char in team.members">
+                            <img class="img-circle img-center" ng-src="{{char.thumbnail.path+'.'+char.thumbnail.extension}}" width="30" height="30"></span>
+                        </td>
                         <td><button type="button" class="close" aria-label="Close" ng-click="deleteTeam(team.team_id)" style="margin-top: 5px;"><span aria-hidden="true">&times;</span></button></td>
                     </tr>
                 </tbody>
