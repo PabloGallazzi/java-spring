@@ -30,3 +30,10 @@ footer {
 	margin-top: 50px;
 	padding:50px;
 }
+
+.divider-vertical {
+    height: 30px;
+    margin: 10px 9px 0 9px;
+    border-left: 1px solid #757575;
+    border-right: 1px solid #757575;
+}

@@ -13,6 +13,7 @@ app.controller('loginController', ['$scope', '$location', 'userService', 'errorS
             userService.login(username, password)
                 .success(function (user) {
                     setCookie('access_token', user.access_token, 190);
+                    setCookie('nick_name', username, 190);
                     userService.redirectHome();
                 })
                 .error(function (error) {

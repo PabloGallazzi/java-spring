@@ -100,6 +100,10 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
+                            <span id="nickName" class="navbar-text hidden-xs"></span>
+                        </li>
+                        <li class="divider-vertical hidden-xs"></li>
+                        <li>
                             <a href="" onclick="deleteCookieAndRedirect('access_token'); return false;">Logout</a>
                         </li>
                     </ul>
@@ -116,7 +120,12 @@
     <div id="footer">
         <p>Copyright &copy; TACS Marvel 2016</p>
     </div>
-
 </div>
+    <script>
+        $(document).ready(function(){
+            var nickName = getCookie('nick_name');
+            $('#nickName').append('Hola! ' + '<b>'+ nickName + '</b>');
+        })
+    </script>
 </body>
 </html>
