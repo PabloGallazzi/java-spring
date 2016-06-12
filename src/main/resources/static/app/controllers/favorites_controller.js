@@ -57,6 +57,7 @@ app.controller('favoritesController',
                         fav.image = fav.thumbnail.path + "." + fav.thumbnail.extension;
                         return fav;
                     });
+                    $scope.userDoesNotHasFavorites = ($scope.favorites.length==0);
                 })
             }
 

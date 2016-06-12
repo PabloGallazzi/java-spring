@@ -95,7 +95,8 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         function getUsersTeams(){
             userService.getUserTeams(userId, accessToken)
                 .success(function(teams){
-                    $scope.teams = teams.map(function(t){return t;})
+                    $scope.teams = teams.map(function(t){return t;});
+                    $scope.userDoesNotHasTeams = ($scope.teams.length==0);
                 })
                 .error(function(errResponse){
                     console.error('Error while fetching user teams');

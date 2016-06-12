@@ -31,6 +31,15 @@
         <div class="panel-heading">
             <h3 class="panel-title">My teams</h3>
         </div>
+
+        <!--Info alert when user does not has teams-->
+        <div ng-show="userDoesNotHasTeams">
+            <div class="col-lg-6 col-lg-offset-3 alert alert-info fade in" style="text-align: center; margin-top: 15px;">
+                <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                You don't have any team yet :( Create one by clicking the button above!
+            </div>
+        </div>
+
         <div class="panel-body">
             <table class="table table-hover">
                 <tbody>

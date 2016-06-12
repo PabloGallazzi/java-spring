@@ -1,5 +1,13 @@
 <div class="container" ng-init="getFavorites()">
 
+    <!--Info alert when user does not has favorites-->
+    <div ng-show="userDoesNotHasFavorites">
+        <div class="col-lg-6 col-lg-offset-3 alert alert-info fade in" style="text-align: center; margin-top: 15px;">
+            <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            Nothing here.. add your favorite <b><a href="#/characters">now!</a></b>
+        </div>
+    </div>
+
     <div class="col-sm-4" ng-repeat="favorite in favorites">
         <div class="col-sm-12">
             <a ng-href="#/characters/{{favorite.id}}" ng-click="selectFavorite(favorite)">
