@@ -1,0 +1,44 @@
+/*Vista de chars del team*/
+.remove-char-button{
+    position: relative;
+    top: 20px;
+    left: 90%;
+}
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+.char-image{
+    border:5px black solid;
+    margin: 10px;
+}
+.char-title{
+    text-align: center;
+}
+
+/*Vista de teams*/
+.create-team-container{
+    margin-top: 10px;
+}
+.team-tr-container{
+    margin-bottom: 0;
+}
+.team-td-remove-button{
+    margin-top: 5px;
+}
+
+/*user does not has teams alert*/
+.no-teams-alert{
+    text-align: center; margin-top: 15px;
+}
+
+/*team created success alert*/
+.team-created-alert{
+    text-align: center;
+    margin-top: 15px;
+}

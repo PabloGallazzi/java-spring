@@ -1,31 +1,15 @@
+<link href="content/css/teams.css" type="text/css" rel="stylesheet"/>
+
 <div class="container" ng-controller="teamController" ng-init="getChars()">
     <div class="col-sm-4" ng-repeat="char in selectedTeamCharacters">
         <div class="col-sm-12">
-            <div class="removeCharButton">
+            <div class="remove-char-button">
                 <button type="button" class="btn btn-warning btn-circle" ng-click="deleteCharFromTeam(char.id)"><i class="glyphicon glyphicon-remove"></i></button>
             </div>
             <a ng-href="#/characters/{{char.id}}" ng-click="selectCharacter(char)">
-                <img class="img-circle img-center" style="border:5px black solid; margin: 10px;"
-                     ng-src="{{char.image_path}}" width="300px" height="300">
+                <img class="img-circle img-center char-image" ng-src="{{char.image_path}}" width="300px" height="300">
             </a>
-            <h3 style="text-align: center;">{{char.name}}</h3>
+            <h3 class="char-title">{{char.name}}</h3>
         </div>
     </div>
 </div>
-
-<style>
-    .removeCharButton{
-        position: relative;
-        top: 20px;
-        left: 90%;
-    }
-    .btn-circle {
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        padding: 6px 0;
-        font-size: 12px;
-        line-height: 1.428571429;
-        border-radius: 15px;
-    }
-</style>

@@ -1,9 +1,7 @@
-<head>
-    <link href="content/css/teams.css" type="text/css" rel="stylesheet"/>
-</head>
+<link href="content/css/teams.css" type="text/css" rel="stylesheet"/>
 
 <div class="container" ng-controller="teamController" ng-init="init()">
-    <div class="row" style="margin-top: 10px;">
+    <div class="row create-team-container">
         <div class="col-lg-6 col-lg-offset-3">
             <div class="input-group">
                 <input type="text" class="form-control" ng-model="teamName" placeholder="insert a name for your team...">
@@ -18,7 +16,7 @@
 
             <!--Success alert when team was created-->
             <div ng-show="isCharAddedSuccessful">
-                <div class="col-lg-6 col-lg-offset-3 alert alert-success fade in" style="text-align: center; margin-top: 15px;">
+                <div class="team-created-alert col-lg-6 col-lg-offset-3 alert alert-success fade in">
                     <a href="" ng-click="closeSuccessAlert()" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Success!</strong> char {{charNameAdded}} has been added to team
                 </div>
@@ -38,7 +36,7 @@
 
         <!--Info alert when user does not has teams-->
         <div ng-show="userDoesNotHasTeams">
-            <div class="col-lg-6 col-lg-offset-3 alert alert-info fade in" style="text-align: center; margin-top: 15px;">
+            <div class="no-teams-alert col-lg-6 col-lg-offset-3 alert alert-info fade in">
                 <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 You don't have any team yet :( Create one by clicking the button above!
             </div>
@@ -47,13 +45,13 @@
         <div class="panel-body">
             <table class="table table-hover">
                 <tbody>
-                    <tr ng-repeat="team in teams" style="margin-bottom: 0;">
+                    <tr class="team-tr-container" ng-repeat="team in teams">
                         <td class="col-md-2"><a href="" ng-click="viewTeam(team)">{{team.team_name}}</a></td>
                         <td><button type="submit" class="btn btn-default" ng-click="addChars()">Add char</button></td>
                         <td><span ng-repeat="char in team.members">
                             <img class="img-circle img-center" ng-src="{{char.thumbnail.path+'.'+char.thumbnail.extension}}" width="30" height="30"></span>
                         </td>
-                        <td><button type="button" class="close" aria-label="Close" ng-click="deleteTeam(team.team_id)" style="margin-top: 5px;"><span aria-hidden="true">&times;</span></button></td>
+                        <td><button type="button" class="close team-td-remove-button" aria-label="Close" ng-click="deleteTeam(team.team_id)"><span aria-hidden="true">&times;</span></button></td>
                     </tr>
                 </tbody>
             </table>
