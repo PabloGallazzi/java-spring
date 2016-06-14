@@ -80,6 +80,7 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         
         $scope.viewTeam = function(team){
             teamsShareService.setTeamCharacters(team.members);
+            teamsShareService.setTeamId(team.team_id);
             $location.path('/teams/characters', false);
         };
 
@@ -90,7 +91,18 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
                 return char;
             });
         };
-
+    
+        $scope.deleteCharFromTeam = function(charId){
+            userService.deleteChar(charId, teamsShareService.getTeamId())
+                .success(function(){
+                    deleteCharFromList(charId);
+                    $scope.getChars();
+                })
+                .error(function(){
+                    console.error('Error while deleting team char');
+                })
+            ;
+        };
         
         function getUsersTeams(){
             userService.getUserTeams(userId, accessToken)
@@ -127,13 +139,28 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
         function selectCharacter(character) {
             characterService.setSelectedCharacter(character);
         }
+
+        function deleteCharFromList(charId){
+            var charList = teamsShareService.getTeamCharacters();
+            var newCharList = charList.filter(function(char){
+               return char.id != charId;
+            });
+            teamsShareService.setTeamCharacters(newCharList);
+        }
     }
 ]);
 
 app.factory('teamsShareService', [function(){
     var selectedTeamCharacters = [];
-
+    var selectedTeamId = {};
+        
     return{
+        setTeamId: function(team){
+            selectedTeamId = team;
+        },
+        getTeamId: function(){
+            return selectedTeamId;
+        },
         setTeamCharacters: function(teamCharacters){
             selectedTeamCharacters = teamCharacters;
         },

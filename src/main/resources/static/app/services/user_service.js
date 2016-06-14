@@ -15,6 +15,7 @@ app.service('userService', ['$http', function ($http) {
     userService.deleteTeam = deleteTeam;
     userService.selectUser = selectUser;
     userService.addCharToTeam = addCharToTeam;
+    userService.deleteChar = deleteChar;
 
     // Getters
     userService.getAccessToken = getAccessToken;
@@ -103,7 +104,6 @@ app.service('userService', ['$http', function ($http) {
     }
 
     function addCharToTeam(teamId, character){
-        var userId = getAuthenticatedUserId();
         var data = {
             id: character.id,
             name: character.name,
@@ -113,6 +113,11 @@ app.service('userService', ['$http', function ($http) {
         };
 
         return $http.post('/users/' + userId + '/teams/' + teamId + '/characters?access_token=' + accessToken, data, config);
+    }
+
+    function deleteChar(charId, teamId){
+        var data = {params: {access_token: accessToken}};
+        return $http.delete('/users/' + userId + '/teams/' + teamId + '/characters/' + charId, data);
     }
 
 }]);
