@@ -137,6 +137,7 @@ public class User {
             }
         }
         if(teamToRemove != null){
+            teamToRemove.setMembers(null);
             teams.remove(teamToRemove);
         }else{
             throw new NotFoundException("Unable to remove team", "team_not_found", new String[0]);
