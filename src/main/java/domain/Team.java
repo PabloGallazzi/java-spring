@@ -31,7 +31,7 @@ public class Team {
     @Reference(lazy = true)
     private List<Character> members = new ArrayList<>();
 
-    public Team(){/*Necessary for Mongo*/}
+    public Team() {/*Necessary for Mongo*/}
 
     public Team(String name) {
         this.teamName = name;
@@ -54,10 +54,21 @@ public class Team {
     }
 
     public void addMember(Character character) {
-        this.members.add(character);
+        if (!isInTeam(character)) {
+            this.members.add(character);
+        }
     }
 
-    public Character removeMember(Integer characterId){
+    boolean isInTeam(Character character) {
+        for (Character character1 : members) {
+            if (character1.getId().equals(character.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Character removeMember(Integer characterId) {
         Character characterToRemove = null;
         for (Character character : members) {
             if (character.getId().equals(characterId))
