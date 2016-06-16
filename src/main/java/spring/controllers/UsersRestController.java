@@ -252,6 +252,7 @@ public class UsersRestController {
         User thisUser = users.findByUserId(userId);
         validateTeamBelongsToUser(thisUser, team);
         thisUser.deleteTeam(team.getTeamId());
+        teams.delete(team);
         users.update(thisUser);
         return new ResponseEntity<>(null, null, HttpStatus.NO_CONTENT);
     }
