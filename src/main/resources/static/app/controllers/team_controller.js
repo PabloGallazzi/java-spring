@@ -25,6 +25,7 @@ app.controller('teamController', ['$scope', '$location', 'userService', 'errorSe
                 .success(function() {
                     getUsersTeams();
                     $scope.teamName = null;
+                    $scope.errors.api = null;
                 })
                 .error(function(error) {
                     console.error('Error creating a team');
