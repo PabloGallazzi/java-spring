@@ -22,6 +22,8 @@ commons-codec: v1.10
 
 log4j (Spring boot embedded)
 
+[jedis](https://github.com/xetorthio/jedis): v2.8.0
+
 ## Can i see this amazing app deployed ?
 
 Yes you [can](https://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
@@ -63,10 +65,14 @@ This runs the application in develop environment (the default) which uses an in-
 
 ## Which are the available environments ?
 
-* develop : This is the default environment it provides an in-memory db and has real connectivity with Marvel's API.
-* test : This is the environment in which tests run, it provides an in-memory db and a mock for Marvel's API. This environment should not be used for any other purpose than running the tests.
-* mongo : This environment provides the settings to connect to a real mongo db and has real connectivity with Marvel's API, if you are to run the application in this environment, make sure you are running a real mongo db in port 27017, the dbname is bdtptacs_dev.
-* openshift : This environment has all the needed settings to connect to openshift's real mongo db and has real connectivity with Marvel's API. This environment should only be used for deployment purposes.
+* develop : This is the default environment it provides an in-memory db, an in-memory cache, and has real connectivity with Marvel's API.
+* test : This is the environment in which tests run, it provides an in-memory db, an in-memory cache and a mock for Marvel's API. This environment should not be used for any other purpose than running the tests.
+* mongo : This environment provides the settings to connect to a real mongo db, an in-memory cache and has real connectivity with Marvel's API, if you are to run the application in this environment, make sure you are running a real mongo db in port 27017, the dbname is bdtptacs_dev.
+* openshift : This environment has all the needed settings to connect to openshift's real mongo db, connects to openshift's real redis as a cache and has real connectivity with Marvel's API. This environment should only be used for deployment purposes.
+
+## Where did you take the Redis cartridge from ?
+
+You can find the Redis cartridge [here](https://github.com/smarterclayton/openshift-redis-cart)!
 
 ## How do I run the app in a specific environment ?
 
