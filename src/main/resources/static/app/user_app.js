@@ -1,4 +1,4 @@
-var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate']);
+var app = angular.module('appUser', ['ngRoute','ngResource','angular-loading-bar', 'ngAnimate','angularUtils.directives.dirPagination']);
 app.filter('range', function() {
     return function(input, total) {
         total = parseInt(total);

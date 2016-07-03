@@ -14,29 +14,27 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-4" ng-repeat="x in characters">
-		<div class="col-sm-12">
-			<a data-id="{{x.id}}" ng-href="#/characters/{{x.id}}" ng-click="setSelectedCharacter(x);">
-				<img class="img-circle img-center" style="border:5px black solid; margin: 10px;" ng-src="{{x.thumbnail.path+'.'+x.thumbnail.extension}}" width="300px" height="300">
+
+	<div dir-paginate="ch in characters | itemsPerPage: 9" total-items="totalCharacters"
+		 current-page="pagination.current" pagination-id="charactersPagination">
+		<div class="col-sm-4">
+			<a data-id="{{ch.id}}" ng-href="#/characters/{{ch.id}}" ng-click="setSelectedCharacter(ch);">
+				<img class="img-circle img-center" style="border:5px black solid; margin: 10px;" ng-src="{{ch.thumbnail.path+'.'+ch.thumbnail.extension}}" width="300px" height="300">
 			</a>
-			<h3 style="text-align: center;">{{x.name}}</h3>
+			<h3 style="text-align: center;">{{ch.name}}</h3>
 		</div>
 	</div>
 
 	<nav class="text-center">
-		<ul class="pagination">
-			<li>
-				<a href="#/characters" class="previouspage" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-			<li ng-repeat="n in [] | range:rangePages" type="number" ng-click="changePage($event)"><a href="#/characters">{{$index + 1}}</a></li>
-			<li>
-				<a href="#/characters" class="nextpage" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		</ul>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="text-center">
+					<dir-pagination-controls boundary-links="true" pagination-id="charactersPagination"
+											 on-page-change="pageChanged(newPageNumber)" template-url="app/directives/dirPagination.tpl.html">
+					</dir-pagination-controls>
+				</div>
+			</div>
+		</div>
 	</nav>
 
 </div>
