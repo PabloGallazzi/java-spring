@@ -1,0 +1,28 @@
+.character-image {
+    border: 5px black solid;
+    display: block;
+    max-width: 75%;
+    max-height: 75%;
+    height: auto;
+    width: auto;
+}
+
+.character-description {
+    padding-top: 50px;
+    color: black;
+}
+
+.char-image-link {
+    border: 5px black solid;
+    margin: 10px;
+    width: 300px;
+    height: 300px;
+}
+
+.char-name {
+    text-align: center
+}
+
+.chars-row-container {
+    margin-top: 10px
+}

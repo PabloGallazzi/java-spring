@@ -1,9 +1,10 @@
 /*Vista de chars del team*/
-.remove-char-button{
+.remove-char-button {
     position: relative;
     top: 20px;
     left: 90%;
 }
+
 .btn-circle {
     width: 30px;
     height: 30px;
@@ -13,32 +14,39 @@
     line-height: 1.428571429;
     border-radius: 15px;
 }
-.char-image{
-    border:5px black solid;
+
+.char-image {
+    border: 5px black solid;
     margin: 10px;
+    width: 300px;
+    height: 300px;
 }
-.char-title{
+
+.char-title {
     text-align: center;
 }
 
 /*Vista de teams*/
-.create-team-container{
+.create-team-container {
     margin-top: 10px;
 }
-.team-tr-container{
+
+.team-tr-container {
     margin-bottom: 0;
 }
-.team-td-remove-button{
+
+.team-td-remove-button {
     margin-top: 5px;
 }
 
 /*user does not has teams alert*/
-.no-teams-alert{
-    text-align: center; margin-top: 15px;
+.no-teams-alert {
+    text-align: center;
+    margin-top: 15px;
 }
 
 /*team created success alert*/
-.team-created-alert{
+.team-created-alert {
     text-align: center;
     margin-top: 15px;
 }

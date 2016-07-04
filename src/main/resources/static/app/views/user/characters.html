@@ -1,40 +1,45 @@
+<link href="content/css/character.css" rel="stylesheet">
+
 <div class="container">
-	<div class="row" style="margin-top: 10px;">
-		<div class="panel panel-info" >
-			<div class="panel-heading">
-				Character Filter
-			</div>
-			<div>
-				<div class="input-group">
+    <div class="row chars-row-container">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Character Filter
+            </div>
+            <div>
+                <div class="input-group">
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-search"></span>
 				</span>
-					<input id="txtCharacterName" type="text" class="form-control" placeholder="Character name" ng-change="nameChange()" ng-model="name">
-				</div>
-			</div>
-		</div>
-	</div>
+                    <input id="txtCharacterName" type="text" class="form-control" placeholder="Character name"
+                           ng-change="nameChange()" ng-model="name">
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div dir-paginate="ch in characters | itemsPerPage: 9" total-items="totalCharacters"
-		 current-page="pagination.current" pagination-id="charactersPagination">
-		<div class="col-sm-4">
-			<a data-id="{{ch.id}}" ng-href="#/characters/{{ch.id}}" ng-click="setSelectedCharacter(ch);">
-				<img class="img-circle img-center" style="border:5px black solid; margin: 10px;" ng-src="{{ch.thumbnail.path+'.'+ch.thumbnail.extension}}" width="300px" height="300">
-			</a>
-			<h3 style="text-align: center;">{{ch.name}}</h3>
-		</div>
-	</div>
+    <div dir-paginate="ch in characters | itemsPerPage: 9" total-items="totalCharacters"
+         current-page="pagination.current" pagination-id="charactersPagination">
+        <div class="col-sm-4">
+            <a data-id="{{ch.id}}" ng-href="#/characters/{{ch.id}}" ng-click="setSelectedCharacter(ch);">
+                <img class="img-circle img-center char-image-link"
+                     ng-src="{{ch.thumbnail.path+'.'+ch.thumbnail.extension}}">
+            </a>
+            <h3 class="char-name">{{ch.name}}</h3>
+        </div>
+    </div>
 
-	<nav class="text-center">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="text-center">
-					<dir-pagination-controls boundary-links="true" pagination-id="charactersPagination"
-											 on-page-change="pageChanged(newPageNumber)" template-url="app/directives/dirPagination.tpl.html">
-					</dir-pagination-controls>
-				</div>
-			</div>
-		</div>
-	</nav>
+    <nav class="text-center">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
+                    <dir-pagination-controls boundary-links="true" pagination-id="charactersPagination"
+                                             on-page-change="pageChanged(newPageNumber)"
+                                             template-url="app/directives/dirPagination.tpl.html">
+                    </dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </nav>
 
 </div>
