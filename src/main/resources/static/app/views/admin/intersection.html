@@ -1,3 +1,5 @@
+<link href="content/css/commons.css" rel="stylesheet">
+
 <div class="container" ng-init="getUsers()">
     <div class="col-lg-8"><!--left col-->
         <div class="form-group">
@@ -26,13 +28,13 @@
     </div>
 
     <div ng-if="intersected">
-        <div ng-show="characters.length" class="col-lg-5 alert alert-success fade in"
-             style="text-align: left; margin-top: 15px;">
-            <strong>Intersected!</strong> {{ showResult() }} <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
+        <div ng-show="characters.length" class="col-lg-5 alert alert-success fade in intersection">
+            <strong>Intersected!</strong> {{ showResult() }}
+            <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
         </div>
-        <div ng-show="!characters.length" class="col-lg-5 alert alert-warning fade in"
-             style="text-align: left; margin-top: 15px;">
-            <strong>Empty!</strong> {{ showResult() }} <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
+        <div ng-show="!characters.length" class="col-lg-5 alert alert-warning fade in intersection">
+            <strong>Empty!</strong> {{ showResult() }}
+            <button type="reset" class="btn btn-default" ng-click="clearSelection()">Clear selection!</button>
         </div>
     </div>
 
