@@ -2,9 +2,9 @@
 
 ## This is the repository for the TACS assignment.
 
-For detailed information about the API see the [wiki](https://github.com/niko118/tp-tacs/wiki)
+For detailed information about the API see the [wiki](https://github.com/PabloGallazzi/java-spring/wiki)
 
-For usage information see the [API-usage-examples](https://github.com/niko118/tp-tacs/wiki/API-usage-examples)
+For usage information see the [API-usage-examples](https://github.com/PabloGallazzi/java-spring/wiki/API-usage-examples)
 
 ## Frameworks:
 
@@ -30,7 +30,7 @@ Yes you [can](https://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
 
 ## Can i see the deploy history and status ?
 
-Yes you [can](http://190.192.142.145/deploy/5737931a7628e17321000043)!
+Yes you [can](http://190.192.153.205:8080/deploy/5737931a7628e17321000043)!
 
 ## Does this app deploy itself ?
 
