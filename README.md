@@ -2,6 +2,8 @@
 
 ## This is the repository for the TACS assignment.
 
+To be able to use Marvel's API read [this](https://github.com/PabloGallazzi/java-spring/wiki/Usage-of-Marvel's-API)
+
 For detailed information about the API see the [wiki](https://github.com/PabloGallazzi/java-spring/wiki)
 
 For usage information see the [API-usage-examples](https://github.com/PabloGallazzi/java-spring/wiki/API-usage-examples)
