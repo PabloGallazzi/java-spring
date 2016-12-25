@@ -32,7 +32,7 @@ Yes you [can](https://tptacsutnfrba-pablogallazzi.rhcloud.com/)!
 
 ## Can i see the deploy history and status ?
 
-Yes you [can](http://190.192.153.205:8080/deploy/5737931a7628e17321000043)!
+Yes you [can](http://190.192.153.205/deploy/5737931a7628e17321000043)!
 
 ## Does this app deploy itself ?
 
