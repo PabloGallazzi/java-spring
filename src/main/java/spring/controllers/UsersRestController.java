@@ -6,7 +6,8 @@ import domain.Token;
 import domain.User;
 import exceptions.rest.BadRequestException;
 import exceptions.rest.NotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ import java.util.List;
 @RestController
 public class UsersRestController {
 
-    private static final Logger logger = Logger.getLogger(UsersRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UsersRestController.class);
 
     @Autowired
     private UsersRepository users;

@@ -1,7 +1,8 @@
 package services;
 
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.Map;
 @Profile({"test", "develop", "mongo"})
 public class LocalCacheProvider implements CacheProvider {
 
-    private static final Logger logger = Logger.getLogger(LocalCacheProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(LocalCacheProvider.class);
 
     Map<String, Cacheable> cache;
 

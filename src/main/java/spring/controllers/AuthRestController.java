@@ -2,7 +2,8 @@ package spring.controllers;
 
 import domain.User;
 import exceptions.rest.BadRequestException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import repositories.AuthRepository;
 @RestController
 public class AuthRestController {
 
-    private static final Logger logger = Logger.getLogger(AuthRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
 
     @Autowired
     private AuthRepository auths;

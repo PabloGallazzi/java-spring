@@ -2,7 +2,8 @@ package spring.utils;
 
 import exceptions.rest.*;
 import exceptions.web.WebBaseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,7 +21,7 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalExceptionHandlingControllerAdvice {
 
-    private static final Logger logger = Logger.getLogger(GlobalExceptionHandlingControllerAdvice.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandlingControllerAdvice.class);
 
     @ExceptionHandler(RestBaseException.class)
     public ResponseEntity<?> handleError(HttpServletRequest req, Exception exception)

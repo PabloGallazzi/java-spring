@@ -1,6 +1,7 @@
 package services;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,7 +18,7 @@ import java.io.IOException;
 @Profile({"openshift"})
 public class SecureFilter implements Filter  {
 
-    private static final Logger logger = Logger.getLogger(SecureFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecureFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

@@ -3,11 +3,11 @@ package services;
 import com.pgallazzi.http.client.TacsRestClient;
 import com.pgallazzi.http.utils.callbacks.JavaRestClientCallback;
 import com.pgallazzi.http.utils.response.RestClientResponse;
-import domain.Character;
 import domain.vo.getmarvelcharacters.GetMarvelCharacters;
 import exceptions.rest.ServiceUnavailableException;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
@@ -26,7 +26,7 @@ public class MarvelApiService implements MarvelApiServiceInterface {
     @Autowired
     private CacheProvider cacheProvider;
 
-    private static final Logger logger = Logger.getLogger(MarvelApiService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MarvelApiService.class);
 
     private static TacsRestClient restClient = new TacsRestClient();
 

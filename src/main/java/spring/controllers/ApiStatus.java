@@ -1,6 +1,7 @@
 package spring.controllers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Map;
 @RestController
 public class ApiStatus {
 
-    private static final Logger logger = Logger.getLogger(ApiStatus.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiStatus.class);
 
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
     ResponseEntity<?> ping() {
