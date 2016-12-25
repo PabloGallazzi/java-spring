@@ -12,6 +12,5 @@ notifications:
   email:
     recipients:
       - pablogallazzi@gmail.com
-      - nicolas.g.garcia1@gmail.com
     on_success: never
     on_failure: always
