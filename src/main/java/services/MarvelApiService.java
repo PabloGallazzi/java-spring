@@ -33,10 +33,8 @@ public class MarvelApiService implements MarvelApiServiceInterface {
     private static final String BASE_URL = "http://gateway.marvel.com/v1/public/";
 
     private static String generateAuthInfo() throws Exception {
-        //Keys from Pablo's user... from here
-        String publicKey = "f3deeb5c7582067a1be1cc261d0a58b1";
-        String privateKey = "2e913724a927c38382bfe92287b19792d3707d93";
-        //To here.
+        String publicKey = "YOUR_PUBLIC_KEY";
+        String privateKey = "YOUR_PRIVATE_KEY";
         String timeStamp = String.valueOf(new Date().getTime());
         String stringToHash = timeStamp + privateKey + publicKey;
         return "ts=" + timeStamp + "&apikey=" + publicKey + "&hash=" + DigestUtils.md5Hex(stringToHash);
