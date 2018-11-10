@@ -1,16 +1,16 @@
 package spring;
 
-import domain.*;
 import domain.Character;
+import domain.*;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -19,9 +19,9 @@ import repositories.CharactersRepository;
 import repositories.TeamsRepository;
 import services.DSMongoInterface;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 /**
  * Created by pgallazzi on 3/4/16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @WebAppConfiguration
 @ActiveProfiles("test")
 @Ignore
@@ -54,13 +54,13 @@ public class BaseTester {
     protected CharactersRepository charactersRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
     @After
-    public void tearDown() throws Exception {
-        ArrayList<Class> classes = new ArrayList<Class>(
+    public void tearDown() {
+        ArrayList<Class> classes = new ArrayList<>(
                 Arrays.asList(Thumbnail.class, Character.class, Team.class, User.class, Token.class));
         for (Class aClass : classes) {
             ds.getDatastore().delete(ds.getDatastore().find(aClass));
