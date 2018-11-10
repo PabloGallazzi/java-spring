@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/niko118/tp-tacs.svg?token=yWHUWReDvcqkbLeRzp1p&branch=master)](https://magnum.travis-ci.com/niko118/tp-tacs)
+[![Build Status](https://travis-ci.org/PabloGallazzi/java-spring.svg?branch=master)](https://travis-ci.org/PabloGallazzi/java-spring)
+[![codecov.io](https://codecov.io/github/PabloGallazzi/java-spring/branch/master/graph/badge.svg)](https://codecov.io/github/PabloGallazzi/java-spring)
 
 ## This is the repository for the TACS assignment.
 
