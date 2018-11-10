@@ -17,6 +17,7 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws Exception {
+
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
         logger.info("The application is up!");
         logger.info("Let's inspect the beans provided by Spring Boot:");
@@ -25,5 +26,6 @@ public class Application {
         for (String beanName : beanNames) {
             logger.info(beanName);
         }
+
     }
 }
